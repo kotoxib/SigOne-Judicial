@@ -1,0 +1,85 @@
+/* ── FUENTE GLOBAL PARA EL LOGIN ── */
+:host {
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── BOTÓN ORANGE CORPORATIVO ── */
+.btn-orange {
+  background: linear-gradient(to right, #F47920, #D4620A) !important;
+  color: #ffffff !important;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+}
+.btn-orange:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(244, 121, 32, 0.3) !important;
+}
+
+/* ── COMPORTAMIENTO DE LOS INPUTS DE LÍNEA ── */
+.input-field {
+  border: none !important;
+  border-bottom: 1.5px solid #E5E7EB !important;
+  background: transparent !important;
+  color: #1F2937 !important;
+  border-radius: 0 !important;
+  padding: 10px 2px !important;
+  font-size: 14px !important;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+.input-field:focus {
+  border-color: #F47920 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ── SUBRAYADO DE BIENVENIDO ── */
+.orange-underline {
+  position: relative;
+}
+.orange-underline::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: #F47920;
+  border-radius: 99px;
+  margin-top: 6px;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+.slide.active { opacity: 1; }
+
+.input-field {
+  border: none;
+  border-bottom: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 0;
+  transition: border-color .25s;
+  width: 100%;
+  padding: 10px 2px;
+  font-size: .9rem;
+}
+.input-field:focus { border-color: var(--orange); outline: none; }
+
+.rol-card {
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all .2s;
+  background: #fff;
+}
+.rol-card:hover, .rol-card.selected {
+  border-color: var(--orange);
+  background: rgba(244, 121, 32, .04);
+}

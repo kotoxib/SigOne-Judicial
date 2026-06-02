@@ -1,0 +1,123 @@
+/* Layout del topbar */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.topbar-tabs-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.topbar-tabs-nav::-webkit-scrollbar { display: none; }
+
+/* Toggle button */
+.topbar-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color .2s, background .2s;
+  flex-shrink: 0;
+}
+.topbar-toggle-btn:hover { color: var(--text); background: var(--bg); }
+
+/* Notification bell */
+.topbar-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background .2s;
+}
+.topbar-icon-btn:hover { background: var(--bg); }
+
+/* Greeting */
+.topbar-greeting {
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.topbar-greeting strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Logout button */
+.topbar-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 5px 12px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  transition: background .2s, border-color .2s, color .2s;
+  white-space: nowrap;
+}
+.topbar-logout-btn:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+.topbar-logout-btn:hover svg { stroke: #dc2626; }
+
+/* Cobertura temporal en topbar */
+.topbar-cobertura-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+.topbar-cobertura-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(244,121,32,.12);
+  color: #D4620A;
+  border: 1px solid rgba(244,121,32,.25);
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  line-height: 1.6;
+}
+.topbar-cobertura-sub {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── Responsive móvil (< 768px) ── */
+@media (max-width: 767px) {
+  .topbar-greeting { display: none; }
+  .topbar-logout-label { display: none; }
+  .topbar-logout-btn { padding: 6px; border-radius: 8px; }
+}

@@ -1,0 +1,2634 @@
+﻿<app-product-tour ruta="configuracion"></app-product-tour>
+<div class="flex h-screen w-screen overflow-hidden">
+  
+  <app-sidebar
+    [moduleName]="'CONFIGURACIÓN'"
+    [expanded]="sidebarExpanded()"
+    (toggle)="toggleSidebar()">
+    
+    <div class="space-y-1">
+      
+      <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Seguridad</span>
+      
+      <button id="tour-nav-usuarios" class="sdi w-full" [class.nav-active]="activeView()==='usuarios'" (click)="showView('usuarios')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span class="nav-label">Usuarios</span>
+      </button>
+
+      @if (!esIndependiente()) {
+        <button class="sdi w-full" [class.nav-active]="activeView()==='roles'" (click)="showView('roles')">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          <span class="nav-label">Roles</span>
+        </button>
+      }
+
+      <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Catálogos Generales</span>
+
+      <button id="tour-nav-clientes" class="sdi w-full" [class.nav-active]="activeView()==='clientes'" (click)="showView('clientes')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        <span class="nav-label">Clientes</span>
+      </button>
+
+      <button class="sdi w-full" [class.nav-active]="activeView()==='entidades'" (click)="showView('entidades')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+        <span class="nav-label">Entidades</span>
+      </button>
+
+      <button id="tour-nav-tiposcaso" class="sdi w-full" [class.nav-active]="activeView()==='tiposcaso'" (click)="showView('tiposcaso')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+        <span class="nav-label">Tipos de Caso</span>
+      </button>
+
+      <button class="sdi w-full" [class.nav-active]="activeView()==='tablas'" (click)="showView('tablas')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18M10 4v16M6 4h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z"/></svg>
+        <span class="nav-label">Tablas Generales</span>
+      </button>
+
+      <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Mantenedores SPJ</span>
+
+      <button id="tour-nav-etapas" class="sdi w-full" [class.nav-active]="activeView()==='etapas'" (click)="showView('etapas')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m-.01 4h.01"/></svg>
+        <span class="nav-label">Etapas Procesales</span>
+      </button>
+
+      <button class="sdi w-full" [class.nav-active]="activeView()==='subetapas'" (click)="showView('subetapas')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h12M4 14h8M4 18h6"/></svg>
+        <span class="nav-label">Sub-Etapas</span>
+      </button>
+
+      <button class="sdi w-full" [class.nav-active]="activeView()==='juzgados'" (click)="showView('juzgados')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l9-4 9 4v2H3V6zm2 2h14v1a7 7 0 01-14 0V8zm0 9h14m-14 3h14"/></svg>
+        <span class="nav-label">Juzgados</span>
+      </button>
+
+      <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Mantenedores GAP</span>
+
+      <button id="tour-nav-tiposgasto" class="sdi w-full" [class.nav-active]="activeView()==='tiposgasto'" (click)="showView('tiposgasto')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        <span class="nav-label">Tipos de Gasto</span>
+      </button>
+
+      <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Mantenedores SCG</span>
+
+      <button class="sdi w-full" [class.nav-active]="activeView()==='tiposArancel'" (click)="showView('tiposArancel')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <span class="nav-label">Tipos de Arancel</span>
+      </button>
+
+      @if (esAdminSigcomt()) {
+        <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Gestión Sigone</span>
+        
+        <button class="sdi w-full" [class.nav-active]="activeView()==='notarias'" (click)="showView('notarias')">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <span class="nav-label">Notarías</span>
+        </button>
+        
+        <button class="sdi w-full" [class.nav-active]="activeView()==='aplicativos'" (click)="showView('aplicativos')">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          <span class="nav-label">Aplicativos</span>
+        </button>
+      }
+
+      <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Personalización</span>
+      
+      <button id="tour-nav-personalizacion" class="sdi w-full" [class.nav-active]="activeView()==='personalizacion'" (click)="showView('personalizacion')">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <span class="nav-label">Personalización Login</span>
+      </button>
+
+    </div>
+
+    <div sidebar-footer class="p-2 w-full">
+      <a routerLink="/portal" class="sdi w-full">
+        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span class="nav-label">Volver al Portal</span>
+      </a>
+    </div>
+
+  </app-sidebar>
+
+  <main class="flex-1 overflow-y-auto bg-gray-50">
+  
+<header id="cfgTopbar">
+      <div class="topbar-left">
+        <div class="topbar-icon-box">
+          <svg class="w-4 h-4" style="color:#fff" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <div>
+          <p class="topbar-subtitle">SIGCOMT · Suite de Procesos Judiciales</p>
+          <p class="topbar-title">{{ titles[activeView()] }}</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span class="cfg-greeting">Hola, <strong>{{ userName() }}</strong></span>
+        <button class="cfg-logout-btn" (click)="doLogout()" title="Cerrar sesión">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          <span class="cfg-logout-label">Cerrar sesión</span>
+        </button>
+      </div>
+</header> 
+  
+  <div id="cfgContent" class="p-6">
+      <!-- ══ USUARIOS ══ -->
+      @if (activeView() === 'usuarios') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Usuarios</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Gestión de accesos al sistema</p>
+            @if (!esAdminSigcomt() && miNotariaRol() && miNotariaRol() !== 'Todas') {
+            <div class="flex items-center gap-2 mt-2">
+              <span class="text-xs" style="color:#6B7280">
+                Usuarios creados:
+                <strong [style.color]="usuariosEnMiNotaria() >= LIMITE_USUARIOS_NOTARIA ? '#EF4444' : '#F47920'">
+                  {{ usuariosEnMiNotaria() }}
+                </strong>
+                <span style="color:#9CA3AF"> de {{ LIMITE_USUARIOS_NOTARIA }} permitidos</span>
+              </span>
+              <div style="background:#E5E7EB;border-radius:99px;height:5px;width:100px;overflow:hidden;flex-shrink:0">
+                <div style="height:100%;border-radius:99px;transition:width .3s"
+                  [style.width]="(Math.min(usuariosEnMiNotaria() / LIMITE_USUARIOS_NOTARIA, 1) * 100) + '%'"
+                  [style.background]="usuariosEnMiNotaria() >= LIMITE_USUARIOS_NOTARIA ? '#EF4444' : '#F47920'">
+                </div>
+              </div>
+              <span class="text-xs font-semibold"
+                [style.color]="usuariosEnMiNotaria() >= LIMITE_USUARIOS_NOTARIA ? '#EF4444' : '#6B7280'">
+                {{ LIMITE_USUARIOS_NOTARIA - usuariosEnMiNotaria() > 0 ? (LIMITE_USUARIOS_NOTARIA - usuariosEnMiNotaria()) + ' restantes' : 'Límite alcanzado' }}
+              </span>
+            </div>
+            }
+          </div>
+          <button class="btn-orange" (click)="abrirModalUsuario()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nuevo usuario
+          </button>
+        </div>
+        <div class="stat-card pt-2.5 pb-4 px-3 mb-4">
+          <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+              <div style="position:relative"><svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Nombre, correo..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fUsrSearch"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">
+                Notaría
+                @if (!esAdminSigcomt() && miNotariaRol() && miNotariaRol() !== 'Todas') {
+                  <span style="font-size:10px;color:#9CA3AF;font-weight:400;margin-left:4px">(fijo)</span>
+                }
+              </label>
+              @if (!esAdminSigcomt() && miNotariaRol() && miNotariaRol() !== 'Todas') {
+                <input class="filter-input" [value]="miNotariaRol()" readonly
+                  style="background:#F9FAFB;color:#6B7280;cursor:default;pointer-events:none"/>
+              } @else {
+                <select class="filter-input" [(ngModel)]="fUsrNotaria">
+                  <option value="">Todas</option>
+                  @for (n of notarias(); track n.id) {
+                    <option [value]="n.razon">{{ n.razon }}</option>
+                  }
+                </select>
+              }
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+              <select class="filter-input" [(ngModel)]="fUsrEstado">
+                <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+            <button class="btn-orange" (click)="filtrarUsuarios()">Filtrar</button>
+          </div>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
+            <p class="text-sm font-semibold" style="color:#1F2937">Lista de Usuarios</p>
+            <span class="text-xs" style="color:#6B7280">{{ usuariosFiltrados().length }} registros</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="data-table">
+              <thead>
+                <tr><th>#</th><th>Nombre completo</th><th>Celular</th><th>Correo</th><th>Rol</th><th>Tipo de usuario</th><th>Condición</th><th>Estado</th><th>Acciones</th></tr>
+              </thead>
+              <tbody>
+                @for (u of usrPaginated(); track u.id; let i = $index) {
+                  <tr>
+                    <td class="n-col">{{ i + 1 }}</td>
+                    <td>
+                      <div class="flex items-center gap-2">
+                        <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#F47920,#D4620A);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">{{ iniciales(u.nombres, u.apellidos) }}</div>
+                        <div>
+                          <p class="font-medium" style="font-size:13px">{{ u.nombres }} {{ u.apellidos }}</p>
+                          <p class="text-muted">{{ u.email }}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-muted">{{ u.celular }}</td>
+                    <td class="text-xs" style="color:#3B82F6">{{ u.email }}</td>
+                    <td>@if (u.roles.length) { <span class="badge-role">{{ u.roles[0].rol }}</span> }</td>
+                    <td class="text-muted">{{ u.tipoUsuario }}</td>
+                    <td class="text-muted">{{ u.condicion || '—' }}</td>
+                    <td>
+                      @if (u.estado === 'Activo') { <span class="badge-active">Activo</span> }
+                      @else { <span class="badge-inactive">Inactivo</span> }
+                    </td>
+                    <td>
+                      <div class="flex gap-1.5">
+                        <button class="btn-icon btn-view" title="Ver" (click)="verUsuario(u.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                        <button class="btn-icon btn-edit" title="Editar" (click)="editarUsuario(u.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                        <button class="btn-icon btn-lock" title="Contraseña" (click)="abrirCambioPwd(u.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></button>
+                        <button class="btn-icon btn-role-add" title="Cobertura Temporal" (click)="abrirCobertura(u.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="pg-bar">
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Por página:</span>
+              <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+              </select>
+              <span class="pg-info">de {{ usuariosFiltrados().length }} registros</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Página {{ usrPage() }} de {{ totalPages(usuariosFiltrados().length) }}</span>
+              <div class="flex gap-1">
+                <button class="pg-btn" [disabled]="usrPage()===1" (click)="setPage(usrPage, usrPage()-1, usuariosFiltrados().length)">&#8249;</button>
+                <button class="pg-btn" [disabled]="usrPage()>=totalPages(usuariosFiltrados().length)" (click)="setPage(usrPage, usrPage()+1, usuariosFiltrados().length)">&#8250;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ ROLES ══ -->
+      @if (activeView() === 'roles') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Roles</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Perfiles de acceso y permisos</p>
+          </div>
+          <button class="btn-orange" (click)="abrirModalRol()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nuevo Rol
+          </button>
+        </div>
+        <div class="stat-card pt-2.5 pb-4 px-3 mb-4">
+          <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+              <div style="position:relative">
+                <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9CA3AF;width:15px;height:15px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Nombre del rol..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fRolSearch"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Tipo de usuario</label>
+              <select class="filter-input" [(ngModel)]="fRolTipo">
+                <option value="">Todos</option>
+                <option>Digitador</option><option>Abogado</option><option>Asistente</option><option>Mantenedor</option><option>Administrador</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+              <select class="filter-input" [(ngModel)]="fRolEstado">
+                <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+            <button class="btn-orange" (click)="filtrarRoles()">Filtrar</button>
+          </div>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
+            <p class="text-sm font-semibold" style="color:#1F2937">Lista de Roles</p>
+            <span class="text-xs" style="color:#6B7280">{{ rolesFiltrados().length }} registros</span>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Nro.</th><th>Rol ID</th><th>Tipo de Usuario</th><th>Nombre del Rol</th><th>Descripción</th><th>Usuarios</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+              @for (r of rolPaginated(); track r.id; let i = $index) {
+                <tr>
+                  <td class="n-col">{{ i + 1 }}</td>
+                  <td class="cod-cell">{{ r.id }}</td>
+                  <td><span class="badge-role">{{ r.tipoUsuario }}</span></td>
+                  <td class="font-medium">{{ r.nombre }}</td>
+                  <td class="text-muted">{{ r.descripcion }}</td>
+                  <td><span class="badge-role">{{ contarUsrPorRol(r.nombre) }} usuarios</span></td>
+                  <td>
+                    @if (r.estado === 'Activo') { <span class="badge-active">Activo</span> }
+                    @else { <span class="badge-inactive">Inactivo</span> }
+                  </td>
+                  <td>
+                    <div class="flex gap-1.5">
+                      <button class="btn-icon btn-view" title="Visualizar" (click)="editarRol(r.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                      <button class="btn-icon btn-edit" title="Editar" (click)="editarRol(r.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <div class="pg-bar">
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Por página:</span>
+              <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+              </select>
+              <span class="pg-info">de {{ rolesFiltrados().length }} registros</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Página {{ rolPage() }} de {{ totalPages(rolesFiltrados().length) }}</span>
+              <div class="flex gap-1">
+                <button class="pg-btn" [disabled]="rolPage()===1" (click)="setPage(rolPage, rolPage()-1, rolesFiltrados().length)">&#8249;</button>
+                <button class="pg-btn" [disabled]="rolPage()>=totalPages(rolesFiltrados().length)" (click)="setPage(rolPage, rolPage()+1, rolesFiltrados().length)">&#8250;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ CLIENTES ══ -->
+      @if (activeView() === 'clientes') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Clientes</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Registro de clientes del despacho</p>
+          </div>
+          <button class="btn-orange" (click)="nuevoCliente()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nuevo Cliente
+          </button>
+        </div>
+        <div class="stat-card pt-2.5 pb-4 px-3 mb-4">
+          <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+              <div style="position:relative"><svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input placeholder="Nombre, documento..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fCliSearch"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Entidad</label>
+              <select class="filter-input" [(ngModel)]="fCliEntidad">
+                <option value="">Todas las entidades</option>
+                <option value="Persona Natural">Persona Natural</option>
+                <option value="Empresa">Empresa</option>
+                <option value="Banco">Banco</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+              <select class="filter-input" [(ngModel)]="fCliEstado">
+                <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+            <button class="btn-orange" (click)="filtrarClientes()">Filtrar</button>
+          </div>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
+            <p class="text-sm font-semibold" style="color:#1F2937">Lista de Clientes</p>
+            <span class="text-xs" style="color:#6B7280">{{ clientesFiltrados().length }} registros</span>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Nombre / Razón Social</th><th>Tipo Doc.</th><th>Nro. Documento</th><th>Entidad</th><th>Contacto</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+              @for (c of cliPaginated(); track c.id; let i = $index) {
+                <tr>
+                  <td class="n-col">{{ i + 1 }}</td>
+                  <td class="font-medium">{{ c.nombre }}</td>
+                  <td class="text-muted">{{ c.tipoDoc }}</td>
+                  <td class="cod-cell">{{ c.nroDoc }}</td>
+                  <td>
+                    @if (c.entidad === 'Persona Natural') {
+                      <span style="background:#FEF3C7;color:#92400E;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;display:inline-block">Persona Natural</span>
+                    } @else if (c.entidad === 'Empresa') {
+                      <span style="background:#EDE9FE;color:#5B21B6;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;display:inline-block">Empresa</span>
+                    } @else if (c.entidad === 'Banco') {
+                      <span style="background:#D1FAE5;color:#065F46;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;display:inline-block">Banco</span>
+                    } @else {
+                      <span class="badge-role">{{ c.entidad }}</span>
+                    }
+                  </td>
+                  <td class="text-muted">{{ getContactoDisplay(c) }}</td>
+                  <td>
+                    @if (c.estado === 'Activo') { <span class="badge-active">Activo</span> }
+                    @else { <span class="badge-inactive">Inactivo</span> }
+                  </td>
+                  <td>
+                    <div class="flex gap-1.5">
+                      <button class="btn-icon btn-view" (click)="verCliente(c.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                      <button class="btn-icon btn-edit" (click)="editarCliente(c.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <div class="pg-bar">
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Por página:</span>
+              <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+              </select>
+              <span class="pg-info">de {{ clientesFiltrados().length }} registros</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Página {{ cliPage() }} de {{ totalPages(clientesFiltrados().length) }}</span>
+              <div class="flex gap-1">
+                <button class="pg-btn" [disabled]="cliPage()===1" (click)="setPage(cliPage, cliPage()-1, clientesFiltrados().length)">&#8249;</button>
+                <button class="pg-btn" [disabled]="cliPage()>=totalPages(clientesFiltrados().length)" (click)="setPage(cliPage, cliPage()+1, clientesFiltrados().length)">&#8250;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ ENTIDADES ══ -->
+      @if (activeView() === 'entidades') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Entidades</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Tipos de entidad del sistema</p>
+          </div>
+          <button class="btn-orange" (click)="abrirModalEntidad()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nueva Entidad
+          </button>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Nombre</th><th>Descripción</th><th>Aplica a</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+              <tr><td class="n-col">1</td><td class="font-medium">Persona Natural</td><td class="text-muted">Cliente individual, persona física</td><td><span class="badge-role">SPJ</span> <span class="badge-role">GAP</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view" (click)="abrirModalEntidad('Persona Natural','Cliente individual')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalEntidad('Persona Natural','Cliente individual')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
+              <tr><td class="n-col">2</td><td class="font-medium">Empresa</td><td class="text-muted">Persona jurídica SAC / SA</td><td><span class="badge-role">SPJ</span> <span class="badge-role">GAP</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view" (click)="abrirModalEntidad('Empresa','Persona jurídica SAC/SA')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalEntidad('Empresa','Persona jurídica SAC/SA')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
+              <tr><td class="n-col">3</td><td class="font-medium">Banco</td><td class="text-muted">Entidad bancaria / financiera</td><td><span class="badge-role">SCG</span> <span class="badge-role">SPJ</span> <span class="badge-role">GAP</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view" (click)="abrirModalEntidad('Banco','Entidad bancaria')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalEntidad('Banco','Entidad bancaria')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
+            </tbody>
+          </table>
+          <div class="pg-bar">
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Por página:</span>
+              <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+              </select>
+              <span class="pg-info">de {{ ENT_TOTAL }} registros</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Página {{ entPage() }} de {{ totalPages(ENT_TOTAL) }}</span>
+              <div class="flex gap-1">
+                <button class="pg-btn" [disabled]="entPage()===1" (click)="setPage(entPage, entPage()-1, ENT_TOTAL)">&#8249;</button>
+                <button class="pg-btn" [disabled]="entPage()>=totalPages(ENT_TOTAL)" (click)="setPage(entPage, entPage()+1, ENT_TOTAL)">&#8250;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ TIPOS DE CASO ══ -->
+      @if (activeView() === 'tiposcaso') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Tipos de Caso</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Categorías de caso con monto base por entidad (SPJ y GAP)</p>
+          </div>
+          <button class="btn-orange" (click)="abrirModalTipoCaso()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nuevo Tipo de Caso
+          </button>
+        </div>
+       <div class="stat-card pt-2.5 pb-4 px-3 mb-4">
+          <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+              <div style="position:relative"><svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input placeholder="Nombre, código..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fTipoCasoSearch"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Entidad</label>
+              <select class="filter-input" [(ngModel)]="fTipoCasoEntidad">
+                <option value="">Todas las entidades</option>
+                <option value="Persona Natural">Persona Natural</option>
+                <option value="Empresa">Empresa</option>
+                <option value="Banco">Banco</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+              <select class="filter-input" [(ngModel)]="fTipoCasoEstado">
+                <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+            <button class="btn-orange" style="padding:8px 18px" (click)="filtrarTipoCaso()">Filtrar</button>
+          </div>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Código</th><th>Nombre</th><th>Entidad</th><th>Moneda</th><th>Monto Base</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody>
+                @for (t of tiposCasoPaginated(); track t.id; let i = $index) {
+                  <tr>
+                    <td class="text-muted">{{ (tipPage()-1)*pageSize()+i+1 }}</td>
+                    <td><span class="cod-cell">{{ t.codigo }}</span></td>
+                    <td class="font-medium">{{ t.nombre }}</td>
+                    <td>
+                      @if (t.entidad === 'Banco') {
+                        <span style="display:inline-flex;align-items:center;gap:4px;background:rgba(59,130,246,.1);color:#1D4ED8;border-radius:12px;padding:2px 10px;font-size:11px;font-weight:600">
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l9-3 9 3M3 10h18M3 14h18M3 18h18"/></svg>
+                          Banco
+                        </span>
+                      } @else if (t.entidad === 'Empresa') {
+                        <span style="display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,.1);color:#B45309;border-radius:12px;padding:2px 10px;font-size:11px;font-weight:600">
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/></svg>
+                          Empresa
+                        </span>
+                      } @else {
+                        <span style="display:inline-flex;align-items:center;gap:4px;background:rgba(16,185,129,.1);color:#065F46;border-radius:12px;padding:2px 10px;font-size:11px;font-weight:600">
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                          Persona Natural
+                        </span>
+                      }
+                    </td>
+                    <td class="text-muted">{{ t.moneda }}</td>
+                    <td class="font-medium" style="color:#1F2937">
+                      @if (t.montoBase > 0) { {{ t.moneda }} {{ t.montoBase | number:'1.2-2' }} }
+                      @else { <span class="text-muted">—</span> }
+                    </td>
+                    <td>
+                      @if (t.estado === 'Activo') { <span class="badge-active">Activo</span> }
+                      @else { <span class="badge-inactive">Inactivo</span> }
+                    </td>
+                    <td>
+                      <div class="flex gap-1.5">
+                        <button class="btn-icon btn-edit" title="Editar" (click)="editarTipoCaso(t.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+                @if (!tiposCasoPaginated().length) {
+                  <tr><td colspan="8" class="text-center text-muted py-8">No se encontraron tipos de caso</td></tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="pg-bar">
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Por página:</span>
+              <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+              </select>
+              <span class="pg-info">de {{ tiposCasoFiltrados().length }} registros</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Página {{ tipPage() }} de {{ totalPages(tiposCasoFiltrados().length) }}</span>
+              <div class="flex gap-1">
+                <button class="pg-btn" [disabled]="tipPage()===1" (click)="setPage(tipPage, tipPage()-1, tiposCasoFiltrados().length)">&#8249;</button>
+                <button class="pg-btn" [disabled]="tipPage()>=totalPages(tiposCasoFiltrados().length)" (click)="setPage(tipPage, tipPage()+1, tiposCasoFiltrados().length)">&#8250;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ ETAPAS ══ -->
+      @if (activeView() === 'etapas') {
+
+        <!-- LISTA -->
+        @if (etaProcView() === 'list') {
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Etapas Procesales</h2>
+              <p class="text-sm mt-0.5" style="color:#6B7280">Configuración de etapas por entidad</p>
+            </div>
+            <button class="btn-orange" (click)="nuevaConfigEtapa()">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Nueva Etapa Procesal
+            </button>
+          </div>
+          <div class="stat-card pt-2.5 pb-4 px-3 mb-4">
+            <div class="flex flex-wrap gap-3 items-end">
+              <div class="flex-1 min-w-[200px]">
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+                <div style="position:relative">
+                  <svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <input placeholder="Buscar entidad..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fEtaSearch"/>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Entidad</label>
+                <select class="filter-input" [(ngModel)]="fEtaEntidad">
+                  <option value="">Todas las entidades</option>
+                  @for (e of TIPOS_ENTIDAD; track e) { <option [value]="e">{{ e }}</option> }
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+                <select class="filter-input" [(ngModel)]="fEtaEstado">
+                  <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+                </select>
+              </div>
+              <button class="btn-orange" (click)="filtrarEtapas()">Filtrar</button>
+            </div>
+          </div>
+          <div class="stat-card overflow-hidden">
+            <table class="data-table">
+              <thead><tr><th>Nro.</th><th>Entidad</th><th>Cliente</th><th>Etapas</th><th>Aplicativo</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody>
+                @for (c of etaConfigPaginated(); track c.id; let i = $index) {
+                  <tr>
+                    <td class="n-col">{{ (etaProcPage()-1)*pageSize() + i + 1 }}</td>
+                    <td class="font-medium">{{ c.entidad }}{{ c.entidad === 'Bancos' && c.banco && c.banco !== 'Todos' ? ' — ' + c.banco : '' }}</td>
+                    <td class="text-muted" style="font-size:12px">
+                      {{ c.clientes && c.clientes.length ? c.clientes.join(', ') : 'Todos' }}
+                    </td>
+                    <td><span class="badge-role">{{ c.etapas.length }}</span></td>
+                    <td><span class="badge-role">{{ c.aplicativo }}</span></td>
+                    <td>@if (c.estado==='Activo') {<span class="badge-active">Activo</span>} @else {<span class="badge-inactive">Inactivo</span>}</td>
+                    <td>
+                      <div class="flex gap-1.5">
+                        <button class="btn-icon btn-view" title="Ver" (click)="editarConfigEtapa(c.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                        <button class="btn-icon btn-edit" title="Editar" (click)="editarConfigEtapa(c.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <div class="pg-bar">
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Por página:</span>
+                <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                  <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+                </select>
+                <span class="pg-info">de {{ etaConfigFiltradas().length }} registros</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Página {{ etaProcPage() }} de {{ totalPages(etaConfigFiltradas().length) }}</span>
+                <div class="flex gap-1">
+                  <button class="pg-btn" [disabled]="etaProcPage()===1" (click)="setPage(etaProcPage, etaProcPage()-1, etaConfigFiltradas().length)">&#8249;</button>
+                  <button class="pg-btn" [disabled]="etaProcPage()>=totalPages(etaConfigFiltradas().length)" (click)="setPage(etaProcPage, etaProcPage()+1, etaConfigFiltradas().length)">&#8250;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- FORMULARIO -->
+        @if (etaProcView() === 'form') {
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">
+                {{ etaProcEditId() ? 'Editar Configuración de Etapa' : 'Nueva Configuración de Etapa' }}
+              </h2>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn-orange" (click)="guardarConfigEtapa()">Guardar</button>
+              <button class="btn-secondary" (click)="cancelarConfigEtapa()">Cancelar</button>
+            </div>
+          </div>
+
+          <div class="stat-card p-4 mb-4">
+            <div class="grid grid-cols-3 gap-3 mb-3">
+
+              <!-- Entidad -->
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Entidad <span style="color:#EF4444">**</span></label>
+                <select class="filter-input w-full"
+                  [ngModel]="etaFormEntidad()"
+                  (ngModelChange)="etaFormEntidad.set($event); etaFormBancosSel.set(['Todos']); etaFormClientesSel.set(['Todos']); etaFormBancosOpen.set(false); etaFormClientesOpen.set(false)">
+                  @for (e of TIPOS_ENTIDAD; track e) { <option [value]="e">{{ e }}</option> }
+                </select>
+              </div>
+
+              <!-- Banco (solo si Bancos) -->
+              @if (etaFormEntidad() === 'Bancos') {
+                <div style="position:relative">
+                  <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Banco</label>
+                  <button type="button" class="filter-input w-full" style="text-align:left;display:flex;align-items:center;justify-content:space-between;cursor:pointer"
+                    (click)="etaFormBancosOpen.update(v=>!v)">
+                    <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                      {{ etaFormBancosSel().join(', ') || 'Todos' }}
+                    </span>
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                  </button>
+                  @if (etaFormBancosOpen()) {
+                    <div style="position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #E5E7EB;border-radius:8px;z-index:50;box-shadow:0 4px 12px rgba(0,0,0,.1);overflow:hidden">
+                      <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:13px;color:#374151"
+                        [style.background]="etaFormBancosSel().includes('Todos') ? 'rgba(244,121,32,.08)' : 'transparent'"
+                        (click)="toggleFormBanco('Todos'); $event.stopPropagation()">
+                        <input type="checkbox" [checked]="etaFormBancosSel().includes('Todos')" style="pointer-events:none"/> Todos
+                      </label>
+                      @for (b of bancosRegistrados(); track b) {
+                        <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:13px;color:#374151"
+                          [style.background]="etaFormBancosSel().includes(b) ? 'rgba(244,121,32,.08)' : 'transparent'"
+                          (click)="toggleFormBanco(b); $event.stopPropagation()">
+                          <input type="checkbox" [checked]="etaFormBancosSel().includes(b)" style="pointer-events:none"/> {{ b }}
+                        </label>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Estado -->
+              <div>
+                <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Estado</label>
+                <select class="filter-input w-full" [(ngModel)]="formConfigEtapa.estado">
+                  <option>Activo</option><option>Inactivo</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Cliente -->
+            <div class="grid grid-cols-3 gap-3 mb-3">
+              <div style="position:relative">
+                <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Cliente</label>
+                <button type="button" class="filter-input w-full" style="text-align:left;display:flex;align-items:center;justify-content:space-between;cursor:pointer"
+                  (click)="etaFormClientesOpen.update(v=>!v)">
+                  <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                    {{ etaFormClientesSel().join(', ') || 'Todos' }}
+                  </span>
+                  <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                @if (etaFormClientesOpen()) {
+                  <div style="position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #E5E7EB;border-radius:8px;z-index:50;box-shadow:0 4px 12px rgba(0,0,0,.1);overflow:hidden;max-height:180px;overflow-y:auto">
+                    <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:13px;color:#374151"
+                      [style.background]="etaFormClientesSel().includes('Todos') ? 'rgba(244,121,32,.08)' : 'transparent'"
+                      (click)="toggleFormCliente('Todos'); $event.stopPropagation()">
+                      <input type="checkbox" [checked]="etaFormClientesSel().includes('Todos')" style="pointer-events:none"/> Todos
+                    </label>
+                    @for (cl of clientesPorEntidad(); track cl) {
+                      <label style="display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:13px;color:#374151"
+                        [style.background]="etaFormClientesSel().includes(cl) ? 'rgba(244,121,32,.08)' : 'transparent'"
+                        (click)="toggleFormCliente(cl); $event.stopPropagation()">
+                        <input type="checkbox" [checked]="etaFormClientesSel().includes(cl)" style="pointer-events:none"/> {{ cl }}
+                      </label>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div>
+              <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px">Descripción</label>
+              <textarea class="filter-input w-full" rows="2" placeholder="Escribe una descripción" [(ngModel)]="formConfigEtapa.descripcion" style="resize:none;height:64px"></textarea>
+            </div>
+          </div>
+
+          <!-- TABS -->
+          <div class="stat-card overflow-hidden">
+            <div class="flex border-b" style="border-color:rgba(0,0,0,.08)">
+              <button class="px-5 py-3 text-sm font-semibold transition-colors"
+                [style.color]="etaProcActiveTab()==='etapa' ? '#f47920' : '#6B7280'"
+                [style.border-bottom]="etaProcActiveTab()==='etapa' ? '2px solid #f47920' : '2px solid transparent'"
+                (click)="etaProcActiveTab.set('etapa')">Etapa</button>
+              <button class="px-5 py-3 text-sm font-semibold transition-colors"
+                [style.color]="etaProcActiveTab()==='duracion' ? '#f47920' : '#6B7280'"
+                [style.border-bottom]="etaProcActiveTab()==='duracion' ? '2px solid #f47920' : '2px solid transparent'"
+                (click)="etaProcActiveTab.set('duracion')">Duración etapa</button>
+            </div>
+
+            @if (etaProcActiveTab() === 'etapa') {
+              <div class="p-4">
+                <div class="flex items-center justify-between mb-3">
+                  <span class="font-semibold text-sm" style="color:#1F2937">Lista de etapas</span>
+                  <button class="btn-orange" (click)="abrirModalAgregarEtapa()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    Nueva etapa
+                  </button>
+                </div>
+                <table class="data-table">
+                  <thead><tr><th>Etapa Id</th><th>Nombre</th><th>Tipo Proceso</th><th>Tipo Etapa</th><th>Acciones</th></tr></thead>
+                  <tbody>
+                    @for (e of etaFormPaginated(); track e.id) {
+                      <tr>
+                        <td class="cod-cell">{{ e.id }}</td>
+                        <td class="font-medium">{{ e.nombre }}</td>
+                        <td>@for (t of e.tiposProceso; track t) { <span class="badge-role" style="margin-right:3px">{{ t }}</span> }</td>
+                        <td class="text-muted">{{ e.tipoEtapa }}</td>
+                        <td>
+                          <button class="btn-icon" style="color:#EF4444" title="Eliminar" (click)="eliminarEtapaItem(e.id)">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                    @if (etapasFormList().length === 0) {
+                      <tr><td colspan="5" class="text-center text-muted py-6" style="font-size:13px">Sin etapas agregadas</td></tr>
+                    }
+                  </tbody>
+                </table>
+                <div class="pg-bar">
+                  <div class="flex items-center gap-2">
+                    <span class="pg-info">{{ etapasFormList().length }} etapas</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div class="flex gap-1">
+                      <button class="pg-btn" [disabled]="etaFormPage()===1" (click)="setPage(etaFormPage, etaFormPage()-1, etapasFormList().length)">&#8249;</button>
+                      <button class="pg-btn" [disabled]="etaFormPage()>=totalPages(etapasFormList().length)" (click)="setPage(etaFormPage, etaFormPage()+1, etapasFormList().length)">&#8250;</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+
+            @if (etaProcActiveTab() === 'duracion') {
+              <div class="p-4">
+
+                <!-- Radios + toggles de columnas -->
+                <div class="flex items-center justify-between mb-4">
+                  <div class="flex items-center gap-5">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                      <span style="width:18px;height:18px;border-radius:50%;border:2px solid;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"
+                        [style.border-color]="etaDurSubView()==='todos' ? '#e11d48' : '#D1D5DB'"
+                        (click)="etaDurSubView.set('todos')">
+                        @if (etaDurSubView()==='todos') {
+                          <span style="width:9px;height:9px;border-radius:50%;background:#e11d48;display:block"></span>
+                        }
+                      </span>
+                      <span class="text-sm font-medium" style="color:#374151">Todos</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                      <span style="width:18px;height:18px;border-radius:50%;border:2px solid;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"
+                        [style.border-color]="etaDurSubView()==='porTipo' ? '#e11d48' : '#D1D5DB'"
+                        (click)="etaDurSubView.set('porTipo')">
+                        @if (etaDurSubView()==='porTipo') {
+                          <span style="width:9px;height:9px;border-radius:50%;background:#e11d48;display:block"></span>
+                        }
+                      </span>
+                      <span class="text-sm font-medium" style="color:#374151">Por tipo</span>
+                    </label>
+                  </div>
+                  <!-- Toggles de columnas opcionales -->
+                  <div class="flex items-center gap-2">
+                    @if (isDEJVisible()) {
+                      <button style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1.5px solid;font-size:12px;font-weight:600;cursor:pointer;background:#fff"
+                        [style.border-color]="etaDurColDEJ() ? '#1F2937' : '#D1D5DB'"
+                        [style.color]="etaDurColDEJ() ? '#1F2937' : '#6B7280'"
+                        (click)="etaDurColDEJ.update(v=>!v)">
+                        Días DEJ
+                        @if (etaDurColDEJ()) {
+                          <svg style="width:16px;height:16px;background:#1F2937;border-radius:50%;color:#fff;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"/></svg>
+                        } @else {
+                          <svg style="width:16px;height:16px;background:#1F2937;border-radius:50%;color:#fff;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"/></svg>
+                        }
+                      </button>
+                    }
+                    <button style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1.5px solid;font-size:12px;font-weight:600;cursor:pointer;background:#fff"
+                      [style.border-color]="etaDurColMeta() ? '#1F2937' : '#D1D5DB'"
+                      [style.color]="etaDurColMeta() ? '#1F2937' : '#6B7280'"
+                      (click)="etaDurColMeta.update(v=>!v)">
+                      Días meta
+                      @if (etaDurColMeta()) {
+                        <svg style="width:16px;height:16px;background:#1F2937;border-radius:50%;color:#fff;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"/></svg>
+                      } @else {
+                        <svg style="width:16px;height:16px;background:#1F2937;border-radius:50%;color:#fff;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"/></svg>
+                      }
+                    </button>
+                    <button style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1.5px solid;font-size:12px;font-weight:600;cursor:pointer;background:#fff"
+                      [style.border-color]="etaDurColAlerta() ? '#1F2937' : '#D1D5DB'"
+                      [style.color]="etaDurColAlerta() ? '#1F2937' : '#6B7280'"
+                      (click)="etaDurColAlerta.update(v=>!v)">
+                      Días alerta usuario
+                      @if (etaDurColAlerta()) {
+                        <svg style="width:16px;height:16px;background:#1F2937;border-radius:50%;color:#fff;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"/></svg>
+                      } @else {
+                        <svg style="width:16px;height:16px;background:#1F2937;border-radius:50%;color:#fff;flex-shrink:0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"/></svg>
+                      }
+                    </button>
+                  </div>
+                </div>
+
+                <!-- VISTA TODOS -->
+                @if (etaDurSubView() === 'todos') {
+                  <ng-container *ngTemplateOutlet="tabladur; context:{ rows: duracionesTabla(), tipo: 'Todos', idx: -1 }"></ng-container>
+                }
+
+                <!-- VISTA POR TIPO — lista dinámica de criterios -->
+                @if (etaDurSubView() === 'porTipo') {
+                  @for (crit of duracionesPorTipoArr(); track $index; let i = $index) {
+                    <div style="border:1px solid rgba(0,0,0,.07);border-radius:10px;padding:16px;margin-bottom:14px">
+                      <!-- Header criterio -->
+                      <div class="flex items-end justify-between mb-3">
+                        <div>
+                          <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:4px">Tipo Proceso</label>
+                          <select class="filter-input" style="min-width:160px"
+                            [ngModel]="crit.tipo" (ngModelChange)="setDurCriterioTipo(i,$event)">
+                            <option value="">Seleccione</option>
+                            @for (tp of tiposProcesoDeLasEtapas(); track tp) { <option [value]="tp">{{ tp }}</option> }
+                          </select>
+                        </div>
+                        @if (duracionesPorTipoArr().length > 1) {
+                          <button class="btn-secondary" style="font-size:12px" (click)="removeDurCriterio(i)">Eliminar criterio</button>
+                        }
+                      </div>
+                      <!-- Tabla del criterio -->
+                      @if (crit.tipo) {
+                        <ng-container *ngTemplateOutlet="tabladur; context:{ rows: crit.rows, tipo: crit.tipo, idx: i }"></ng-container>
+                      } @else {
+                        <p style="font-size:12px;color:#9CA3AF;text-align:center;padding:12px 0">Selecciona un tipo de proceso</p>
+                      }
+                    </div>
+                  }
+                  <!-- Botón agregar criterio -->
+                  <button style="width:100%;padding:10px;border:1.5px dashed #D1D5DB;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:500;color:#9CA3AF;cursor:pointer;background:transparent;transition:border-color .2s,color .2s"
+                    (mouseenter)="$event.target && $any($event.target).style && ($any($event.target).style.borderColor='#f47920') && ($any($event.target).style.color='#f47920')"
+                    (mouseleave)="$event.target && $any($event.target).style && ($any($event.target).style.borderColor='#D1D5DB') && ($any($event.target).style.color='#9CA3AF')"
+                    (click)="addDurCriterio()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    Agregar tipo de proceso
+                  </button>
+                }
+
+                <!-- Template reutilizable para tabla de duración -->
+                <ng-template #tabladur let-rows="rows" let-tipo="tipo">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Etapa ID</th><th>Nombre</th>
+                        @if (isDEJVisible() && etaDurColDEJ()) { <th>Días DEJ</th> }
+                        <th>Días Caso</th>
+                        @if (etaDurColAlerta()) { <th>Días alerta usuario</th> }
+                        @if (etaDurColMeta()) { <th>Días meta</th> }
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (row of rows; track row.etapa.id) {
+                        <tr>
+                          <td class="cod-cell">{{ row.etapa.id }}</td>
+                          <td style="color:#f47920;font-weight:500">{{ row.etapa.nombre }}</td>
+                          @if (isDEJVisible() && etaDurColDEJ()) {
+                            <td class="text-muted">{{ row.dur ? row.dur.diasDEJ : '—' }}</td>
+                          }
+                          <td class="text-muted">{{ row.dur ? row.dur.diasCaso : '—' }}</td>
+                          @if (etaDurColAlerta()) {
+                            <td class="text-muted">{{ row.dur ? row.dur.diasAlerta : '—' }}</td>
+                          }
+                          @if (etaDurColMeta()) {
+                            <td class="text-muted">{{ row.dur ? row.dur.diasMeta : '—' }}</td>
+                          }
+                          <td>
+                            <button class="btn-icon btn-edit" title="Editar" (click)="abrirModalDuracion(row.etapa.id, tipo)">
+                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            </button>
+                          </td>
+                        </tr>
+                      }
+                      @if (!rows || rows.length === 0) {
+                        <tr><td [attr.colspan]="4 + (isDEJVisible()&&etaDurColDEJ()?1:0) + (etaDurColAlerta()?1:0) + (etaDurColMeta()?1:0)" class="text-center text-muted py-5" style="font-size:13px">Sin etapas</td></tr>
+                      }
+                    </tbody>
+                  </table>
+                </ng-template>
+              </div>
+            }
+          </div>
+        }
+      }
+
+      <!-- ══ SUB-ETAPAS ══ -->
+      @if (activeView() === 'subetapas') {
+
+        <!-- LISTA -->
+        @if (subProcView() === 'list') {
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Sub-Etapas</h2>
+              <p class="text-sm mt-0.5" style="color:#6B7280">Configuración de sub-estados por etapa procesal</p>
+            </div>
+            <button class="btn-orange" (click)="nuevaConfigSubEtapa()">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Nuevo Sub-estado
+            </button>
+          </div>
+          <div class="stat-card pt-2.5 pb-4 px-3 mb-4">
+            <div class="flex flex-wrap gap-3 items-end">
+              <div class="flex-1 min-w-[200px]">
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+                <div style="position:relative">
+                  <svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <input placeholder="Buscar entidad o etapa..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fSubSearch"/>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Entidad</label>
+                <select class="filter-input" [(ngModel)]="fSubEntidad">
+                  <option value="">Todas las entidades</option>
+                  @for (e of TIPOS_ENTIDAD; track e) { <option [value]="e">{{ e }}</option> }
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+                <select class="filter-input" [(ngModel)]="fSubEstado">
+                  <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+                </select>
+              </div>
+              <button class="btn-orange" (click)="filtrarSubEtapas()">Filtrar</button>
+            </div>
+          </div>
+          <div class="stat-card overflow-hidden">
+            <table class="data-table">
+              <thead><tr><th>Nro.</th><th>Entidad</th><th>Cliente</th><th>Etapa</th><th>Sub-estados</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody>
+                @for (c of subConfigPaginated(); track c.id; let i = $index) {
+                  <tr>
+                    <td class="n-col">{{ (subProcPage()-1)*pageSize() + i + 1 }}</td>
+                    <td class="font-medium">{{ c.entidad }}</td>
+                    <td class="text-muted" style="font-size:12px">{{ c.clientes && c.clientes.length ? c.clientes.join(', ') : 'Todos' }}</td>
+                    <td class="font-medium">{{ c.etapaNombre }}</td>
+                    <td><span class="badge-role">{{ c.subestados.length }}</span></td>
+                    <td>@if (c.estado==='Activo') {<span class="badge-active">Activo</span>} @else {<span class="badge-inactive">Inactivo</span>}</td>
+                    <td>
+                      <div class="flex gap-1.5">
+                        <button class="btn-icon btn-view" title="Ver" (click)="editarConfigSubEtapa(c.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                        <button class="btn-icon btn-edit" title="Editar" (click)="editarConfigSubEtapa(c.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <div class="pg-bar">
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Por página:</span>
+                <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                  <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+                </select>
+                <span class="pg-info">de {{ subConfigFiltradas().length }} registros</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Página {{ subProcPage() }} de {{ totalPages(subConfigFiltradas().length) }}</span>
+                <div class="flex gap-1">
+                  <button class="pg-btn" [disabled]="subProcPage()===1" (click)="setPage(subProcPage, subProcPage()-1, subConfigFiltradas().length)">&#8249;</button>
+                  <button class="pg-btn" [disabled]="subProcPage()>=totalPages(subConfigFiltradas().length)" (click)="setPage(subProcPage, subProcPage()+1, subConfigFiltradas().length)">&#8250;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- FORMULARIO -->
+        @if (subProcView() === 'form') {
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">
+                {{ subProcEditId() ? 'Editar' : 'Nueva' }} Configuración de Sub-estados
+              </h2>
+              <p class="text-sm mt-0.5" style="color:#6B7280">Defina la entidad, cliente, etapa y los sub-estados correspondientes</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn-orange" (click)="guardarConfigSubEtapa()">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Guardar
+              </button>
+              <button class="btn-secondary" (click)="cancelarConfigSubEtapa()">Cancelar</button>
+            </div>
+          </div>
+
+          <!-- Config card -->
+          <div class="stat-card p-5 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+              <!-- Entidad -->
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Entidad <span style="color:#EF4444">*</span></label>
+                <select class="filter-input w-full"
+                  [ngModel]="subFormEntidad()"
+                  (ngModelChange)="subFormEntidad.set($event); onSubEntidadChange()">
+                  @for (e of TIPOS_ENTIDAD; track e) { <option [value]="e">{{ e }}</option> }
+                </select>
+              </div>
+
+              <!-- Cliente multiselect -->
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Cliente</label>
+                <div style="position:relative">
+                  <button type="button" class="filter-input w-full text-left flex items-center justify-between"
+                    (click)="subFormClientesOpen.set(!subFormClientesOpen())">
+                    <span style="font-size:13px;color:#374151">
+                      {{ subFormClientesSel().join(', ') || 'Seleccionar' }}
+                    </span>
+                    <svg class="w-4 h-4" style="color:#9CA3AF;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                  </button>
+                  @if (subFormClientesOpen()) {
+                    <div style="position:absolute;top:100%;left:0;right:0;z-index:50;background:#fff;border:1px solid #E5E7EB;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.1);padding:6px 0;max-height:180px;overflow-y:auto;margin-top:2px">
+                      <label style="display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;font-size:13px" (click)="toggleSubFormCliente('Todos')">
+                        <input type="checkbox" [checked]="subFormClientesSel().includes('Todos')" style="width:14px;height:14px;accent-color:#F47920" readonly/>
+                        <span>Todos</span>
+                      </label>
+                      @for (cl of subClientesPorEntidad(); track cl) {
+                        <label style="display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;font-size:13px" (click)="toggleSubFormCliente(cl)">
+                          <input type="checkbox" [checked]="subFormClientesSel().includes(cl)" style="width:14px;height:14px;accent-color:#F47920" readonly/>
+                          <span>{{ cl }}</span>
+                        </label>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- Estado -->
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+                <select class="filter-input w-full" [(ngModel)]="formConfigSubEtapa.estado">
+                  <option>Activo</option><option>Inactivo</option>
+                </select>
+              </div>
+
+            </div>
+
+            <!-- Etapa -->
+            <div class="mt-4">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Etapa Procesal <span style="color:#EF4444">*</span></label>
+              @if (etasPorEntidadCliente().length === 0) {
+                <p class="text-sm" style="color:#9CA3AF">No hay etapas configuradas para la entidad y cliente seleccionados.</p>
+              } @else {
+                <select class="filter-input w-full" style="max-width:400px"
+                  [ngModel]="subFormEtapaId()"
+                  (ngModelChange)="subFormEtapaId.set($event)">
+                  <option value="">Seleccionar etapa...</option>
+                  @for (e of etasPorEntidadCliente(); track e.id) {
+                    <option [value]="e.id">{{ e.nombre }}</option>
+                  }
+                </select>
+              }
+            </div>
+          </div>
+
+          <!-- Tabla de sub-estados -->
+          <div class="stat-card overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-3" style="border-bottom:1px solid #F3F4F6">
+              <h3 class="font-semibold" style="font-size:14px;color:#374151">Lista de Sub-estados</h3>
+              <button class="btn-orange" style="padding:6px 14px;font-size:12px" (click)="abrirModalAgregarSubEstado()">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Agregar sub-estado
+              </button>
+            </div>
+            <table class="data-table">
+              <thead><tr><th>Nro.</th><th>Nombre</th><th>Descripción</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody>
+                @for (s of subFormPaginated(); track s.id; let i = $index) {
+                  <tr>
+                    <td class="n-col">{{ (subFormPageSig()-1)*pageSize() + i + 1 }}</td>
+                    <td class="font-medium">{{ s.nombre }}</td>
+                    <td class="text-muted">{{ s.descripcion || '—' }}</td>
+                    <td>@if (s.estado==='Activo') {<span class="badge-active">Activo</span>} @else {<span class="badge-inactive">Inactivo</span>}</td>
+                    <td>
+                      <button class="btn-icon btn-delete" title="Eliminar" (click)="eliminarSubEstadoItem(s.id)">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                      </button>
+                    </td>
+                  </tr>
+                }
+                @if (subEstadosFormList().length === 0) {
+                  <tr><td colspan="5" class="text-center text-muted py-6" style="font-size:13px">No hay sub-estados agregados aún</td></tr>
+                }
+              </tbody>
+            </table>
+            <div class="pg-bar">
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Por página:</span>
+                <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                  <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option>
+                </select>
+                <span class="pg-info">de {{ subEstadosFormList().length }} registros</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Página {{ subFormPageSig() }} de {{ totalPages(subEstadosFormList().length) }}</span>
+                <div class="flex gap-1">
+                  <button class="pg-btn" [disabled]="subFormPageSig()===1" (click)="setPage(subFormPageSig, subFormPageSig()-1, subEstadosFormList().length)">&#8249;</button>
+                  <button class="pg-btn" [disabled]="subFormPageSig()>=totalPages(subEstadosFormList().length)" (click)="setPage(subFormPageSig, subFormPageSig()+1, subEstadosFormList().length)">&#8250;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- MODAL: Agregar Sub-estado -->
+        @if (modalActivo() === 'agregarSubEstado') {
+          <div class="cfg-modal-bg" (click)="closeModal()">
+            <div class="cfg-modal" style="max-width:480px" (click)="$event.stopPropagation()">
+              <div class="cfg-modal-title">Agregar Sub-estado
+                <button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+
+              <div class="space-y-4">
+                <!-- Nombre -->
+                <div>
+                  <label>Nombre <span style="color:#EF4444">*</span></label>
+                  <input type="text" placeholder="Nombre del sub-estado..." [(ngModel)]="formAgregarSubEstado.nombre"/>
+                  @if (subErrNombre()) {
+                    <span style="color:#EF4444;font-size:11px">Campo obligatorio *</span>
+                  }
+                </div>
+
+                <!-- Descripción -->
+                <div>
+                  <label>Descripción</label>
+                  <textarea rows="2" placeholder="Descripción opcional..." [(ngModel)]="formAgregarSubEstado.descripcion" style="resize:none;width:100%;padding:8px 10px;border:1px solid #D1D5DB;border-radius:8px;font-size:13px"></textarea>
+                </div>
+
+                <!-- Estado -->
+                <div>
+                  <label>Estado</label>
+                  <select [(ngModel)]="formAgregarSubEstado.estado">
+                    <option>Activo</option><option>Inactivo</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex gap-3 justify-end mt-4">
+                <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+                <button class="btn-orange" (click)="guardarAgregarSubEstado()">Guardar</button>
+              </div>
+            </div>
+          </div>
+        }
+
+      }
+
+      <!-- ══ JUZGADOS ══ -->
+      @if (activeView() === 'juzgados') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Juzgados</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Registro de juzgados del sistema</p>
+          </div>
+          <button class="btn-orange" (click)="abrirModalJuzgado()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nuevo Juzgado
+          </button>
+        </div>
+        <div class="stat-card p-4 mb-4">
+          <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+              <div style="position:relative"><svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Nombre de Juzgado" class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fJuzEstado"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+              <select class="filter-input" [(ngModel)]="fJuzEstado">
+                <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+            <button class="btn-orange" (click)="filtrarJuzgados()">Filtrar</button>
+          </div>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <table class="data-table">
+            <thead><tr><th>Código</th><th>Nombre</th><th>Distrito Judicial</th><th>Especialidad</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+              <tr><td class="cod-cell">J001</td><td class="font-medium">3er Juzgado Civil de Lima</td><td class="text-muted">Lima</td><td><span class="badge-role">Civil</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalJuzgado('J001','3er Juzgado Civil de Lima','Lima','Civil')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
+              <tr><td class="cod-cell">J002</td><td class="font-medium">5to Juzgado de Paz Letrado</td><td class="text-muted">Lima Norte</td><td><span class="badge-role">Paz Letrado</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalJuzgado('J002','5to Juzgado de Paz Letrado','Lima Norte','Paz Letrado')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
+            </tbody>
+          </table>
+          <div class="pg-bar">
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Por página:</span>
+              <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+              </select>
+              <span class="pg-info">de {{ JUZ_TOTAL }} registros</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Página {{ juzPage() }} de {{ totalPages(JUZ_TOTAL) }}</span>
+              <div class="flex gap-1">
+                <button class="pg-btn" [disabled]="juzPage()===1" (click)="setPage(juzPage, juzPage()-1, JUZ_TOTAL)">&#8249;</button>
+                <button class="pg-btn" [disabled]="juzPage()>=totalPages(JUZ_TOTAL)" (click)="setPage(juzPage, juzPage()+1, JUZ_TOTAL)">&#8250;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ TABLAS GENERALES ══ -->
+      @if (activeView() === 'tablas') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Tablas Generales</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Catálogos compartidos entre aplicativos</p>
+          </div>
+          <button class="btn-orange" (click)="abrirModalTabla()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nueva tabla
+          </button>
+        </div>
+        <div class="stat-card pt-2.5 pb-4 px-3 mb-4">
+          <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+              <div style="position:relative"><svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Nombre, código..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fTabSearch"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Tipo de código</label>
+              <select class="filter-input" [(ngModel)]="fTabTipo">
+                <option value="">Todos los tipos</option>
+                <option value="entidad">entidad</option>
+                <option value="etapa">etapa</option>
+                <option value="documento">documento</option>
+                <option value="caso">caso</option>
+                <option value="moneda">moneda</option>
+                <option value="gasto">gasto</option>
+                <option value="arancel">arancel</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+              <select class="filter-input" [(ngModel)]="fTabEstado">
+                <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+            <button class="btn-orange" (click)="filtrarTablas()">Filtrar</button>
+          </div>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <div class="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
+            <p class="text-sm font-semibold" style="color:#1F2937">Catálogos del sistema</p>
+            <span class="text-xs" style="color:#6B7280">{{ tablasFiltradas().length }} registros</span>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Código</th><th>Nombre</th><th>Tipo</th><th>Descripción</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+              @for (t of tabPaginated(); track t.id) {
+                <tr>
+                  <td class="cod-cell">{{ t.codigo }}</td>
+                  <td class="font-medium">{{ t.nombre }}</td>
+                  <td><span class="badge-role">{{ t.tipo }}</span></td>
+                  <td class="text-muted">{{ t.descripcion }}</td>
+                  <td>
+                    @if (t.estado === 'Activo') { <span class="badge-active">Activo</span> }
+                    @else { <span class="badge-inactive">Inactivo</span> }
+                  </td>
+                  <td>
+                    <button class="btn-icon btn-edit" (click)="abrirModalTabla(t.codigo, t.nombre, t.tipo, t.descripcion)">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <div class="pg-bar">
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Por página:</span>
+              <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+              </select>
+              <span class="pg-info">de {{ tablasFiltradas().length }} registros</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="pg-info">Página {{ tabPage() }} de {{ totalPages(tablasFiltradas().length) }}</span>
+              <div class="flex gap-1">
+                <button class="pg-btn" [disabled]="tabPage()===1" (click)="setPage(tabPage, tabPage()-1, tablasFiltradas().length)">&#8249;</button>
+                <button class="pg-btn" [disabled]="tabPage()>=totalPages(tablasFiltradas().length)" (click)="setPage(tabPage, tabPage()+1, tablasFiltradas().length)">&#8250;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ TIPOS DE GASTO ══ -->
+      @if (activeView() === 'tiposgasto') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Tipos de Gasto</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Categorías de gastos para el módulo GAP</p>
+          </div>
+          <button class="btn-orange" (click)="abrirModalGasto()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nuevo Tipo
+          </button>
+        </div>
+        <div class="stat-card p-4 mb-4">
+          <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+              <div style="position:relative"><svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Nombre, código..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fGastoSearch"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Tipo</label>
+              <select class="filter-input" [(ngModel)]="fGastoTipo">
+                <option value="">Todos</option><option>Administrativo</option><option>Judicial</option><option>Valores</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+              <select class="filter-input" [(ngModel)]="fGastoEstado">
+                <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+            <button class="btn-orange" (click)="filtrarGastos()">Filtrar</button>
+          </div>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
+            <p class="text-sm font-semibold" style="color:#1F2937">Categorías de gastos</p>
+            <span class="text-xs" style="color:#6B7280">{{ tiposGastoFiltrados().length }} registros</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Código</th><th>Nombre</th><th>Tipo</th><th>Descripción</th><th>Aplicativo</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody>
+                @for (g of gastoPaginated(); track g.id; let i = $index) {
+                  <tr>
+                    <td class="n-col">{{ i + 1 }}</td>
+                    <td><span class="cod-cell font-mono font-semibold" style="color:#F47920">{{ g.codigo }}</span></td>
+                    <td class="font-medium">{{ g.nombre }}</td>
+                    <td>
+                      @if (g.tipo === 'Judicial') { <span class="badge-active" style="background:rgba(59,130,246,.1);color:#3B82F6;border-color:rgba(59,130,246,.3)">Judicial</span> }
+                      @else if (g.tipo === 'Valores') { <span class="badge-active" style="background:rgba(234,179,8,.1);color:#CA8A04;border-color:rgba(234,179,8,.3)">Valores</span> }
+                      @else { <span class="badge-active" style="background:rgba(107,114,128,.1);color:#6B7280;border-color:rgba(107,114,128,.3)">Administrativo</span> }
+                    </td>
+                    <td class="text-muted" style="max-width:220px">{{ g.descripcion }}</td>
+                    <td><span class="badge-active" style="background:rgba(99,102,241,.1);color:#6366F1;border-color:rgba(99,102,241,.3)">{{ g.aplicativo }}</span></td>
+                    <td>
+                      @if (g.estado === 'Activo') { <span class="badge-active">Activo</span> }
+                      @else { <span class="badge-inactive">Inactivo</span> }
+                    </td>
+                    <td>
+                      <button class="btn-icon btn-edit" (click)="editarGasto(g.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <div class="pg-bar">
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Por página:</span>
+                <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                  <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option>
+                </select>
+                <span class="pg-info">de {{ tiposGastoFiltrados().length }} registros</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Página {{ gastoPage() }} de {{ totalPages(tiposGastoFiltrados().length) }}</span>
+                <div class="flex gap-1">
+                  <button class="pg-btn" [disabled]="gastoPage()===1" (click)="setPage(gastoPage, gastoPage()-1, tiposGastoFiltrados().length)">&#8249;</button>
+                  <button class="pg-btn" [disabled]="gastoPage()>=totalPages(tiposGastoFiltrados().length)" (click)="setPage(gastoPage, gastoPage()+1, tiposGastoFiltrados().length)">&#8250;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ TIPOS DE ARANCEL (SCG) ══ -->
+      @if (activeView() === 'tiposArancel') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Tipos de Arancel</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Aranceles judiciales del módulo SCG · Monto referencial en S/</p>
+          </div>
+          <button class="btn-orange" (click)="abrirModalArancel()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nuevo Arancel
+          </button>
+        </div>
+        <div class="stat-card p-4 mb-4">
+          <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+              <div style="position:relative"><svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Nombre, código..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fArancelSearch"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+              <select class="filter-input" [(ngModel)]="fArancelEstado">
+                <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+            <button class="btn-orange" (click)="filtrarAranceles()">Filtrar</button>
+          </div>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
+            <p class="text-sm font-semibold" style="color:#1F2937">Aranceles judiciales</p>
+            <span class="text-xs" style="color:#6B7280">{{ tiposArancelFiltrados().length }} registros</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Cód. Arancel</th><th>Tipo de Gasto</th><th>Nombre Arancel</th><th>Concepto</th><th>Costo (S/)</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody>
+                @for (a of arancelPaginated(); track a.id; let i = $index) {
+                  <tr>
+                    <td class="n-col">{{ i + 1 }}</td>
+                    <td><span class="cod-cell font-mono font-semibold" style="color:#F47920">{{ a.codigo }}</span></td>
+                    <td><span style="font-size:11px;font-weight:600;color:#6B7280;text-transform:uppercase;letter-spacing:.03em">{{ a.tipoGasto }}</span></td>
+                    <td class="font-medium">{{ a.nombre }}</td>
+                    <td class="text-muted" style="max-width:200px;font-size:12px">{{ a.concepto }}</td>
+                    <td><span class="font-semibold" style="color:#059669">S/ {{ a.costo }}</span></td>
+                    <td>
+                      @if (a.estado === 'Activo') { <span class="badge-active">Activo</span> }
+                      @else { <span class="badge-inactive">Inactivo</span> }
+                    </td>
+                    <td>
+                      <button class="btn-icon btn-edit" (click)="editarArancel(a.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <div class="pg-bar">
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Por página:</span>
+                <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                  <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option>
+                </select>
+                <span class="pg-info">de {{ tiposArancelFiltrados().length }} registros</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Página {{ arancelPage() }} de {{ totalPages(tiposArancelFiltrados().length) }}</span>
+                <div class="flex gap-1">
+                  <button class="pg-btn" [disabled]="arancelPage()===1" (click)="setPage(arancelPage, arancelPage()-1, tiposArancelFiltrados().length)">&#8249;</button>
+                  <button class="pg-btn" [disabled]="arancelPage()>=totalPages(tiposArancelFiltrados().length)" (click)="setPage(arancelPage, arancelPage()+1, tiposArancelFiltrados().length)">&#8250;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+    
+      <!-- ══ NOTARÍAS ══ -->
+      @if (activeView() === 'notarias') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Gestión de Notarías</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Notarías registradas y sus aplicativos</p>
+          </div>
+          <button class="btn-orange" (click)="abrirModalNotaria()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nueva Notaría
+          </button>
+        </div>
+        <div class="stat-card p-4 mb-4">
+          <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+              <div style="position:relative"><svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Nombre, RUC..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fNotSearch"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+              <select class="filter-input" [(ngModel)]="fNotEstado">
+                <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+            <button class="btn-orange" (click)="filtrarNotarias()">Filtrar</button>
+          </div>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
+            <p class="text-sm font-semibold" style="color:#1F2937">Lista de Notarías</p>
+            <span class="text-xs" style="color:#6B7280">{{ notariasFiltradas().length }} registros</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Razón Social</th><th>RUC</th><th>Distrito</th><th>Teléfono</th><th>Email</th><th>GEPDIA / año</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody>
+                @for (n of notPaginated(); track n.id; let i = $index) {
+                  <tr>
+                    <td class="n-col">{{ i + 1 }}</td>
+                    <td class="font-medium">{{ n.razon }}</td>
+                    <td class="cod-cell">{{ n.ruc }}</td>
+                    <td class="text-muted">{{ n.distrito }}</td>
+                    <td class="text-muted">{{ n.telefono }}</td>
+                    <td class="text-muted">{{ n.email }}</td>
+                    <td>
+                      @if (n.apps.includes('GEPDIA')) {
+                        <div style="display:flex;flex-direction:column;gap:5px;min-width:120px">
+                          <div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+                              <span style="font-size:10px;color:#6B7280;font-weight:600">Consultas</span>
+                              <span style="font-size:10px;color:#6366F1;font-weight:700">{{ n.gepdia_consultas_usadas ?? 0 }}/{{ n.gepdia_consultas }}</span>
+                            </div>
+                            <div style="height:4px;background:#E5E7EB;border-radius:9px;overflow:hidden">
+                              <div style="height:100%;background:#6366F1;border-radius:9px" [style.width.%]="((n.gepdia_consultas_usadas??0) / (n.gepdia_consultas||1)) * 100"></div>
+                            </div>
+                          </div>
+                          <div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+                              <span style="font-size:10px;color:#6B7280;font-weight:600">Cargas doc.</span>
+                              <span style="font-size:10px;color:#8B5CF6;font-weight:700">{{ n.gepdia_cargas_usadas ?? 0 }}/{{ n.gepdia_cargas }}</span>
+                            </div>
+                            <div style="height:4px;background:#E5E7EB;border-radius:9px;overflow:hidden">
+                              <div style="height:100%;background:#8B5CF6;border-radius:9px" [style.width.%]="((n.gepdia_cargas_usadas??0) / (n.gepdia_cargas||1)) * 100"></div>
+                            </div>
+                          </div>
+                        </div>
+                      } @else {
+                        <span class="text-muted" style="font-size:12px">—</span>
+                      }
+                    </td>
+                    <td>
+                      @if (n.estado === 'Activo') { <span class="badge-active">Activo</span> }
+                      @else { <span class="badge-inactive">Inactivo</span> }
+                    </td>
+                    <td>
+                      <div class="flex gap-1.5">
+                        <button class="btn-icon btn-view" (click)="verNotaria(n.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                        <button class="btn-icon btn-edit" (click)="editarNotaria(n.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <div class="pg-bar">
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Por página:</span>
+                <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                  <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+                </select>
+                <span class="pg-info">de {{ notariasFiltradas().length }} registros</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Página {{ notPage() }} de {{ totalPages(notariasFiltradas().length) }}</span>
+                <div class="flex gap-1">
+                  <button class="pg-btn" [disabled]="notPage()===1" (click)="setPage(notPage, notPage()-1, notariasFiltradas().length)">&#8249;</button>
+                  <button class="pg-btn" [disabled]="notPage()>=totalPages(notariasFiltradas().length)" (click)="setPage(notPage, notPage()+1, notariasFiltradas().length)">&#8250;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ APLICATIVOS ══ -->
+      @if (activeView() === 'aplicativos') {
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Gestión de Aplicativos</h2>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Aplicativos registrados por notaría</p>
+          </div>
+          <button class="btn-orange" (click)="abrirModalAplicativo()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Nuevo Aplicativo
+          </button>
+        </div>
+        <div class="stat-card p-4 mb-4">
+          <div class="flex flex-wrap gap-3 items-end">
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Buscar</label>
+              <div style="position:relative"><svg width="15" height="15" style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" fill="none" stroke="#9CA3AF" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" placeholder="Nombre, descripción..." class="filter-input w-full" style="padding-left:32px" [(ngModel)]="fAppSearch"/>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Notaría</label>
+              <select class="filter-input" [(ngModel)]="fAppNotaria">
+                <option value="">Todas</option>
+                @for (n of notarias(); track n.id) { <option [value]="n.razon">{{ n.razon }}</option> }
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Estado</label>
+              <select class="filter-input" [(ngModel)]="fAppEstado">
+                <option value="">Todos</option><option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+            <button class="btn-orange" (click)="filtrarAplicativos()">Filtrar</button>
+          </div>
+        </div>
+        <div class="stat-card overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100">
+            <p class="text-sm font-semibold" style="color:#1F2937">Lista de Aplicativos</p>
+            <span class="text-xs" style="color:#6B7280">{{ aplicativosFiltrados().length }} registros</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Notaría</th><th>Nombre</th><th>Descripción</th><th>URL</th><th>Estado</th><th>Acción</th></tr></thead>
+              <tbody>
+                @for (a of appPaginated(); track a.id; let i = $index) {
+                  <tr>
+                    <td class="n-col">{{ i + 1 }}</td>
+                    <td class="text-muted">{{ a.notaria }}</td>
+                    <td class="font-medium">{{ a.nombre }}</td>
+                    <td class="text-muted">{{ a.descripcion }}</td>
+                    <td class="cod-cell">{{ a.url }}</td>
+                    <td>
+                      @if (a.estado === 'Activo') { <span class="badge-active">Activo</span> }
+                      @else { <span class="badge-inactive">Inactivo</span> }
+                    </td>
+                    <td><button class="btn-icon btn-edit" (click)="editarAplicativo(a.id)"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <div class="pg-bar">
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Por página:</span>
+                <select class="pg-select" [ngModel]="pageSize()" (ngModelChange)="setPageSize($event)">
+                  <option [value]="5">5</option><option [value]="10">10</option><option [value]="25">25</option><option [value]="100">100</option>
+                </select>
+                <span class="pg-info">de {{ aplicativosFiltrados().length }} registros</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="pg-info">Página {{ appPage() }} de {{ totalPages(aplicativosFiltrados().length) }}</span>
+                <div class="flex gap-1">
+                  <button class="pg-btn" [disabled]="appPage()===1" (click)="setPage(appPage, appPage()-1, aplicativosFiltrados().length)">&#8249;</button>
+                  <button class="pg-btn" [disabled]="appPage()>=totalPages(aplicativosFiltrados().length)" (click)="setPage(appPage, appPage()+1, aplicativosFiltrados().length)">&#8250;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ PERSONALIZACIÓN ══ -->
+      @if (activeView() === 'personalizacion') {
+
+        <!-- Encabezado -->
+        <div class="mb-5" id="tour-personalizacion-header">
+          <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Personalización del Login</h2>
+          <p class="text-sm mt-0.5" style="color:#6B7280">Configura los textos, banners y aspecto de la pantalla de acceso</p>
+        </div>
+
+        <!-- Layout: ancho completo -->
+        <div class="space-y-4">
+
+          <!-- Dos columnas independientes: cada una maneja su propio gap -->
+          <div style="display:flex;gap:16px;align-items:flex-start">
+
+            <!-- COLUMNA IZQUIERDA: Banners + Posición -->
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+
+              <!-- BANNERS DEL SLIDER -->
+              <div class="stat-card p-5">
+                <div class="flex items-center gap-2 mb-3">
+                  <div style="width:26px;height:26px;background:rgba(244,121,32,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg class="w-3.5 h-3.5" style="color:#F47920" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  </div>
+                  <span class="text-sm font-semibold" style="color:#1F2937">Banners del Slider</span>
+                  <span style="font-size:11px;color:#9CA3AF">(3 imágenes alternadas)</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                  @for (b of loginBanners(); track $index; let i = $index) {
+                    <div>
+                      <p style="font-size:11px;font-weight:600;color:#6B7280;margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em">Banner {{ i + 1 }}</p>
+                      <label [for]="'bnr-'+i" style="display:block;border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .2s"
+                        [style.border]="b.startsWith('data:') ? '2px solid #F47920' : '2px dashed #D1D5DB'">
+                        <div style="aspect-ratio:16/9;background:#F3F4F6;overflow:hidden;position:relative">
+                          <img [src]="b" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'"/>
+                          @if (!b.startsWith('data:')) {
+                            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+                              <svg class="w-6 h-6" style="color:#C4C9D4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                              <span style="font-size:11px;font-weight:600;color:#9CA3AF">+ Subir</span>
+                            </div>
+                          }
+                        </div>
+                      </label>
+                      <input type="file" accept="image/*" [id]="'bnr-'+i" style="display:none" (change)="onBannerFileChange(i,$event)"/>
+                      @if (b.startsWith('data:')) {
+                        <button (click)="resetBanner(i)" style="margin-top:5px;width:100%;font-size:10px;font-weight:600;color:#F47920;background:rgba(244,121,32,.06);border:1px solid rgba(244,121,32,.2);border-radius:6px;padding:4px;cursor:pointer">
+                          ↩ Restaurar original
+                        </button>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- POSICIÓN DEL TÍTULO -->
+              <div class="stat-card p-5">
+                <div class="flex items-center gap-2 mb-1">
+                  <div style="width:26px;height:26px;background:rgba(244,121,32,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg class="w-3.5 h-3.5" style="color:#F47920" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                  </div>
+                  <span class="text-sm font-semibold" style="color:#1F2937">Posición del Título</span>
+                </div>
+                <p class="text-xs mb-3 ml-9" style="color:#9CA3AF">Selecciona dónde aparecerán el título y subtítulo en el panel del login</p>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+                  <button class="pos-btn" [class.on]="loginCfg.logoPos==='top-left'"   (click)="loginCfg.logoPos='top-left'">↖ Sup. Izq.</button>
+                  <button class="pos-btn" [class.on]="loginCfg.logoPos==='top-center'" (click)="loginCfg.logoPos='top-center'">↑ Superior</button>
+                  <button class="pos-btn" [class.on]="loginCfg.logoPos==='top-right'"  (click)="loginCfg.logoPos='top-right'">↗ Sup. Der.</button>
+                  <button class="pos-btn" [class.on]="loginCfg.logoPos==='mid-left'"   (click)="loginCfg.logoPos='mid-left'">← Centro Izq.</button>
+                  <button class="pos-btn" [class.on]="loginCfg.logoPos==='center'"     (click)="loginCfg.logoPos='center'">· Centro</button>
+                  <button class="pos-btn" [class.on]="loginCfg.logoPos==='mid-right'"  (click)="loginCfg.logoPos='mid-right'">→ Centro Der.</button>
+                  <button class="pos-btn" [class.on]="loginCfg.logoPos==='bot-left'"   (click)="loginCfg.logoPos='bot-left'">↙ Inf. Izq.</button>
+                  <button class="pos-btn" [class.on]="loginCfg.logoPos==='bot-center'" (click)="loginCfg.logoPos='bot-center'">↓ Inferior</button>
+                  <button class="pos-btn" [class.on]="loginCfg.logoPos==='bot-right'"  (click)="loginCfg.logoPos='bot-right'">↘ Inf. Der.</button>
+                </div>
+              </div>
+
+            </div><!-- /columna izquierda -->
+
+            <!-- COLUMNA DERECHA: Textos + Logo -->
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+
+              <!-- TEXTOS DEL LOGIN -->
+              <div class="stat-card p-5">
+                <div class="flex items-center gap-2 mb-4">
+                  <div style="width:26px;height:26px;background:rgba(244,121,32,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg class="w-3.5 h-3.5" style="color:#F47920" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                  </div>
+                  <span class="text-sm font-semibold" style="color:#1F2937">Textos del Login</span>
+                </div>
+                <div class="mb-5">
+                  <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#6B7280">Título Principal</label>
+                  <div class="txt-toolbar">
+                    <select class="txt-tb-select" [(ngModel)]="loginCfg.tituloSize">
+                      <option value="sm">Pequeño</option><option value="md">Normal</option>
+                      <option value="lg">Grande</option><option value="xl">Muy grande</option>
+                    </select>
+                    <div class="txt-tb-sep"></div>
+                    <button class="txt-tb-btn" [class.active]="loginCfg.tituloBold"   (click)="loginCfg.tituloBold=!loginCfg.tituloBold"   title="Negrita" style="font-weight:700">B</button>
+                    <button class="txt-tb-btn" [class.active]="loginCfg.tituloItalic" (click)="loginCfg.tituloItalic=!loginCfg.tituloItalic" title="Cursiva"  style="font-style:italic;font-weight:600">I</button>
+                    <div class="txt-tb-sep"></div>
+                    <label class="txt-tb-color" title="Color del texto"><input type="color" [(ngModel)]="loginCfg.tituloColor"/></label>
+                    <div class="txt-tb-sep"></div>
+                    <button class="txt-tb-btn" [class.active]="loginCfg.tituloAlign==='left'"   (click)="loginCfg.tituloAlign='left'"   title="Izquierda"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3V5zm0 4h12v2H3V9zm0 4h18v2H3v-2zm0 4h12v2H3v-2z"/></svg></button>
+                    <button class="txt-tb-btn" [class.active]="loginCfg.tituloAlign==='center'" (click)="loginCfg.tituloAlign='center'" title="Centrar"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3V5zm3 4h12v2H6V9zm-3 4h18v2H3v-2zm3 4h12v2H6v-2z"/></svg></button>
+                    <button class="txt-tb-btn" [class.active]="loginCfg.tituloAlign==='right'"  (click)="loginCfg.tituloAlign='right'"  title="Derecha"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3V5zm6 4h12v2H9V9zm-6 4h18v2H3v-2zm6 4h12v2H9v-2z"/></svg></button>
+                  </div>
+                  <input type="text" class="filter-input w-full" placeholder="Suite de Procesos Judiciales" [(ngModel)]="loginCfg.titulo"
+                    [style.font-weight]="loginCfg.tituloBold ? '700' : '400'"
+                    [style.font-style]="loginCfg.tituloItalic ? 'italic' : 'normal'"
+                    [style.text-align]="loginCfg.tituloAlign || 'left'"
+                    [style.color]="loginCfg.tituloColor || '#1F2937'"/>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color:#6B7280">Subtítulo</label>
+                  <div class="txt-toolbar">
+                    <select class="txt-tb-select" [(ngModel)]="loginCfg.subtituloSize">
+                      <option value="sm">Pequeño</option><option value="md">Normal</option>
+                      <option value="lg">Grande</option><option value="xl">Muy grande</option>
+                    </select>
+                    <div class="txt-tb-sep"></div>
+                    <button class="txt-tb-btn" [class.active]="loginCfg.subtituloBold"   (click)="loginCfg.subtituloBold=!loginCfg.subtituloBold"   title="Negrita" style="font-weight:700">B</button>
+                    <button class="txt-tb-btn" [class.active]="loginCfg.subtituloItalic" (click)="loginCfg.subtituloItalic=!loginCfg.subtituloItalic" title="Cursiva"  style="font-style:italic;font-weight:600">I</button>
+                    <div class="txt-tb-sep"></div>
+                    <label class="txt-tb-color" title="Color del texto"><input type="color" [(ngModel)]="loginCfg.subtituloColor"/></label>
+                    <div class="txt-tb-sep"></div>
+                    <button class="txt-tb-btn" [class.active]="loginCfg.subtituloAlign==='left'"   (click)="loginCfg.subtituloAlign='left'"   title="Izquierda"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3V5zm0 4h12v2H3V9zm0 4h18v2H3v-2zm0 4h12v2H3v-2z"/></svg></button>
+                    <button class="txt-tb-btn" [class.active]="loginCfg.subtituloAlign==='center'" (click)="loginCfg.subtituloAlign='center'" title="Centrar"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3V5zm3 4h12v2H6V9zm-3 4h18v2H3v-2zm3 4h12v2H6v-2z"/></svg></button>
+                    <button class="txt-tb-btn" [class.active]="loginCfg.subtituloAlign==='right'"  (click)="loginCfg.subtituloAlign='right'"  title="Derecha"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 5h18v2H3V5zm6 4h12v2H9V9zm-6 4h18v2H3v-2zm6 4h12v2H9v-2z"/></svg></button>
+                  </div>
+                  <input type="text" class="filter-input w-full" placeholder="Plataforma integral..." [(ngModel)]="loginCfg.subtitulo"
+                    [style.font-weight]="loginCfg.subtituloBold ? '700' : '400'"
+                    [style.font-style]="loginCfg.subtituloItalic ? 'italic' : 'normal'"
+                    [style.text-align]="loginCfg.subtituloAlign || 'left'"
+                    [style.color]="loginCfg.subtituloColor || '#6B7280'"/>
+                </div>
+              </div>
+
+              <!-- LOGO -->
+              <div class="stat-card p-5">
+                <div class="flex items-center gap-2 mb-3">
+                  <div style="width:26px;height:26px;background:rgba(244,121,32,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                    <svg class="w-3.5 h-3.5" style="color:#F47920" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  </div>
+                  <span class="text-sm font-semibold" style="color:#1F2937">Logo</span>
+                </div>
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-1.5" style="color:#6B7280">Imagen del logo</label>
+                <input type="file" accept="image/*" class="filter-input w-full text-xs"/>
+              </div>
+
+            </div><!-- /columna derecha -->
+
+          </div><!-- /flex dos columnas -->
+
+          <!-- BOTONES -->
+          <div class="flex items-center justify-between">
+            <button class="btn-secondary" style="color:#EF4444;border-color:#FECACA" (click)="restablecerLogin()">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Restablecer
+            </button>
+            <div class="flex gap-2">
+              <button class="btn-secondary" (click)="previewModalOpen.set(true)">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                Pantalla completa
+              </button>
+              <button class="btn-orange" (click)="guardarPersonalizacion()">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Guardar configuración
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /space-y-4 -->
+      }
+
+  </div><!-- /cfgMain -->
+   </main>
+</div><!-- /cfgWrapper -->
+
+<!-- ══════════════ MODALES ══════════════ -->
+
+  <!-- MODAL USUARIO (componente) -->
+  <app-usuario-modal
+    [visible]="usuarioModalVisible()"
+    [usuarios]="usuarios()"
+    [notariasActivas]="notariasActivas()"
+    [roles]="roles()"
+    (closed)="usuarioModalVisible.set(false)"
+    (saved)="onUsuarioSaved($event)"
+    (toast)="showToast($event)">
+  </app-usuario-modal>
+
+  <!-- MODAL CONTRASEÑA (componente) -->
+  <app-restablecer-pwd-modal
+    [visible]="pwdModalVisible()"
+    [usernameLabel]="pwdModalLabel()"
+    [usuarioId]="pwdModalId()"
+    (closed)="pwdModalVisible.set(false)"
+    (pwdGuardada)="onPwdGuardada($event)">
+  </app-restablecer-pwd-modal>
+
+  <!-- MODAL COBERTURA TEMPORAL (componente) -->
+  <app-cobertura-temp-modal
+    [visible]="coberturaModalVisible()"
+    [targetId]="coberturaTargetId2()"
+    [targetLabel]="coberturaTargetLabel2()"
+    [coberturas]="coberturas()"
+    [usuariosPorNotaria]="usuariosPorNotaria()"
+    (closed)="coberturaModalVisible.set(false)"
+    (coberturaRegistrada)="onCoberturaRegistrada($event)"
+    (coberturaEliminada)="eliminarCobertura($event)">
+  </app-cobertura-temp-modal>
+
+  <!-- MODAL ROL (componente) -->
+  <app-rol-modal
+    [visible]="rolModalVisible()"
+    [roles]="roles()"
+    [notariaAdmin]="miNotariaRol()"
+    [esAdminSigcomt]="esAdminSigcomt()"
+    (closed)="rolModalVisible.set(false)"
+    (saved)="onRolSaved($event)"
+    (toast)="showToast($event)">
+  </app-rol-modal>
+
+  <!-- MODAL NOTARÍA -->
+  @if (modalActivo() === 'notaria') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:560px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(244,121,32,.15)"><svg class="w-4 h-4" style="color:#F47920" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5"/></svg></div>
+          <span>{{ notModalTitle() }}</span>
+          <button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div class="col-span-2"><label>Razón Social <span style="color:#EF4444">*</span></label><input type="text" placeholder="Ej: Notaría Lima Norte" maxlength="50" [(ngModel)]="formNot.razon"/></div>
+          <div><label>Nombre del Notario</label><input type="text" placeholder="Dr./Dra." maxlength="100" [(ngModel)]="formNot.notario"/></div>
+          <div><label>RUC <span style="color:#EF4444">*</span></label><input type="text" placeholder="20XXXXXXXXX" maxlength="11" [(ngModel)]="formNot.ruc"/></div>
+          <div><label>Distrito Judicial</label><input type="text" placeholder="Lima" maxlength="50" [(ngModel)]="formNot.distrito"/></div>
+          <div><label>Teléfono</label><input type="text" placeholder="01-XXX XXXX" maxlength="15" [(ngModel)]="formNot.telefono"/></div>
+          <div><label>Email <span style="color:#EF4444">*</span></label><input type="email" placeholder="notaria@mail.com" maxlength="50" [(ngModel)]="formNot.email"/></div>
+          <div class="col-span-2"><label>Dirección</label><input type="text" placeholder="Dirección completa" maxlength="250" [(ngModel)]="formNot.direccion"/></div>
+          @if (showEstadoNot()) {
+            <div><label>Estado</label><select [(ngModel)]="formNot.estado"><option>Activo</option><option>Inactivo</option></select></div>
+          }
+        </div>
+        <p class="text-xs font-semibold uppercase tracking-wider mt-4 mb-2" style="color:#6B7280">Aplicativos con acceso <span style="color:#EF4444">*</span></p>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          @for (app of APPS_LIST; track app) {
+            <label class="chk-app-item">
+              <input type="checkbox" class="perm-chk" [checked]="isAppSelected(app)" (change)="toggleApp(app)"/>
+              <div><p style="font-size:13px;font-weight:600;color:#1F2937">{{ app }}</p></div>
+            </label>
+          }
+        </div>
+        @if (isAppSelected('GEPDIA')) {
+          <div class="mt-4 p-3 rounded-xl" style="background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.2)">
+            <p class="text-xs font-semibold uppercase tracking-wider mb-3 flex items-center gap-1.5" style="color:#6366F1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              Límites GEPDIA / año
+            </p>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px">Consultas IA</label>
+                <input type="number" min="0" max="9999" class="cfg-input w-full" placeholder="50" [(ngModel)]="formNot.gepdia_consultas"/>
+              </div>
+              <div>
+                <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px">Cargas de Documentos</label>
+                <input type="number" min="0" max="9999" class="cfg-input w-full" placeholder="20" [(ngModel)]="formNot.gepdia_cargas"/>
+              </div>
+            </div>
+            <p class="text-xs mt-2" style="color:#9CA3AF">Máximo de operaciones por notaría al año. 0 = sin límite.</p>
+          </div>
+        }
+        <div class="flex gap-3 justify-end mt-4">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarNotaria()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL APLICATIVO -->
+  @if (modalActivo() === 'aplicativo') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:560px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(244,121,32,.15)"><svg class="w-4 h-4" style="color:#F47920" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg></div>
+          <span>{{ appModalTitle() }}</span>
+          <button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div>
+            <label>Notaría <span style="color:#EF4444">*</span></label>
+            <select [(ngModel)]="formApp.notaria">
+              <option value="">Seleccionar notaría...</option>
+              @for (n of notariasActivas(); track n.id) { <option [value]="n.razon">{{ n.razon }}</option> }
+            </select>
+          </div>
+          <div><label>Nombre <span style="color:#EF4444">*</span></label><input type="text" placeholder="Nombre del aplicativo" maxlength="50" [(ngModel)]="formApp.nombre"/></div>
+          <div class="col-span-2"><label>Descripción</label><input type="text" placeholder="Descripción breve" maxlength="200" [(ngModel)]="formApp.descripcion"/></div>
+          <div class="col-span-2"><label>URL <span style="color:#EF4444">*</span></label><input type="text" placeholder="https://... o nombre.html" [(ngModel)]="formApp.url"/></div>
+          @if (showEstadoApp()) {
+            <div><label>Estado</label><select [(ngModel)]="formApp.estado"><option>Activo</option><option>Inactivo</option></select></div>
+          }
+        </div>
+        <div class="flex gap-3 justify-end mt-4">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarAplicativo()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL CLIENTE -->
+  @if (modalActivo() === 'cliente') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:640px;max-height:90vh;overflow-y:auto" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">
+          <span>{{ cliModalTitle() }}</span>
+          <button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <p style="font-size:11px;font-weight:700;color:#F47920;letter-spacing:.08em;text-transform:uppercase;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(244,121,32,.2)">Datos del Cliente</p>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div class="col-span-2"><label>Nombres o Razón Social <span style="color:#EF4444">*</span></label><input type="text" placeholder="Nombre completo o razón social" [(ngModel)]="formCli.nombre" [disabled]="cliReadonly()"/></div>
+          <div><label>Tipo de Documento</label><select [(ngModel)]="formCli.tipoDoc" [disabled]="cliReadonly()"><option value="DNI">DNI</option><option value="RUC">RUC</option><option value="CE">CE</option><option value="Pasaporte">Pasaporte</option></select></div>
+          <div><label>Nro. de Documento <span style="color:#EF4444">*</span></label><input type="text" placeholder="Ej: 47834512" [(ngModel)]="formCli.nroDoc" [disabled]="cliReadonly()"/></div>
+          <div><label>Entidad o Rubro <span style="color:#EF4444">*</span></label>
+            <select [(ngModel)]="formCli.entidad" (ngModelChange)="onEntidadChange()" [disabled]="cliReadonly()">
+              <option value="">— Seleccionar —</option>
+              <option value="Persona Natural">Persona Natural</option><option value="Empresa">Empresa</option><option value="Banco">Banco</option>
+            </select>
+          </div>
+          @if (showCliCorreo()) {
+            <div><label>Correo Electrónico</label><input type="email" placeholder="correo@ejemplo.com" [(ngModel)]="formCli.correo" [disabled]="cliReadonly()"/></div>
+          }
+          @if (showEstadoCli()) {
+            <div><label>Estado</label><select [(ngModel)]="formCli.estado" [disabled]="cliReadonly()"><option value="Activo">Activo</option><option value="Inactivo">Inactivo</option></select></div>
+          }
+        </div>
+        @if (showCliContactos()) {
+          <div style="margin-top:16px">
+            <p style="font-size:11px;font-weight:700;color:#F47920;letter-spacing:.08em;text-transform:uppercase;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(244,121,32,.2)">Datos del Contacto</p>
+            @if (!cliReadonly()) {
+              <div class="grid grid-cols-2 gap-x-4" style="margin-bottom:10px">
+                <div><label>Nombre Completo</label><input type="text" placeholder="Nombres y apellidos" [(ngModel)]="formContacto.nombre"/></div>
+                <div><label>Cargo</label><input type="text" placeholder="Ej: Gerente Legal" [(ngModel)]="formContacto.cargo"/></div>
+                <div><label>Correo</label><input type="email" placeholder="correo@empresa.com" [(ngModel)]="formContacto.correo"/></div>
+                <div style="display:flex;gap:8px;align-items:flex-end">
+                  <div style="flex:1"><label>Teléfono</label><input type="text" placeholder="Ej: 999888777" [(ngModel)]="formContacto.telefono"/></div>
+                  <button class="btn-orange" style="margin-bottom:14px;padding:8px 14px;white-space:nowrap" (click)="agregarContacto()">+</button>
+                </div>
+              </div>
+            }
+            <div style="border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;margin-bottom:14px">
+              <table class="data-table" style="font-size:12px">
+                <thead><tr><th>Nombre</th><th>Cargo</th><th>Correo</th><th>Teléfono</th><th>Principal</th>@if (!cliReadonly()) {<th></th>}</tr></thead>
+                <tbody>
+                  @for (ct of contactosTemp(); track $index; let i = $index) {
+                    <tr>
+                      <td>{{ ct.nombre }}</td>
+                      <td class="text-muted">{{ ct.cargo }}</td>
+                      <td class="text-muted">{{ ct.correo }}</td>
+                      <td class="text-muted">{{ ct.telefono }}</td>
+                      <td>
+                        @if (ct.principal) { <span class="badge-active">Sí</span> }
+                        @else if (!cliReadonly()) { <button class="btn-secondary" style="padding:3px 8px;font-size:11px" (click)="setPrincipalContacto(i)">Marcar</button> }
+                      </td>
+                      @if (!cliReadonly()) {
+                        <td><button class="btn-icon btn-del" (click)="eliminarContacto(i)"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button></td>
+                      }
+                    </tr>
+                  }
+                  @if (!contactosTemp().length) {
+                    <tr><td colspan="6" style="text-align:center;padding:12px 0;color:#9CA3AF;font-size:12px">Sin contactos agregados</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        }
+        <div class="flex gap-3 justify-end mt-2">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          @if (!cliReadonly()) { <button class="btn-orange" (click)="guardarCliente()">Guardar</button> }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL ENTIDAD -->
+  @if (modalActivo() === 'entidad') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:420px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">{{ entidadModalTitle() }}<button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+        <div><label>Nombre</label><input type="text" [(ngModel)]="formEntidad.nombre"/></div>
+        <div><label>Descripción</label><input type="text" [(ngModel)]="formEntidad.descripcion"/></div>
+        <div class="flex gap-3 justify-end mt-2">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarEntidad()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL TIPO DE CASO -->
+  @if (modalActivo() === 'tipocaso') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:500px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(244,121,32,.15)">
+            <svg class="w-4 h-4" style="color:#F47920" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <span>{{ tipoCasoModalTitle() }}</span>
+          <button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div>
+            <label>Código <span style="color:#EF4444">*</span></label>
+            <input type="text" placeholder="Ej: ODSD" maxlength="10" [(ngModel)]="formTipoCaso.codigo" style="text-transform:uppercase"/>
+          </div>
+          <div>
+            <label>Entidad <span style="color:#EF4444">*</span></label>
+            <select [(ngModel)]="formTipoCaso.entidad">
+              <option value="">— Seleccionar —</option>
+              <option>Persona Natural</option>
+              <option>Empresa</option>
+              <option>Banco</option>
+            </select>
+          </div>
+          <div class="col-span-2">
+            <label>Nombre del Tipo de Caso <span style="color:#EF4444">*</span></label>
+            <input type="text" placeholder="Ej: Obligación de Dar Suma de Dinero" maxlength="80" [(ngModel)]="formTipoCaso.nombre"/>
+          </div>
+          <div>
+            <label>Moneda <span style="color:#EF4444">*</span></label>
+            <select [(ngModel)]="formTipoCaso.moneda">
+              <option>PEN</option>
+              <option>USD</option>
+            </select>
+          </div>
+          <div>
+            <label>Monto Base del Caso</label>
+            <input type="number" min="0" step="0.01" placeholder="0.00" [(ngModel)]="formTipoCaso.montoBase"/>
+          </div>
+          @if (showEstadoTipoCaso()) {
+            <div class="col-span-2">
+              <label>Estado</label>
+              <select [(ngModel)]="formTipoCaso.estado">
+                <option>Activo</option><option>Inactivo</option>
+              </select>
+            </div>
+          }
+        </div>
+        <p class="text-xs mt-2" style="color:#9CA3AF">El monto base puede ajustarse al crear o editar un caso en SPJ.</p>
+        <div class="flex gap-3 justify-end mt-4">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarTipoCaso()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL DURACIÓN ETAPA -->
+  @if (modalActivo() === 'duracion') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:480px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">Editar Duración etapa<button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+
+        <!-- Info readonly -->
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <div>
+            <label>Etapa ID</label>
+            <input type="text" [value]="etaDurEditEtapaId()" readonly style="background:#F9FAFB;color:#6B7280"/>
+          </div>
+          <div>
+            <label>Nombre</label>
+            <input type="text" [value]="etapaNombrePorId(etaDurEditEtapaId())" readonly style="background:#F9FAFB;color:#374151;font-weight:500"/>
+          </div>
+        </div>
+
+        <!-- Campos de días -->
+        <div class="grid grid-cols-2 gap-4">
+
+          <!-- Días Caso (siempre) -->
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Días Caso</label>
+            <div style="display:flex;align-items:center;gap:12px">
+              <button style="font-size:18px;line-height:1;color:#6B7280;padding:0 4px" (click)="adjDur('diasCaso',-1)">—</button>
+              <span style="font-size:16px;font-weight:600;color:#1F2937;min-width:28px;text-align:center">{{ formDuracion().diasCaso }}</span>
+              <button style="font-size:18px;line-height:1;color:#6B7280;padding:0 4px" (click)="adjDur('diasCaso',1)">+</button>
+            </div>
+          </div>
+
+          <!-- Días DEJ (solo BCP + columna activa) -->
+          @if (isDEJVisible() && etaDurColDEJ()) {
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Días DEJ</label>
+              <div style="display:flex;align-items:center;gap:12px">
+                <button style="font-size:18px;line-height:1;color:#6B7280;padding:0 4px" (click)="adjDur('diasDEJ',-1)">—</button>
+                <span style="font-size:16px;font-weight:600;color:#1F2937;min-width:28px;text-align:center">{{ formDuracion().diasDEJ }}</span>
+                <button style="font-size:18px;line-height:1;color:#6B7280;padding:0 4px" (click)="adjDur('diasDEJ',1)">+</button>
+              </div>
+            </div>
+          }
+
+          <!-- Días Meta (si columna activa) -->
+          @if (etaDurColMeta()) {
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Días Meta</label>
+              <div style="display:flex;align-items:center;gap:12px">
+                <button style="font-size:18px;line-height:1;color:#6B7280;padding:0 4px" (click)="adjDur('diasMeta',-1)">—</button>
+                <span style="font-size:16px;font-weight:600;color:#1F2937;min-width:28px;text-align:center">{{ formDuracion().diasMeta }}</span>
+                <button style="font-size:18px;line-height:1;color:#6B7280;padding:0 4px" (click)="adjDur('diasMeta',1)">+</button>
+              </div>
+            </div>
+          }
+
+          <!-- Días Alerta Usuario (si columna activa) -->
+          @if (etaDurColAlerta()) {
+            <div>
+              <label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px">Días alerta Usuario</label>
+              <div style="display:flex;align-items:center;gap:12px">
+                <button style="font-size:18px;line-height:1;color:#6B7280;padding:0 4px" (click)="adjDur('diasAlerta',-1)">—</button>
+                <span style="font-size:16px;font-weight:600;color:#1F2937;min-width:28px;text-align:center">{{ formDuracion().diasAlerta }}</span>
+                <button style="font-size:18px;line-height:1;color:#6B7280;padding:0 4px" (click)="adjDur('diasAlerta',1)">+</button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="flex gap-3 justify-end mt-5">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarDuracion()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL AGREGAR ETAPA -->
+  @if (modalActivo() === 'agregarEtapa') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:540px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">Agregar etapa<button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <!-- Nombre -->
+          <div>
+            <label>Nombre <span style="color:#EF4444">**</span></label>
+            <input type="text" placeholder="Nombre de la etapa" [(ngModel)]="formAgregarEtapa.nombre"/>
+            @if (etaErrNombre()) { <span style="color:#EF4444;font-size:11px">Campo Obligatorio*</span> }
+          </div>
+
+          <!-- Tipo de proceso (multi-select) -->
+          <div style="position:relative">
+            <label>Tipo de proceso <span style="color:#EF4444">**</span></label>
+            <button type="button"
+              style="width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border:1px solid #D1D5DB;border-radius:8px;background:#fff;font-size:13px;color:#374151;cursor:pointer"
+              (click)="etaTipoProcOpened.update(v=>!v)">
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px">
+                {{ etaTiposProcesoSel().length ? etaTiposProcesoSel().join(', ') : 'Seleccione' }}
+              </span>
+              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            @if (etaTipoProcOpened()) {
+              <div style="position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #E5E7EB;border-radius:8px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.1);overflow:hidden">
+                @for (tp of TIPOS_PROCESO; track tp) {
+                  <label style="display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;font-size:13px;color:#374151;user-select:none"
+                    [style.background]="etaTiposProcesoSel().includes(tp) ? 'rgba(244,121,32,.08)' : 'transparent'"
+                    (click)="toggleTipoProceso(tp); $event.stopPropagation()">
+                    <input type="checkbox" [checked]="etaTiposProcesoSel().includes(tp)" style="width:14px;height:14px;flex-shrink:0;pointer-events:none"/>
+                    <span>{{ tp }}</span>
+                  </label>
+                }
+              </div>
+            }
+            @if (etaErrTipoProceso()) { <span style="color:#EF4444;font-size:11px">Campo Obligatorio*</span> }
+          </div>
+
+          <!-- Tipo de etapa -->
+          <div>
+            <label>Tipo de etapa <span style="color:#EF4444">**</span></label>
+            <select [(ngModel)]="formAgregarEtapa.tipoEtapa">
+              <option value="">Seleccione</option>
+              <option>Obligatoria</option>
+              <option>No Obligatoria</option>
+            </select>
+            @if (etaErrTipoEtapa()) { <span style="color:#EF4444;font-size:11px">Campo Obligatorio*</span> }
+          </div>
+        </div>
+
+        <div class="flex gap-3 justify-end mt-4">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarAgregarEtapa()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL JUZGADO -->
+  @if (modalActivo() === 'juzgado') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:440px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">{{ juzgadoModalTitle() }}<button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+        <div><label>Nombre <span style="color:#EF4444">*</span></label><input type="text" placeholder="Ej: 3er Juzgado Civil" [(ngModel)]="formJuzgado.nombre"/></div>
+        <div><label>Distrito Judicial</label><input type="text" placeholder="Lima, Callao..." [(ngModel)]="formJuzgado.distrito"/></div>
+        <div><label>Especialidad</label>
+          <select [(ngModel)]="formJuzgado.especialidad"><option>Civil</option><option>Laboral</option><option>Familia</option><option>Paz Letrado</option><option>Comercial</option></select>
+        </div>
+        <div class="flex gap-3 justify-end mt-2">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarJuzgado()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL TABLA GENERAL -->
+  @if (modalActivo() === 'tabla') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:460px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">{{ tablaModalTitle() }}<button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+        <div class="grid grid-cols-2 gap-x-3">
+          <div><label>Código</label><input type="text" placeholder="TG00X" [(ngModel)]="formTabla.codigo"/></div>
+          <div><label>Tipo <span style="color:#EF4444">*</span></label>
+            <select [(ngModel)]="formTabla.tipo"><option value="">Seleccionar...</option><option value="entidad">Entidad</option><option value="etapa">Etapa</option><option value="subetapa">Sub-etapa</option></select>
+          </div>
+        </div>
+        <div><label>Nombre <span style="color:#EF4444">*</span></label><input type="text" [(ngModel)]="formTabla.nombre"/></div>
+        <div><label>Descripción</label><input type="text" [(ngModel)]="formTabla.descripcion"/></div>
+        <div class="flex gap-3 justify-end mt-2">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarTabla()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL TIPO DE ARANCEL (SCG) -->
+  @if (modalActivo() === 'tipoarancel') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:480px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(5,150,105,.12)"><svg class="w-4 h-4" style="color:#059669" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+          <span>{{ arancelModalTitle() }}</span>
+          <button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div>
+            <label>Cód. Arancel <span style="color:#EF4444">*</span></label>
+            <input type="text" placeholder="Ej: R-001" maxlength="8" [(ngModel)]="formArancel.codigo" style="text-transform:uppercase"/>
+          </div>
+          <div>
+            <label>Costo S/ <span style="color:#EF4444">*</span></label>
+            <input type="number" min="0" step="0.01" placeholder="0.00" [(ngModel)]="formArancel.costo"/>
+          </div>
+          <div class="col-span-2">
+            <label>Tipo de Gasto <span style="color:#EF4444">*</span></label>
+            <input type="text" placeholder="Ej: REGISTRALES-CASTIGOS" maxlength="50" [(ngModel)]="formArancel.tipoGasto" style="text-transform:uppercase"/>
+          </div>
+          <div class="col-span-2">
+            <label>Nombre Arancel <span style="color:#EF4444">*</span></label>
+            <input type="text" placeholder="Ej: NEGATIVO VEHICULAR" maxlength="80" [(ngModel)]="formArancel.nombre" style="text-transform:uppercase"/>
+          </div>
+          <div class="col-span-2">
+            <label>Concepto</label>
+            <input type="text" placeholder="Descripción del arancel" maxlength="150" [(ngModel)]="formArancel.concepto"/>
+          </div>
+          @if (showEstadoArancel()) {
+            <div><label>Estado</label><select [(ngModel)]="formArancel.estado"><option>Activo</option><option>Inactivo</option></select></div>
+          }
+        </div>
+        <p class="text-xs mt-3" style="color:#9CA3AF">El costo es referencial. El valor real se confirma al registrar el gasto en cada caso.</p>
+        <div class="flex gap-3 justify-end mt-3">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarArancel()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL TIPO DE DOCUMENTO (GEPDIA) -->
+  @if (modalActivo() === 'tipodocumento') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:460px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(99,102,241,.12)"><svg class="w-4 h-4" style="color:#6366F1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+          <span>{{ docModalTitle() }}</span>
+          <button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div>
+            <label>Código <span style="color:#EF4444">*</span></label>
+            <input type="text" placeholder="Ej: SENT" maxlength="6" [(ngModel)]="formDoc.codigo" style="text-transform:uppercase"/>
+          </div>
+          <div class="col-span-2">
+            <label>Nombre <span style="color:#EF4444">*</span></label>
+            <input type="text" placeholder="Ej: Sentencia" maxlength="80" [(ngModel)]="formDoc.nombre"/>
+          </div>
+          <div class="col-span-2">
+            <label>Descripción</label>
+            <input type="text" placeholder="Descripción del tipo de documento" maxlength="150" [(ngModel)]="formDoc.descripcion"/>
+          </div>
+          @if (showEstadoDoc()) {
+            <div><label>Estado</label><select [(ngModel)]="formDoc.estado"><option>Activo</option><option>Inactivo</option></select></div>
+          }
+        </div>
+        <div class="flex gap-3 justify-end mt-4">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarDoc()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL TIPO DE GASTO -->
+  @if (modalActivo() === 'tipogasto') {
+    <div class="cfg-modal-bg" (click)="closeModal()">
+      <div class="cfg-modal" style="max-width:480px" (click)="$event.stopPropagation()">
+        <div class="cfg-modal-title">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(99,102,241,.15)"><svg class="w-4 h-4" style="color:#6366F1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
+          <span>{{ gastoModalTitle() }}</span>
+          <button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div>
+            <label>Código <span style="color:#EF4444">*</span></label>
+            <input type="text" placeholder="Ej: HON" maxlength="6" [(ngModel)]="formGasto.codigo" style="text-transform:uppercase"/>
+          </div>
+          <div>
+            <label>Aplicativo</label>
+            <select [(ngModel)]="formGasto.aplicativo">
+              <option>GAP</option><option>SPJ</option><option>SCG</option>
+            </select>
+          </div>
+          <div>
+            <label>Tipo <span style="color:#EF4444">*</span></label>
+            <select [(ngModel)]="formGasto.tipo">
+              <option>Administrativo</option><option>Judicial</option><option>Valores</option>
+            </select>
+          </div>
+          <div class="col-span-2">
+            <label>Nombre <span style="color:#EF4444">*</span></label>
+            <input type="text" placeholder="Ej: Honorarios Profesionales" maxlength="80" [(ngModel)]="formGasto.nombre"/>
+          </div>
+          <div class="col-span-2">
+            <label>Descripción</label>
+            <input type="text" placeholder="Descripción breve del tipo de gasto" maxlength="150" [(ngModel)]="formGasto.descripcion"/>
+          </div>
+          @if (showEstadoGasto()) {
+            <div>
+              <label>Estado</label>
+              <select [(ngModel)]="formGasto.estado"><option>Activo</option><option>Inactivo</option></select>
+            </div>
+          }
+        </div>
+        <div class="flex gap-3 justify-end mt-4">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-orange" (click)="guardarGasto()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- MODAL PREVISUALIZACIÓN LOGIN -->
+  @if (previewModalOpen()) {
+    <div class="cfg-modal-bg" (click)="previewModalOpen.set(false)">
+      <div style="background:#fff;border-radius:18px;padding:28px;width:90vw;max-width:860px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.25);animation:slideUp .2s cubic-bezier(.16,1,.3,1)" (click)="$event.stopPropagation()">
+
+        <!-- Cabecera -->
+        <div class="cfg-modal-title">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(244,121,32,.15)">
+            <svg class="w-4 h-4" style="color:#F47920" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </div>
+          Vista previa del Login
+          <button class="ml-auto" style="color:#9CA3AF" (click)="previewModalOpen.set(false)">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Pantalla de login simulada -->
+        <div style="border-radius:12px;overflow:hidden;border:1px solid #E5E7EB;position:relative;background:#1e293b;aspect-ratio:16/9">
+          <div style="position:absolute;inset:0;background-size:cover;background-position:center;transition:background-image .3s"
+            [style.backgroundImage]="'url(' + loginBanners()[previewBannerIdx()] + ')'">
+          </div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(249,115,22,.1),rgba(15,23,42,.85))"></div>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;padding:32px;z-index:1"
+            [style.align-items]="posAlign(loginCfg.tituloAlign || 'center')"
+            [style.justify-content]="posJustify(loginCfg.logoPos || 'center')">
+            <img src="assets/img/SIGONE_LOGO.png" alt="Logo"
+              style="width:110px;margin-bottom:18px;filter:brightness(0) invert(1);object-fit:contain"
+              onerror="this.style.display='none'"/>
+            <h2 style="line-height:1.4;margin-bottom:10px;width:100%"
+              [style.color]="loginCfg.tituloColor || '#ffffff'"
+              [style.font-size]="previewTxtSize(loginCfg.tituloSize, true)"
+              [style.font-weight]="loginCfg.tituloBold ? '700' : '400'"
+              [style.font-style]="loginCfg.tituloItalic ? 'italic' : 'normal'"
+              [style.text-align]="loginCfg.tituloAlign || 'center'">{{ loginCfg.titulo }}</h2>
+            <p style="line-height:1.6;max-width:320px;width:100%"
+              [style.color]="loginCfg.subtituloColor || 'rgba(255,255,255,.7)'"
+              [style.font-size]="previewTxtSize(loginCfg.subtituloSize, false)"
+              [style.font-weight]="loginCfg.subtituloBold ? '700' : '400'"
+              [style.font-style]="loginCfg.subtituloItalic ? 'italic' : 'normal'"
+              [style.text-align]="loginCfg.subtituloAlign || 'center'">{{ loginCfg.subtitulo }}</p>
+          </div>
+          <div style="position:absolute;right:0;top:0;bottom:0;width:32%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;z-index:2;box-shadow:-4px 0 20px rgba(0,0,0,.2)">
+            <div style="width:100%">
+              <p style="font-weight:700;font-size:15px;color:#1F2937;margin-bottom:8px">Bienvenido</p>
+              <p style="font-size:12px;color:#9CA3AF;margin-bottom:12px">Ingresa tus credenciales</p>
+              <div style="background:#F3F4F6;border-radius:6px;height:20px;margin-bottom:8px"></div>
+              <div style="background:#F3F4F6;border-radius:6px;height:20px;margin-bottom:14px"></div>
+              <div style="background:linear-gradient(to right,#F47920,#D4620A);border-radius:6px;height:24px;width:100%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selector de banner -->
+        <div class="mt-4">
+          <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color:#6B7280">Seleccionar banner</p>
+          <div class="flex gap-3">
+            @for (b of loginBanners(); track $index; let i = $index) {
+              <button (click)="previewBannerIdx.set(i)" style="flex:1;padding:0;background:none;border:none;cursor:pointer">
+                <div style="border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border-color .2s"
+                  [style.borderColor]="previewBannerIdx() === i ? '#F47920' : '#E5E7EB'">
+                  <div style="aspect-ratio:3/2;overflow:hidden;background:#E5E7EB">
+                    <img [src]="b" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"/>
+                  </div>
+                  <p style="font-size:11px;text-align:center;padding:4px 0;font-weight:600"
+                    [style.color]="previewBannerIdx() === i ? '#F47920' : '#9CA3AF'">Banner {{ i + 1 }}</p>
+                </div>
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Textos actuales -->
+        <div class="mt-4 p-3 rounded-xl" style="background:#FFF7F0;border:1px solid #FED7AA">
+          <p class="text-xs font-semibold mb-1" style="color:#92400E">Textos configurados</p>
+          <p class="text-xs" style="color:#78350F"><span class="font-semibold">Título:</span> {{ loginCfg.titulo || '(sin título)' }}</p>
+          <p class="text-xs mt-0.5" style="color:#78350F"><span class="font-semibold">Subtítulo:</span> {{ loginCfg.subtitulo || '(sin subtítulo)' }}</p>
+        </div>
+
+        <div class="flex justify-end mt-5">
+          <button class="btn-secondary" (click)="previewModalOpen.set(false)">Cerrar</button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+<!-- Modal: Plan no permite agregar usuarios -->
+@if (modalActivo() === 'plan-restriction-users') {
+  <div class="cfg-modal-bg" (click)="closeModal()">
+    <div class="cfg-modal" style="max-width:420px" (click)="$event.stopPropagation()">
+      <div class="cfg-modal-title">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:rgba(244,121,32,.15)"><svg class="w-4 h-4" style="color:#F47920" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg></div>
+        <span>Plan limitado</span>
+        <button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+      </div>
+      <p style="color:#6B7280;font-size:14px;line-height:1.6;margin-bottom:12px">
+        Tu plan de suscripción actual es para abogados independientes y no incluye la gestión de múltiples usuarios.
+      </p>
+      <p style="color:#374151;font-size:13px;font-weight:600;margin-bottom:3px">Para agregar usuarios a tu organización:</p>
+      <p style="color:#6B7280;font-size:13px;margin-bottom:16px">Contacta con nuestro equipo para conocer las opciones disponibles.</p>
+      <div class="flex gap-3 justify-end">
+        <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+        <a href="https://wa.me/51999999999?text=Hola,%20me%20interesa%20agregar%20usuarios%20a%20mi%20cuenta%20en%20SIGONE"
+           target="_blank"
+           class="btn-orange"
+           style="display:inline-flex;align-items:center;gap:6px">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-9.746 9.798c0 2.714.862 5.389 2.546 7.621L2.89 22.817l8.041-2.582a9.854 9.854 0 004.734 1.202h.005c5.43 0 9.868-4.438 9.868-9.889 0-2.632-.996-5.107-2.804-6.976-1.809-1.869-4.239-2.898-6.835-2.898zm0 18.368l-.006-.001a8.325 8.325 0 01-3.997-1.041l-.287-.152-2.968.953.97-3.544-.221-.352a8.321 8.321 0 01-1.291-4.434c0-4.565 3.716-8.281 8.286-8.281 2.21 0 4.285.863 5.859 2.437 1.573 1.573 2.437 3.646 2.437 5.859 0 4.565-3.716 8.281-8.286 8.281z"/>
+          </svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- TOAST -->
+@if (toastVisible()) {
+  <div class="cfg-toast">{{ toastMsg() }}</div>
+}
