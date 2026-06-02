@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { ProductTourService } from '../../services/product-tour.service';
-import { ProductTourComponent } from '../product-tour/product-tour.component';
+//import { ProductTourComponent } from '../product-tour/product-tour.component';
 import { UsuarioModalComponent } from './modals/usuario/usuario-modal.component';
 import { RestablecerPwdModalComponent } from './modals/restablecer-pwd/restablecer-pwd-modal.component';
 import { CoberturaTempModalComponent } from './modals/cobertura-temp/cobertura-temp-modal.component';
@@ -189,7 +189,7 @@ function saveLS(key: string, val: unknown) { try { localStorage.setItem(key, JSO
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, ProductTourComponent,
+  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, //ProductTourComponent,
             UsuarioModalComponent, RestablecerPwdModalComponent, CoberturaTempModalComponent,
             RolModalComponent],
   templateUrl: './configuracion.component.html',

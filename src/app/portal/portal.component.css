@@ -1,0 +1,347 @@
+/* ══════════════════════════════════════════════
+   PORTAL.COMPONENT.CSS — RESTAURACIÓN EXACTA V2
+   Paleta: naranja #F47920 · oscuro #1A1F2E
+════════════════════════════════════════════════ */
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box !important;
+}
+
+
+/* ── SLIDER FONDO (Detrás de todo) ── */
+.bg-slider {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: -3 !important;
+}
+
+.slide {
+  position: absolute !important;
+  inset: 0 !important;
+  background-size: cover !important;
+  background-position: center !important;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out !important;
+}
+
+.slide.active {
+  opacity: 1 !important;
+}
+
+/* ── 🔥 OVERLAY NARANJA SUAVE (Corregido para estar por ENCIMA del slider) ── */
+.overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: -2 !important;
+  /* Se mantiene justo encima de las fotos del slider */
+  background: linear-gradient(125deg, rgba(255, 115, 0, .70) 0%, rgba(26, 31, 46, .80) 100%) !important;
+  pointer-events: none !important;
+}
+
+/* ── HEADER  ── */
+header {
+  position: relative !important;
+  z-index: 10 !important;
+  display: flex !important;
+  align-items: center !important;         /* Alineación vertical perfecta */
+  justify-content: space-between !important; /* Empuja el logo a la izquierda y botones a la derecha */
+  
+  width: 100% !important;                /* Ocupa todo el ancho disponible */
+  max-width: none !important;            /* 🔥 ELIMINA el límite de píxeles para que no se quede centrado */
+  margin: 0 !important;                  /* 🔥 Quita el centrado automático de caja */
+  
+  padding: 12px 20px !important;         /* Espaciado elegante respecto a los bordes de la pantalla */
+  box-sizing: border-box !important;
+}
+
+.logo-img {
+  height: 110px !important;
+  /* Regresa a su escala original e imponente */
+  width: auto !important;
+  display: block !important;
+}
+
+.header-actions {
+  display: flex !important;
+  align-items: center !important;    /* 🔥 Clave: Los alinea perfectamente en el eje central */
+  gap: 12px !important;
+  
+  /* 🔥 SUBIR AMBOS BOTONES EN BLOQUE */
+  transform: translateY(-20px) !important; /* Ajusta este valor (-5px, -7px, etc.) si deseas subirlos más o menos */
+}
+
+/* ── BOTÓN CONFIGURACIÓN ── */
+.btn-config {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 10px !important;
+  color: #ffffff !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 10px 18px !important;
+  text-decoration: none !important;
+  transition: background .2s, border-color .2s !important;
+  transform: none !important; /* Se remueve para heredar el movimiento del padre */
+}
+
+.btn-config span {
+  font-size: 12px !important;    /* Forzado directamente en el texto */
+  font-weight: 600 !important;
+  color: #ffffff !important;
+}
+
+.btn-config:hover {
+  background: rgba(244, 121, 32, .25) !important;
+  border-color: rgba(244, 121, 32, .55) !important;
+}
+
+/* ── BOTÓN SALIR ── */
+.btn-exit {
+  background: rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 11px !important;
+  cursor: pointer !important;
+  color: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background .2s !important;
+  transform: none !important;
+  padding: 10.5px !important;
+}
+
+.btn-exit svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.btn-exit:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+}
+
+.btn-exit svg {
+  display: block !important;
+}
+
+/* ── MAIN CONTENEDOR ── */
+main {
+  position: relative !important;
+  z-index: 1 !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px 32px 60px !important; /* Espaciado uniforme */
+}
+
+/* Subtítulo pequeño superior */
+.section-eyebrow {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 3px !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 255, 255, .55) !important;
+  margin-bottom: 12px !important;
+  text-align: center !important;
+}
+
+/* Título Principal (Malla de Aplicaciones) */
+main h1 {
+  font-family: 'Sora', sans-serif !important;
+  font-size: 32px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  text-align: center !important;
+  letter-spacing: -.5px !important;
+  line-height: 1.2 !important;
+  margin-bottom: 5px !important; 
+}
+
+/* ── GRID DE TARJETAS ── */
+.card-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 260px) !important; /* Fuerza las 4 columnas exactas de 260px */
+  gap: 24px !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+/* Tarjeta Base */
+.app-card {
+  display: flex !important;
+  flex-direction: column !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  text-decoration: none !important;
+  background: rgba(255, 255, 255, .06) !important;
+  border: 1px solid rgba(255, 255, 255, .15) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, .25) !important;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease !important;
+}
+
+.app-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, .40) !important;
+  border-color: rgba(244, 121, 32, .55) !important;
+}
+
+/* Área del Icono/SVG */
+.card-icon-area {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 4/3 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+/* Gradientes específicos restaurados */
+.cobranzas-bg {
+  background: linear-gradient(145deg, #1A1F2E 0%, #252B3D 60%, #2d1a08 100%) !important;
+}
+
+.procesos-bg {
+  background: linear-gradient(145deg, #1A1F2E 0%, #252B3D 60%, #08141a 100%) !important;
+}
+
+.gastos-bg {
+  background: linear-gradient(145deg, #1A1F2E 0%, #252B3D 60%, #0e1a08 100%) !important;
+}
+
+.card-glow {
+  position: absolute !important;
+  width: 180px !important;
+  height: 180px !important;
+  border-radius: 50% !important;
+  opacity: .18 !important;
+  filter: blur(40px) !important;
+  pointer-events: none !important;
+}
+
+.cobranzas-glow {
+  background: #F47920 !important;
+}
+
+.procesos-glow {
+  background: #146ca3 !important;
+}
+
+.gastos-glow {
+  background: #237e26 !important;
+}
+
+/* 🔥 TAMAÑO DE LOGOS RESTAURADO (Grande y nítido como el original) */
+.card-logo-img {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 130px !important;
+  /* Regresa a sus 150px originales */
+  height: 130px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, .5)) !important;
+  transition: transform .28s ease !important;
+  display: block !important;
+}
+
+.app-card:hover .card-logo-img {
+  transform: scale(1.02) !important;
+}
+
+.card-badge {
+  position: absolute !important;
+  top: 12px !important;
+  right: 14px !important;
+  z-index: 3 !important;
+  background: rgba(244, 121, 32, .20) !important;
+  border: 1px solid rgba(244, 121, 32, .45) !important;
+  color: #F47920 !important;
+  font-family: 'Sora', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  padding: 4px 9px !important;
+  border-radius: 20px !important;
+}
+
+/* ── FOOTER DE LA TARJETA (Bloque inferior sólido) ── */
+/* Contenedor del texto inferior (Footer de la tarjeta) */
+.card-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 14px 16px !important;
+  background: rgba(26, 31, 46, .88) !important;
+  border-top: 1px solid rgba(255, 255, 255, .07) !important;
+  gap: 10px !important;
+  min-height: 74px !important; /* Evita que cajas con textos más largos colapsen el diseño */
+}
+
+.card-footer-left {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+/* Nombre del Sistema */
+.card-sys-name {
+  font-family: 'Sora', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  line-height: 1.3 !important; /* Corrige el amontonamiento de líneas */
+}
+
+/* Descripción secundaria */
+.card-sys-sub {
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 11px !important;
+  color: rgba(255, 255, 255, .42) !important;
+  line-height: 1.2 !important;
+}
+
+.card-arrow {
+  color: #F47920 !important;
+  opacity: .6 !important;
+  flex-shrink: 0 !important;
+  transition: opacity .2s, transform .2s !important;
+}
+
+.app-card:hover .card-arrow {
+  opacity: 1 !important;
+  transform: translateX(4px) !important;
+}
+
+/* ── RESPONSIVO FIEL ── */
+@media (max-width: 1180px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 260px) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 0 20px !important;
+  }
+
+  main h1 {
+    font-size: 24px !important;
+  }
+
+  .btn-config span {
+    display: none !important;
+  }
+}

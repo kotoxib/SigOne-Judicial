@@ -1,0 +1,129 @@
+<div class="bg-slider fixed inset-0 z-0 pointer-events-none">
+  @for (banner of banners; track $index) {
+    <div class="slide absolute inset-0 bg-cover bg-center" 
+         [class.active]="sliderIndex() === $index"
+         [style.backgroundImage]="'url(' + banner + ')'">
+    </div>
+  }
+</div>
+<div class="overlay fixed inset-0 z-10 pointer-events-none"></div>
+
+<div class="relative z-20 min-h-screen w-full flex flex-col justify-between font-sans overflow-x-hidden text-white">
+
+  <header class="w-full max-w-7xl mx-auto flex items-center justify-between px-6 py-6 md:px-12">
+    <img class="logo-img h-10 object-contain" src="assets/img/SIGONE_LOGO.png" alt="Logo"
+      onerror="this.style.opacity='0'" />
+
+    <div class="header-actions flex items-center gap-4">
+      <a [routerLink]="['/configuracion']" class="btn-config flex items-center gap-2 bg-black/20 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 transition-all hover:bg-black/40" title="Configuración del sistema">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span class="text-xs font-semibold">Configuración</span>
+      </a>
+
+      <button (click)="logout()" class="btn-exit bg-red-500/10 hover:bg-red-500/20 text-red-400 p-2.5 rounded-xl border border-red-500/20 transition-all" title="Cerrar sesión">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 flex flex-col items-center justify-center px-6 py-10 max-w-7xl w-full mx-auto z-20">
+    <div class="text-center mb-12">
+      <p class="section-eyebrow text-xs font-bold text-orange-400 uppercase tracking-widest mb-1">Suite de Procesos Judiciales</p>
+      <h1 class="text-3xl font-bold tracking-tight font-display md:text-4xl">Malla de Aplicaciones</h1>
+    </div>
+
+    <div class="card-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full px-2 max-w-6xl items-stretch justify-center">
+
+      <a class="app-card" [routerLink]="['/scg']">
+        <div class="card-icon-area cobranzas-bg">
+          <div class="card-glow cobranzas-glow"></div>
+          <img src="assets/img/Logo_cobranzas.png" alt="Cobranzas" class="card-logo-img" />
+          <span class="card-badge">SCG</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-footer-left">
+            <span class="card-sys-name">Sistema de Gestión de Cobranzas</span>
+            <span class="card-sys-sub">Control de Gastos por Aranceles</span>
+          </div>
+          <span class="card-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="app-card" [routerLink]="['/spj']">
+        <div class="card-icon-area procesos-bg">
+          <div class="card-glow procesos-glow"></div>
+          <img src="assets/img/Logo_procesos.png" alt="Procesos" class="card-logo-img" />
+          <span class="card-badge">SPJ</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-footer-left">
+            <span class="card-sys-name">Sistema de Procesos Judiciales</span>
+            <span class="card-sys-sub">Administración de Procesos Bancarios</span>
+          </div>
+          <span class="card-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="app-card" [routerLink]="['/gap']">
+        <div class="card-icon-area gastos-bg">
+          <div class="card-glow gastos-glow"></div>
+          <img src="assets/img/gap_sin fondo.png" alt="Gastos" class="card-logo-img" />
+          <span class="card-badge">GAP</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-footer-left">
+            <span class="card-sys-name">Gestión de Gastos Administrativos</span>
+            <span class="card-sys-sub">por Proceso Judicial</span>
+          </div>
+          <span class="card-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="app-card" [routerLink]="['/gepdia']">
+        <div class="card-icon-area gastos-bg">
+          <div class="card-glow gastos-glow"></div>
+          <img src="assets/img/gedia.png" alt="GEPDIA" class="card-logo-img" />
+          <span class="card-badge">GEPDIA</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-footer-left">
+            <span class="card-sys-name">Gestión y Procesamiento de Documentos</span>
+            <span class="card-sys-sub">con Inteligencia Artificial</span>
+          </div>
+          <span class="card-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+</div>
