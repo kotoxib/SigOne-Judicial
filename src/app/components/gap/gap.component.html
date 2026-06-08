@@ -1,0 +1,1245 @@
+<div id="dashboard-page" class="w-full h-screen flex overflow-hidden">
+
+  <app-sidebar moduleIcon="assets/img/gap_icono.png" moduleName="GAP" [expanded]="sidebarExpanded">
+
+    @if (isSubNavVisible('sub-dash-gerencial')) {
+      <button (click)="activarSubNav('inicio','dash-gerencial')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'dash-gerencial'" title="Dashboard Gerencial">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <span class="nav-label">Dashboard Gerencial</span>
+      </button>
+    }
+    @if (isSubNavVisible('sub-dash-financiero')) {
+      <button (click)="activarSubNav('inicio','dash-financiero')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'dash-financiero'" title="Dashboard Financiero">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="nav-label">Dashboard Financiero</span>
+      </button>
+    }
+    @if (isSubNavVisible('sub-gestion-ingresos')) {
+      <button (click)="activarSubNav('gestion','gestion-ingresos')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'gestion-ingresos'" title="Gestión de Ingresos">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
+        <span class="nav-label">Gestión de Ingresos</span>
+      </button>
+    }
+    @if (isSubNavVisible('sub-gestion-gastos')) {
+      <button (click)="activarSubNav('gestion','gestion-gastos')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'gestion-gastos'" title="Gestión de Gastos">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg>
+        <span class="nav-label">Gestión de Gastos</span>
+      </button>
+    }
+    @if (isSubNavVisible('sub-liquidacion')) {
+      <button (click)="activarSubNav('gestion','liquidacion')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'liquidacion'" title="Liquidación de Casos">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="nav-label">Liquidación de Casos</span>
+      </button>
+    }
+    @if (isSubNavVisible('sub-gestion-procesos')) {
+      <button (click)="activarSubNav('gestion','gestion-procesos')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'gestion-procesos'" title="Gestión de Procesos">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        <span class="nav-label">Gestión de Procesos</span>
+      </button>
+    }
+    @if (isSubNavVisible('sub-rep-gastos-caso')) {
+      <button (click)="activarSubNav('reportes','rep-gastos-caso')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'rep-gastos-caso'" title="Gastos por Caso">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <span class="nav-label">Gastos por Caso</span>
+      </button>
+    }
+    @if (isSubNavVisible('sub-rep-gastos-pend')) {
+      <button (click)="activarSubNav('reportes','rep-gastos-pend')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'rep-gastos-pend'" title="Gastos Pend. Aprobación">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="nav-label">Gastos Pend. Aprobación</span>
+      </button>
+    }
+    @if (isSubNavVisible('sub-rep-financiero')) {
+      <button (click)="activarSubNav('reportes','rep-financiero')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'rep-financiero'" title="Reporte Financiero por Caso">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <span class="nav-label">Reporte Financiero por Caso</span>
+      </button>
+    }
+    @if (isSubNavVisible('sub-rep-liquidacion')) {
+      <button (click)="activarSubNav('reportes','rep-liquidacion')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'rep-liquidacion'" title="Reporte de Liquidaciones">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <span class="nav-label">Reporte de Liquidaciones</span>
+      </button>
+    }
+    @if (isSubNavVisible('sub-rep-gerencial')) {
+      <button (click)="activarSubNav('reportes','rep-gerencial')" class="sub-nav-btn" [class.nav-active]="vistaActiva === 'rep-gerencial'" title="Reporte Gerencial">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        <span class="nav-label">Reporte Gerencial</span>
+      </button>
+    }
+    <button sidebar-footer (click)="handleReturn()" class="sub-nav-btn" style="color:rgba(255,255,255,.4)" onmouseenter="this.style.color='#f87171'" onmouseleave="this.style.color='rgba(255,255,255,.4)'">
+      <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      <span class="nav-label">Regresar al Portal</span>
+    </button>
+
+  </app-sidebar>
+
+ <div class="flex-1 flex flex-col overflow-hidden">
+
+    <header class="topbar flex items-center justify-between px-6 py-3 flex-shrink-0">
+      <div class="flex items-center gap-4">
+        
+        <button (click)="toggleSidebar()" class="text-brand-muted hover:text-gray-600 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+
+        <nav class="hidden md:flex items-center gap-1">
+          <button (click)="cambiarTopbarTab('inicio')" id="tab-inicio" class="topbar-tab" [class.active]="tabActivo === 'inicio'">Inicio</button>
+          <button (click)="cambiarTopbarTab('gestion')" id="tab-gestion" class="topbar-tab" [class.active]="tabActivo === 'gestion'">Gestión Financiera</button>
+          <button (click)="cambiarTopbarTab('reportes')" id="tab-reportes" class="topbar-tab" [class.active]="tabActivo === 'reportes'">Reportes</button>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <button class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center text-brand-muted hover:text-gray-800 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+          </button>
+          <span class="notif-dot"></span>
+        </div>
+
+        <div class="relative user-dropdown-container">
+          <button (click)="toggleDropdown($event)" class="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl hover:bg-gray-100 transition-colors">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-orange-300 flex items-center justify-center text-xs font-bold text-white">AS</div>
+            <span class="hidden sm:block text-sm font-medium text-gray-800">Administrador</span>
+            <svg class="w-4 h-4 text-brand-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          
+          <div id="user-dropdown" class="dropdown-menu absolute right-0 top-full mt-2 w-44 py-1" [class.open]="userDropdownOpen">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">Mi Perfil</a>
+            <div class="border-t border-gray-100 my-1"></div>
+            <button (click)="handleLogout()" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-50">Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-6" style="background:var(--bg)">
+
+  @if (vistaActiva === 'dash-gerencial') {
+    <div id="view-dash-gerencial" class="view block">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h2 class="text-xl font-display font-bold text-gray-800">Dashboard Gerencial</h2>
+          <p class="text-sm text-brand-muted mt-0.5">Visión estratégica y consolidada del negocio</p>
+        </div>
+        <span class="pill-gerencial">Gerencia</span>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-5">
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">Casos Activos</p><p class="text-xl font-display font-bold text-gray-800">148</p><p class="text-xs text-green-500 mt-1">↑ 4 nuevos</p></div>
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">Ingresos Reales</p><p class="text-xl font-display font-bold text-orange-500">S/ 193K</p><p class="text-xs text-orange-400/70 mt-1">77.8% recaudado</p></div>
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">Ingresos Proy.</p><p class="text-xl font-display font-bold text-blue-500">S/ 248K</p><p class="text-xs text-blue-400/70 mt-1">Meta anual</p></div>
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">% Cobranza</p><p class="text-xl font-display font-bold text-green-600">77.8%</p><p class="text-xs text-green-500 mt-1">↑ 3.2% vs mes ant.</p></div>
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">Casos con Deuda</p><p class="text-xl font-display font-bold text-red-500">32</p><p class="text-xs text-red-400/70 mt-1">21.6% del total</p></div>
+      </div>
+
+      <div class="stat-card p-4 mb-5">
+        <div class="flex flex-wrap gap-3 items-end">
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Desde</label><input type="date" class="filter-input"/></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Hasta</label><input type="date" class="filter-input"/></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Cliente</label><select class="filter-input"><option>Todos</option><option>María García</option><option>Juan Pérez</option></select></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Abogado</label><select class="filter-input"><option>Todos</option><option>Andrés Vega</option><option>María Quispe</option></select></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Tipo de Caso</label><select class="filter-input"><option>Todos</option><option>Civil</option><option>Laboral</option><option>Penal</option></select></div>
+          <button class="btn-orange"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>Buscar</button>
+          <button class="btn-secondary">Limpiar</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+        <div class="stat-card p-5 lg:col-span-2">
+          <div class="flex items-center justify-between mb-4"><h3 class="text-sm font-semibold text-gray-800">Utilidad por Mes</h3><span class="badge bg-orange-500/15 text-orange-500 text-xs px-2 py-0.5 rounded-full">2025</span></div>
+          <div class="flex items-end gap-3" style="height:130px;">
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-5" style="height:65%;"></div><div class="bar bg-green-400 w-5" style="height:45%;"></div></div><span class="bar-label">Ene</span></div>
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-5" style="height:72%;"></div><div class="bar bg-green-400 w-5" style="height:50%;"></div></div><span class="bar-label">Feb</span></div>
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-5" style="height:58%;"></div><div class="bar bg-green-400 w-5" style="height:38%;"></div></div><span class="bar-label">Mar</span></div>
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-5" style="height:90%;"></div><div class="bar bg-green-400 w-5" style="height:65%;"></div></div><span class="bar-label">Abr</span></div>
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-5" style="height:78%;"></div><div class="bar bg-green-400 w-5" style="height:55%;"></div></div><span class="bar-label">May</span></div>
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-5" style="height:85%;"></div><div class="bar bg-green-400 w-5" style="height:60%;"></div></div><span class="bar-label">Jun</span></div>
+          </div>
+          <div class="flex items-center gap-5 mt-4 text-xs text-brand-muted">
+            <div class="flex items-center gap-1.5"><span class="w-3 h-2 rounded-sm bg-orange-400 inline-block"></span>Ingreso Real</div>
+            <div class="flex items-center gap-1.5"><span class="w-3 h-2 rounded-sm bg-green-400 inline-block"></span>Utilidad</div>
+          </div>
+        </div>
+        <div class="stat-card p-5">
+          <div class="flex items-center justify-between mb-4"><h3 class="text-sm font-semibold text-gray-800">Casos por Estado Financiero</h3></div>
+          <div class="donut-wrap">
+            <div class="donut-svg-box">
+              <svg width="130" height="130" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="60" fill="none" stroke="#F3F4F6" stroke-width="22"/>
+                <circle class="donut-ring" cx="80" cy="80" r="60" fill="none" stroke="#5B21B6" stroke-width="22" stroke-dasharray="188 188" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+                <circle class="donut-ring" cx="80" cy="80" r="60" fill="none" stroke="#1D4ED8" stroke-width="22" stroke-dasharray="157 219" stroke-dashoffset="-188" transform="rotate(-90 80 80)"/>
+                <circle class="donut-ring" cx="80" cy="80" r="60" fill="none" stroke="#059669" stroke-width="22" stroke-dasharray="31 345" stroke-dashoffset="-345" transform="rotate(-90 80 80)"/>
+              </svg>
+              <div class="donut-center-label"><span class="donut-center-number">148</span><span class="donut-center-sub">casos</span></div>
+            </div>
+            <div class="donut-legend">
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:#5B21B6"></span><span class="donut-legend-label">Liquidado</span><span class="donut-legend-val">50</span></div>
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:#1D4ED8"></span><span class="donut-legend-label">En Cobranza</span><span class="donut-legend-val">88</span></div>
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:#059669"></span><span class="donut-legend-label">Liquidable</span><span class="donut-legend-val">10</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100"><h3 class="text-sm font-semibold text-gray-800">Top Clientes por Cobranza</h3><span class="text-xs text-brand-muted">148 casos activos</span></div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead><tr><th>Cliente</th><th>Ing. Proyectado</th><th>Ing. Cobrado</th><th>Saldo</th><th>Gastos</th><th>Utilidad</th></tr></thead>
+            <tbody>
+              <tr><td class="font-medium">María García López</td><td>S/ 8,500</td><td class="text-green-600 font-medium">S/ 8,500</td><td class="text-green-600">S/ 0</td><td class="text-red-500">S/ 2,100</td><td class="text-green-600 font-medium">S/ 6,400</td></tr>
+              <tr><td class="font-medium">Inmobiliaria Los Álamos</td><td>S/ 25,000</td><td class="text-amber-600 font-medium">S/ 18,000</td><td class="text-amber-600">S/ 7,000</td><td class="text-red-500">S/ 5,500</td><td class="text-amber-600 font-medium">S/ 12,500</td></tr>
+              <tr><td class="font-medium">Juan Pérez Ríos</td><td>S/ 12,000</td><td class="text-amber-600 font-medium">S/ 6,000</td><td class="text-amber-600">S/ 6,000</td><td class="text-red-500">S/ 3,200</td><td class="text-amber-600 font-medium">S/ 2,800</td></tr>
+              <tr><td class="font-medium">Rosa Linares Cano</td><td>S/ 5,200</td><td class="text-gray-400 font-medium">S/ 0</td><td class="text-red-500">S/ 5,200</td><td class="text-red-500">S/ 1,800</td><td class="text-red-500 font-medium">-S/ 1,800</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 4 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-dash-clientes') }} de {{ totalPgs(4) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-dash-clientes') === 1" (click)="pageNav('t-dash-clientes', -1, 4)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-dash-clientes') >= totalPgs(4)" (click)="pageNav('t-dash-clientes', 1, 4)">&#8250;</button></div></div></div>
+      </div>
+    </div>
+  }
+
+  @if (vistaActiva === 'dash-financiero') {
+    <div id="view-dash-financiero" class="view block">
+      <div class="flex items-center justify-between mb-5">
+        <div><h2 class="text-xl font-display font-bold text-gray-800">Dashboard Financiero</h2><p class="text-sm text-brand-muted mt-0.5">Estado económico de los casos judiciales</p></div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">Ing. Proyectado</p><p class="text-xl font-display font-bold text-blue-500">S/ 248K</p></div>
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">Ingreso Real</p><p class="text-xl font-display font-bold text-orange-500">S/ 193K</p></div>
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">Saldo Pend.</p><p class="text-xl font-display font-bold text-amber-500">S/ 55K</p></div>
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">Gastos</p><p class="text-xl font-display font-bold text-red-500">S/ 84K</p></div>
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">Utilidad Real</p><p class="text-xl font-display font-bold text-green-600">S/ 109K</p></div>
+        <div class="stat-card p-4"><p class="text-xs text-brand-muted mb-1 uppercase tracking-wide">Utilidad Proy.</p><p class="text-xl font-display font-bold text-blue-500">S/ 164K</p></div>
+      </div>
+      
+      <div class="stat-card p-4 mb-5">
+        <div class="flex flex-wrap gap-3 items-end">
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Desde</label><input type="date" class="filter-input"/></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Hasta</label><input type="date" class="filter-input"/></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Moneda</label><select class="filter-input"><option>Todas</option><option>PEN</option><option>USD</option></select></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Est. Liquidación</label><select class="filter-input"><option>Todos</option><option>Generada</option><option>Aprobada</option><option>Pagada</option></select></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Cliente</label><select class="filter-input"><option>Todos</option><option>María García</option><option>Juan Pérez</option></select></div>
+          <button class="btn-orange">Buscar</button>
+          <button class="btn-secondary">Limpiar</button>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+        <div class="stat-card p-5 lg:col-span-2">
+          <div class="flex items-center justify-between mb-4"><h3 class="text-sm font-semibold text-gray-800">Ingresos Reales vs Proyectados vs Gastos</h3></div>
+          <div class="flex items-end gap-3" style="height:130px;">
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-4" style="height:65%;"></div><div class="bar bg-blue-400 w-4" style="height:80%;"></div><div class="bar bg-red-300 w-4" style="height:40%;"></div></div><span class="bar-label">Ene</span></div>
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-4" style="height:72%;"></div><div class="bar bg-blue-400 w-4" style="height:85%;"></div><div class="bar bg-red-300 w-4" style="height:45%;"></div></div><span class="bar-label">Feb</span></div>
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-4" style="height:58%;"></div><div class="bar bg-blue-400 w-4" style="height:75%;"></div><div class="bar bg-red-300 w-4" style="height:35%;"></div></div><span class="bar-label">Mar</span></div>
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-4" style="height:90%;"></div><div class="bar bg-blue-400 w-4" style="height:100%;"></div><div class="bar bg-red-300 w-4" style="height:55%;"></div></div><span class="bar-label">Abr</span></div>
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-4" style="height:78%;"></div><div class="bar bg-blue-400 w-4" style="height:90%;"></div><div class="bar bg-red-300 w-4" style="height:48%;"></div></div><span class="bar-label">May</span></div>
+            <div class="flex flex-col items-center gap-1 flex-1"><div class="flex items-end gap-0.5 justify-center" style="height:110px;"><div class="bar bg-orange-400 w-4" style="height:85%;"></div><div class="bar bg-blue-400 w-4" style="height:95%;"></div><div class="bar bg-red-300 w-4" style="height:50%;"></div></div><span class="bar-label">Jun</span></div>
+          </div>
+          <div class="flex items-center gap-5 mt-4 text-xs text-brand-muted">
+            <div class="flex items-center gap-1.5"><span class="w-3 h-2 rounded-sm bg-orange-400 inline-block"></span>Ing. Real</div>
+            <div class="flex items-center gap-1.5"><span class="w-3 h-2 rounded-sm bg-blue-400 inline-block"></span>Ing. Proy.</div>
+            <div class="flex items-center gap-1.5"><span class="w-3 h-2 rounded-sm bg-red-300 inline-block"></span>Gastos</div>
+          </div>
+        </div>
+        <div class="stat-card p-5">
+          <div class="flex items-center justify-between mb-4"><h3 class="text-sm font-semibold text-gray-800">Estado de Liquidaciones</h3></div>
+          <div class="donut-wrap">
+            <div class="donut-svg-box">
+              <svg width="130" height="130" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="60" fill="none" stroke="#F3F4F6" stroke-width="22"/>
+                <circle class="donut-ring" cx="80" cy="80" r="60" fill="none" stroke="#22C55E" stroke-width="22" stroke-dasharray="188 188" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+                <circle class="donut-ring" cx="80" cy="80" r="60" fill="none" stroke="#F59E0B" stroke-width="22" stroke-dasharray="157 219" stroke-dashoffset="-188" transform="rotate(-90 80 80)"/>
+                <circle class="donut-ring" cx="80" cy="80" r="60" fill="none" stroke="#EF4444" stroke-width="22" stroke-dasharray="31 345" stroke-dashoffset="-345" transform="rotate(-90 80 80)"/>
+              </svg>
+              <div class="donut-center-label"><span class="donut-center-number">148</span><span class="donut-center-sub">total</span></div>
+            </div>
+            <div class="donut-legend">
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:#22C55E"></span><span class="donut-legend-label">Liquidado</span><span class="donut-legend-val">50</span></div>
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:#F59E0B"></span><span class="donut-legend-label">Pendiente</span><span class="donut-legend-val">88</span></div>
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:#EF4444"></span><span class="donut-legend-label">Observado</span><span class="donut-legend-val">10</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stat-card overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100"><h3 class="text-sm font-semibold text-gray-800">Resumen Financiero por Casos</h3></div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead><tr><th>Nro. Caso</th><th>Cliente</th><th>Abogado</th><th>Ing. Proy.</th><th>Ing. Real</th><th>Saldo</th><th>Gastos</th><th>Utilidad</th><th>Est. Financiero</th></tr></thead>
+            <tbody>
+              <tr><td class="font-mono text-orange-500 font-semibold">C-2025-001</td><td class="font-medium">María García</td><td class="text-brand-muted">A. Vega</td><td>S/ 8,500</td><td class="text-green-600 font-medium">S/ 8,500</td><td class="text-green-600">S/ 0</td><td class="text-red-500">S/ 2,100</td><td class="text-green-600 font-medium">S/ 6,400</td><td><span class="badge-liquidado">Liquidado</span></td></tr>
+              <tr><td class="font-mono text-orange-500 font-semibold">C-2025-002</td><td class="font-medium">Juan Pérez</td><td class="text-brand-muted">M. Quispe</td><td>S/ 12,000</td><td class="text-amber-600 font-medium">S/ 6,000</td><td class="text-amber-600">S/ 6,000</td><td class="text-red-500">S/ 3,200</td><td class="text-amber-600 font-medium">S/ 2,800</td><td><span class="badge-en-cobranza">En Cobranza</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 2 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-dash-fin') }} de {{ totalPgs(2) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-dash-fin') === 1" (click)="pageNav('t-dash-fin', -1, 2)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-dash-fin') >= totalPgs(2)" (click)="pageNav('t-dash-fin', 1, 2)">&#8250;</button></div></div></div>
+      </div>
+    </div>
+  }
+
+  @if (vistaActiva === 'gestion-ingresos') {
+    <div id="view-gestion-ingresos" class="view block">
+      <div class="flex items-center justify-between mb-5">
+        <div><h2 class="text-xl font-display font-bold text-gray-800">Gestión de Ingresos</h2><p class="text-sm text-brand-muted mt-0.5">Pagos y cobranza por caso judicial</p></div>
+        <button (click)="openModal('modal-nuevo-ingreso')" class="btn-orange"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Nuevo Ingreso</button>
+      </div>
+      <div class="stat-card p-4 mb-5">
+        <div class="flex flex-wrap gap-3 items-end">
+          <div class="flex-1 min-w-[200px]"><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Buscar</label><div class="relative"><svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><input type="text" placeholder="Nro. Ingreso, Nro. Caso, Responsable..." class="filter-input w-full" style="padding-left:2.25rem"/></div></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Fecha Registro</label><input type="date" class="filter-input"/></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Estado</label><select class="filter-input"><option>Todos</option><option>Sin pagos</option><option>En proceso</option><option>Pagado</option></select></div>
+          <button class="btn-orange"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Filtrar</button>
+        </div>
+      </div>
+      <div class="stat-card overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100"><p class="text-sm font-semibold text-gray-800">Listado de Ingresos</p><span class="text-xs text-brand-muted">3 registros</span></div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead><tr><th>Nro. Ingreso</th><th>Nro. Caso</th><th>Cliente</th><th>Moneda</th><th>Monto Caso</th><th>Monto Pagado</th><th>Saldo</th><th>% Cobrado</th><th>Estado</th><th>Últ. Pago</th><th>Acciones</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">ING-2025-001</td><td class="font-mono text-sm">C-2025-001</td><td class="font-medium">María García</td><td>PEN</td>
+                <td class="text-right">S/ 8,500</td><td class="text-green-600 font-medium text-right">S/ 8,500</td><td class="text-green-600 text-right">S/ 0</td>
+                <td><div class="flex items-center gap-2"><div class="flex-1 bg-gray-100 rounded-full h-1.5"><div class="bg-green-500 h-1.5 rounded-full" style="width:100%"></div></div><span class="text-xs text-green-600 font-medium">100%</span></div></td>
+                <td><span class="badge-active">Pagado</span></td><td class="text-brand-muted text-sm">12/01/2025</td>
+                <td><div class="flex gap-1.5 items-center">
+                  <button (click)="openModal('modal-ver-ingreso')" class="btn-icon btn-view" title="Ver detalle"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <span class="btn-icon-disabled" title="No editable"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></span>
+                  <span class="btn-icon-disabled" title="Completado"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></span>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">ING-2025-002</td><td class="font-mono text-sm">C-2025-002</td><td class="font-medium">Juan Pérez</td><td>PEN</td>
+                <td class="text-right">S/ 12,000</td><td class="text-amber-600 font-medium text-right">S/ 6,000</td><td class="text-amber-600 text-right">S/ 6,000</td>
+                <td><div class="flex items-center gap-2"><div class="flex-1 bg-gray-100 rounded-full h-1.5"><div class="bg-amber-400 h-1.5 rounded-full" style="width:50%"></div></div><span class="text-xs text-amber-600 font-medium">50%</span></div></td>
+                <td><span class="badge-warn">En proceso</span></td><td class="text-brand-muted text-sm">18/01/2025</td>
+                <td><div class="flex gap-1.5 items-center">
+                  <button (click)="openModal('modal-ver-ingreso')" class="btn-icon btn-view" title="Ver detalle"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <button (click)="openModal('modal-editar-ingreso')" class="btn-icon btn-edit" title="Editar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                  <button (click)="openModal('modal-registrar-pago')" class="btn-icon" style="background:#EFF6FF;color:#2563EB;" title="Registrar pago"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">ING-2025-003</td><td class="font-mono text-sm">C-2025-003</td><td class="font-medium">Rosa Linares</td><td>PEN</td>
+                <td class="text-right">S/ 5,200</td><td class="text-gray-400 font-medium text-right">S/ 0</td><td class="text-red-500 text-right">S/ 5,200</td>
+                <td><div class="flex items-center gap-2"><div class="flex-1 bg-gray-100 rounded-full h-1.5"><div class="bg-red-400 h-1.5 rounded-full" style="width:0%"></div></div><span class="text-xs text-red-500 font-medium">0%</span></div></td>
+                <td><span class="badge-inactive">Sin pagos</span></td><td class="text-brand-muted text-sm">—</td>
+                <td><div class="flex gap-1.5 items-center">
+                  <button (click)="openModal('modal-ver-ingreso')" class="btn-icon btn-view" title="Ver detalle"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <button (click)="openModal('modal-editar-ingreso')" class="btn-icon btn-edit" title="Editar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                  <button (click)="openModal('modal-registrar-pago')" class="btn-icon" style="background:#EFF6FF;color:#2563EB;" title="Registrar pago"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 3 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-ingresos') }} de {{ totalPgs(3) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-ingresos') === 1" (click)="pageNav('t-ingresos', -1, 3)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-ingresos') >= totalPgs(3)" (click)="pageNav('t-ingresos', 1, 3)">&#8250;</button></div></div></div>
+      </div>
+    </div>
+  }
+
+  @if (vistaActiva === 'gestion-gastos') {
+    <div id="view-gestion-gastos" class="view block">
+      <div class="flex items-center justify-between mb-5">
+        <div><h2 class="text-xl font-display font-bold text-gray-800">Gestión de Gastos</h2><p class="text-sm text-brand-muted mt-0.5">Registro, aprobación y control de gastos por caso</p></div>
+        <button (click)="openModal('modal-nuevo-gasto')" class="btn-orange"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Nuevo Gasto</button>
+      </div>
+      <div class="stat-card p-4 mb-5">
+        <div class="flex flex-wrap gap-3 items-end">
+          <div class="flex-1 min-w-[200px]"><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Buscar</label><div class="relative"><svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><input type="text" placeholder="Nro. Gasto, Nro. Caso, Responsable..." class="filter-input w-full" style="padding-left:2.25rem"/></div></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Fecha Gasto</label><input type="date" class="filter-input"/></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Categoría</label><select class="filter-input"><option>Todos</option><option>Judicial</option><option>Administrativo</option><option>Valores</option></select></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Estado</label><select class="filter-input"><option>Todos</option><option>Registrado</option><option>Aprobado</option><option>Rechazado</option></select></div>
+          <button class="btn-orange"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Filtrar</button>
+          <button class="btn-secondary">Filtros Avanzados</button>
+        </div>
+      </div>
+      <div class="stat-card overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100"><p class="text-sm font-semibold text-gray-800">Listado de Gastos</p><span class="text-xs text-brand-muted">4 registros</span></div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead><tr><th>Nro. Gasto</th><th>Fecha</th><th>Nro. Caso</th><th>Tipo de Gasto</th><th>Categoría</th><th>Moneda</th><th>Monto</th><th>Responsable</th><th>Estado</th><th>Aprobador</th><th>F. Aprobación</th><th>Acciones</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">G-2025-001</td><td class="text-brand-muted text-sm">15/01/2025</td><td class="font-mono text-sm">C-2025-001</td><td>Notarial</td>
+                <td><span class="badge bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full">Judicial</span></td><td>PEN</td><td class="font-medium">S/ 450</td><td class="text-brand-muted text-sm">A. Vega</td>
+                <td><span class="badge-active">Aprobado</span></td><td class="text-brand-muted text-sm">J. Torres</td><td class="text-brand-muted text-sm">16/01/2025</td>
+                <td><div class="flex gap-1.5 items-center">
+                  <button (click)="openModal('modal-ver-gasto')" class="btn-icon btn-view" title="Ver detalle"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <div class="relative">
+                    <button (click)="toggleAcciones('menu-g001', $event)" class="btn-icon btn-more" title="Más acciones"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+                    <div class="accion-menu" [class.open]="menuAccionAbiertoId === 'menu-g001'">
+                      <button (click)="closeAcciones();openModal('modal-pagar-gasto')" class="accion-item accion-green"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>Pagar</button>
+                      <div class="accion-divider"></div>
+                      <button (click)="closeAcciones();openModal('modal-anular-gasto')" class="accion-item accion-red"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>Anular</button>
+                    </div>
+                  </div>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">G-2025-002</td><td class="text-brand-muted text-sm">18/01/2025</td><td class="font-mono text-sm">C-2025-002</td><td>Peritos</td>
+                <td><span class="badge bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full">Administrativo</span></td><td>PEN</td><td class="font-medium">S/ 1,200</td><td class="text-brand-muted text-sm">M. Quispe</td>
+                <td><span class="badge-warn">Registrado</span></td><td class="text-brand-muted text-sm">—</td><td class="text-brand-muted text-sm">—</td>
+                <td><div class="flex gap-1.5 items-center">
+                  <button (click)="openModal('modal-ver-gasto')" class="btn-icon btn-view" title="Ver detalle"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <div class="relative">
+                    <button (click)="toggleAcciones('menu-g002', $event)" class="btn-icon btn-more" title="Más acciones"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
+                    <div class="accion-menu" [class.open]="menuAccionAbiertoId === 'menu-g002'">
+                      <button (click)="closeAcciones();openModal('modal-editar-gasto')" class="accion-item accion-orange"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Editar</button>
+                      <button (click)="closeAcciones();openModal('modal-aprobar-gasto')" class="accion-item accion-green"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Aprobar</button>
+                      <div class="accion-divider"></div>
+                      <button (click)="closeAcciones();openModal('modal-anular-gasto')" class="accion-item accion-red"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>Anular</button>
+                    </div>
+                  </div>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">G-2025-003</td><td class="text-brand-muted text-sm">22/01/2025</td><td class="font-mono text-sm">C-2025-003</td><td>Tasas</td>
+                <td><span class="badge bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full">Valores</span></td><td>PEN</td><td class="font-medium">S/ 320</td><td class="text-brand-muted text-sm">A. Vega</td>
+                <td><span class="badge-inactive">Rechazado</span></td><td class="text-brand-muted text-sm">—</td><td class="text-brand-muted text-sm">—</td>
+                <td><div class="flex gap-1.5 items-center">
+                  <button (click)="openModal('modal-ver-gasto')" class="btn-icon btn-view" title="Ver detalle"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 4 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-gastos') }} de {{ totalPgs(4) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-gastos') === 1" (click)="pageNav('t-gastos', -1, 4)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-gastos') >= totalPgs(4)" (click)="pageNav('t-gastos', 1, 4)">&#8250;</button></div></div></div>
+      </div>
+    </div>
+  }
+
+  @if (vistaActiva === 'liquidacion') {
+    <div id="view-liquidacion" class="view block">
+      <div class="flex items-center justify-between mb-5">
+        <div><h2 class="text-xl font-display font-bold text-gray-800">Liquidación de Casos</h2><p class="text-sm text-brand-muted mt-0.5">Generación y seguimiento de liquidaciones</p></div>
+        <button (click)="openModal('modal-nueva-liquidacion')" class="btn-orange"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>Nueva Liquidación</button>
+      </div>
+      <div class="stat-card p-4 mb-5">
+        <div class="flex flex-wrap gap-3 items-end">
+          <div class="flex-1 min-w-[200px]"><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Buscar</label><div class="relative"><svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><input type="text" placeholder="Nro. Liquidación, Nro. Caso, Cliente..." class="filter-input w-full" style="padding-left:2.25rem"/></div></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Estado</label><select class="filter-input"><option>Todos</option><option>Generada</option><option>Aprobada</option><option>Pagada</option></select></div>
+          <button class="btn-orange"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Filtrar</button>
+        </div>
+      </div>
+      <div class="stat-card overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100"><p class="text-sm font-semibold text-gray-800">Listado de Liquidaciones</p><span class="text-xs text-brand-muted">2 registros</span></div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead><tr><th>Nro. Liquidación</th><th>Fecha</th><th>Nro. Caso</th><th>Cliente</th><th>Total Honorarios</th><th>Total Gastos</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">LIQ-2025-001</td><td class="text-brand-muted text-sm">10/01/2025</td><td class="font-mono text-sm">C-2025-001</td><td class="font-medium">María García</td><td class="text-right">S/ 6,400</td><td class="text-right">S/ 2,100</td><td class="font-semibold text-right">S/ 8,500</td><td><span class="badge-active">Pagada</span></td>
+                <td><div class="flex gap-1.5 items-center">
+                  <button (click)="openModal('modal-ver-liq')" class="btn-icon btn-view" title="Ver detalle"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <span class="btn-icon-disabled" title="Aprobación no requerida"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                  <span class="btn-icon-disabled" title="Ya pagada"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></span>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">LIQ-2025-002</td><td class="text-brand-muted text-sm">20/01/2025</td><td class="font-mono text-sm">C-2025-002</td><td class="font-medium">Juan Pérez</td><td class="text-right">S/ 2,800</td><td class="text-right">S/ 3,200</td><td class="font-semibold text-right">S/ 6,000</td><td><span class="badge-warn">Aprobada</span></td>
+                <td><div class="flex gap-1.5 items-center">
+                  <button (click)="openModal('modal-ver-liq')" class="btn-icon btn-view" title="Ver detalle"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <span class="btn-icon-disabled" title="Ya aprobada"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                  <button (click)="openModal('modal-pagar-liq')" class="btn-icon" style="background:#EFF6FF;color:#2563EB;" title="Pagar liquidación"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">LIQ-2025-003</td><td class="text-brand-muted text-sm">25/01/2025</td><td class="font-mono text-sm">C-2025-003</td><td class="font-medium">Rosa Linares</td><td class="text-right">S/ 3,800</td><td class="text-right">S/ 1,800</td><td class="font-semibold text-right">S/ 5,600</td><td><span class="badge-inactive">Generada</span></td>
+                <td><div class="flex gap-1.5 items-center">
+                  <button (click)="openModal('modal-ver-liq')" class="btn-icon btn-view" title="Ver detalle"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <button (click)="openModal('modal-aprobar-liq')" class="btn-icon" style="background:#F0FDF4;color:#16A34A;" title="Aprobar liquidación"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></button>
+                  <span class="btn-icon-disabled" title="Pendiente de aprobación"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></span>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 3 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-liq') }} de {{ totalPgs(3) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-liq') === 1" (click)="pageNav('t-liq', -1, 3)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-liq') >= totalPgs(3)" (click)="pageNav('t-liq', 1, 3)">&#8250;</button></div></div></div>
+      </div>
+    </div>
+  }
+
+  @if (vistaActiva === 'gestion-procesos') {
+    <div id="view-gestion-procesos" class="view block">
+      <div class="flex items-center justify-between mb-5">
+        <div><h2 class="text-xl font-display font-bold text-gray-800">Gestión de Procesos</h2><p class="text-sm text-brand-muted mt-0.5">Vinculación financiera con los procesos judiciales</p></div>
+      </div>
+      <div class="stat-card p-4 mb-5">
+        <div class="flex flex-wrap gap-3 items-end">
+          <div class="flex-1 min-w-[200px]"><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Buscar</label><div class="relative"><svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><input type="text" placeholder="Nro. Caso, Cliente, Abogado..." class="filter-input w-full" style="padding-left:2.25rem"/></div></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Est. Financiero</label><select class="filter-input"><option>Todos</option><option>En Cobranza</option><option>Liquidable</option><option>Liquidado</option><option>Cerrado</option></select></div>
+          <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Abogado</label><select class="filter-input"><option>Todos</option><option>A. Vega</option><option>M. Quispe</option></select></div>
+          <button class="btn-orange"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>Filtrar</button>
+          <button class="btn-secondary">Limpiar</button>
+        </div>
+      </div>
+      <div class="stat-card overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100"><p class="text-sm font-semibold text-gray-800">Procesos con actividad financiera</p></div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead><tr><th>Nro. Caso</th><th>Cliente</th><th>Abogado</th><th>Ing. Proyectado</th><th>Ing. Real</th><th>Gastos</th><th>Utilidad</th><th>Est. Financiero</th><th>Acciones</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">C-2025-001</td><td class="font-medium">María García</td><td class="text-brand-muted">A. Vega</td><td>S/ 8,500</td><td class="text-green-600">S/ 8,500</td><td class="text-red-500">S/ 2,100</td><td class="text-green-600 font-semibold">S/ 6,400</td><td><span class="badge-liquidado">Liquidado</span></td>
+                <td><button (click)="openModal('modal-ver-proceso')" class="btn-icon btn-view" title="Ver detalle financiero"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button></td>
+              </tr>
+              <tr>
+                <td class="font-mono text-orange-500 font-semibold">C-2025-002</td><td class="font-medium">Juan Pérez</td><td class="text-brand-muted">M. Quispe</td><td>S/ 12,000</td><td class="text-amber-600">S/ 6,000</td><td class="text-red-500">S/ 3,200</td><td class="text-amber-600 font-semibold">S/ 2,800</td><td><span class="badge-en-cobranza">En Cobranza</span></td>
+                <td><button (click)="openModal('modal-ver-proceso')" class="btn-icon btn-view" title="Ver detalle financiero"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 2 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-procesos') }} de {{ totalPgs(2) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-procesos') === 1" (click)="pageNav('t-procesos', -1, 2)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-procesos') >= totalPgs(2)" (click)="pageNav('t-procesos', 1, 2)">&#8250;</button></div></div></div>
+      </div>
+    </div>
+  }
+
+  @if (vistaActiva === 'rep-gastos-caso') {
+    <div class="view block">
+      <div class="flex items-center justify-between mb-5"><div><h2 class="text-xl font-display font-bold text-gray-800">Reporte de Gastos por Caso</h2><p class="text-sm text-brand-muted mt-0.5">Detalle de gastos por caso judicial</p></div><button (click)="showToast('Reporte exportado a Excel')" class="btn-secondary"><svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Exportar Excel</button></div>
+      <div class="stat-card p-4 mb-5"><div class="flex flex-wrap gap-3 items-end">
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Fecha Gasto</label><input type="date" class="filter-input"/></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Nro. Caso</label><select class="filter-input"><option>Todos</option><option>C-2025-001</option><option>C-2025-002</option></select></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Categoría</label><select class="filter-input"><option>Todos</option><option>Judicial</option><option>Administrativo</option><option>Valores</option></select></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Estado</label><select class="filter-input"><option>Todos</option><option>Aprobado</option><option>Registrado</option><option>Rechazado</option></select></div>
+        <button (click)="showToast('Reporte generado')" class="btn-orange">Generar Reporte</button>
+      </div></div>
+      <div class="stat-card overflow-hidden"><div class="overflow-x-auto"><table class="data-table"><thead><tr><th>Nro. Gasto</th><th>Fecha</th><th>Nro. Caso</th><th>Cliente</th><th>Tipo Gasto</th><th>Categoría</th><th>Monto</th><th>Moneda</th><th>Estado</th><th>Responsable</th><th>Aprobador</th><th>Ver</th></tr></thead><tbody>
+        <tr><td class="font-mono text-orange-500">G-2025-001</td><td class="text-brand-muted text-sm">15/01/2025</td><td class="font-mono text-sm">C-2025-001</td><td>María García</td><td>Notarial</td><td><span class="badge bg-purple-100 text-purple-700">Judicial</span></td><td>S/ 450</td><td>PEN</td><td><span class="badge-active">Aprobado</span></td><td class="text-brand-muted">A. Vega</td><td class="text-brand-muted">J. Torres</td><td><button (click)="openModal('modal-ver-gasto')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button></td></tr>
+        <tr><td class="font-mono text-orange-500">G-2025-002</td><td class="text-brand-muted text-sm">18/01/2025</td><td class="font-mono text-sm">C-2025-002</td><td>Juan Pérez</td><td>Peritos</td><td><span class="badge bg-blue-100 text-blue-700">Administrativo</span></td><td>S/ 1,200</td><td>PEN</td><td><span class="badge-warn">Registrado</span></td><td class="text-brand-muted">M. Quispe</td><td class="text-brand-muted">—</td><td><button (click)="openModal('modal-ver-gasto')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button></td></tr>
+      </tbody></table></div><div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 2 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-rep-gc') }} de {{ totalPgs(2) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-rep-gc') === 1" (click)="pageNav('t-rep-gc', -1, 2)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-rep-gc') >= totalPgs(2)" (click)="pageNav('t-rep-gc', 1, 2)">&#8250;</button></div></div></div></div>
+    </div>
+  }
+
+  @if (vistaActiva === 'rep-gastos-pend') {
+    <div class="view block">
+      <div class="flex items-center justify-between mb-5"><div><h2 class="text-xl font-display font-bold text-gray-800">Gastos Pendientes de Aprobación</h2><p class="text-sm text-brand-muted mt-0.5">Gastos en estado Registrado que requieren validación</p></div><button (click)="showToast('Reporte exportado a Excel')" class="btn-secondary"><svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Exportar Excel</button></div>
+      <div class="stat-card p-4 mb-5"><div class="flex flex-wrap gap-3 items-end">
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Fecha</label><input type="date" class="filter-input"/></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Responsable</label><select class="filter-input"><option>Todos</option><option>Andrés Vega</option><option>María Quispe</option></select></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Nro. Caso</label><select class="filter-input"><option>Todos</option><option>C-2025-001</option><option>C-2025-002</option></select></div>
+        <button (click)="showToast('Reporte generado')" class="btn-orange">Generar Reporte</button>
+      </div></div>
+      <div class="stat-card overflow-hidden"><div class="overflow-x-auto"><table class="data-table"><thead><tr><th>Fecha Gen.</th><th>Nro. Gasto</th><th>Nro. Caso</th><th>Cliente</th><th>Tipo Gasto</th><th>Monto</th><th>Moneda</th><th>Responsable</th><th>Estado</th><th>Ver</th></tr></thead><tbody>
+        <tr><td class="text-brand-muted text-sm">18/01/2025</td><td class="font-mono text-orange-500">G-2025-002</td><td class="font-mono text-sm">C-2025-002</td><td>Juan Pérez</td><td>Peritos</td><td class="font-medium">S/ 1,200</td><td>PEN</td><td class="text-brand-muted">M. Quispe</td><td><span class="badge-warn">Registrado</span></td><td><button (click)="openModal('modal-ver-gasto')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button></td></tr>
+        <tr><td class="text-brand-muted text-sm">20/01/2025</td><td class="font-mono text-orange-500">G-2025-004</td><td class="font-mono text-sm">C-2025-003</td><td>Rosa Linares</td><td>Honorarios</td><td class="font-medium">S/ 800</td><td>PEN</td><td class="text-brand-muted">A. Vega</td><td><span class="badge-warn">Registrado</span></td><td><button (click)="openModal('modal-ver-gasto')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button></td></tr>
+      </tbody></table></div><div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 2 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-rep-gp') }} de {{ totalPgs(2) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-rep-gp') === 1" (click)="pageNav('t-rep-gp', -1, 2)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-rep-gp') >= totalPgs(2)" (click)="pageNav('t-rep-gp', 1, 2)">&#8250;</button></div></div></div></div>
+    </div>
+  }
+
+  @if (vistaActiva === 'rep-financiero') {
+    <div class="view block">
+      <div class="flex items-center justify-between mb-5"><div><h2 class="text-xl font-display font-bold text-gray-800">Reporte Financiero por Caso</h2><p class="text-sm text-brand-muted mt-0.5">Resultado financiero consolidado por caso</p></div><button (click)="showToast('Reporte exportado a Excel')" class="btn-secondary"><svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Exportar Excel</button></div>
+      <div class="stat-card p-4 mb-5"><div class="flex flex-wrap gap-3 items-end">
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Abogado</label><select class="filter-input"><option>Todos</option><option>Andrés Vega</option><option>María Quispe</option></select></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Tipo de Caso</label><select class="filter-input"><option>Todos</option><option>Civil</option><option>Laboral</option></select></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Estado Financiero</label><select class="filter-input"><option>Todos</option><option>En Cobranza</option><option>Liquidable</option><option>Liquidado</option><option>Cerrado</option></select></div>
+        <button (click)="showToast('Reporte generado')" class="btn-orange">Generar Reporte</button>
+      </div></div>
+      <div class="stat-card overflow-hidden"><div class="overflow-x-auto"><table class="data-table"><thead><tr><th>Nro. Caso</th><th>Cliente</th><th>Abogado</th><th>Ing. Caso</th><th>Total Gastos</th><th>Utilidad</th><th>% Estudio</th><th>Mto. Estudio</th><th>% Abogado</th><th>Mto. Abogado</th><th>Est. Financiero</th><th>Ver</th></tr></thead><tbody>
+        <tr><td class="font-mono text-orange-500 font-semibold">C-2025-001</td><td>María García</td><td class="text-brand-muted">A. Vega</td><td>S/ 8,500</td><td class="text-red-500">S/ 2,100</td><td class="text-green-600 font-medium">S/ 6,400</td><td>70%</td><td>S/ 4,480</td><td>30%</td><td>S/ 1,920</td><td><span class="badge-liquidado">Liquidado</span></td><td><button (click)="openModal('modal-ver-liq')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button></td></tr>
+        <tr><td class="font-mono text-orange-500 font-semibold">C-2025-002</td><td>Juan Pérez</td><td class="text-brand-muted">M. Quispe</td><td>S/ 12,000</td><td class="text-red-500">S/ 3,200</td><td class="text-amber-600 font-medium">S/ 2,800</td><td>70%</td><td>S/ 1,960</td><td>30%</td><td>S/ 840</td><td><span class="badge-en-cobranza">En Cobranza</span></td><td><button (click)="openModal('modal-ver-liq')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button></td></tr>
+      </tbody></table></div><div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 2 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-rep-fin') }} de {{ totalPgs(2) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-rep-fin') === 1" (click)="pageNav('t-rep-fin', -1, 2)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-rep-fin') >= totalPgs(2)" (click)="pageNav('t-rep-fin', 1, 2)">&#8250;</button></div></div></div></div>
+    </div>
+  }
+
+  @if (vistaActiva === 'rep-liquidacion') {
+    <div class="view block">
+      <div class="flex items-center justify-between mb-5"><div><h2 class="text-xl font-display font-bold text-gray-800">Reporte de Liquidaciones</h2><p class="text-sm text-brand-muted mt-0.5">Liquidaciones generadas, aprobadas y pagadas</p></div><button (click)="showToast('Reporte exportado a Excel')" class="btn-secondary"><svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Exportar Excel</button></div>
+      <div class="stat-card p-4 mb-5"><div class="flex flex-wrap gap-3 items-end">
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Fecha Generación</label><input type="date" class="filter-input"/></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Fecha Pago</label><input type="date" class="filter-input"/></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Estado</label><select class="filter-input"><option>Todos</option><option>Generada</option><option>Aprobada</option><option>Pagada</option></select></div>
+        <button (click)="showToast('Reporte generado')" class="btn-orange">Generar Reporte</button>
+      </div></div>
+      <div class="stat-card overflow-hidden"><div class="overflow-x-auto"><table class="data-table"><thead><tr><th>Nro. Liquidación</th><th>Nro. Caso</th><th>Cliente</th><th>Total Ingresos</th><th>Total Gastos</th><th>Utilidad</th><th>Estado</th><th>Fecha Gen.</th><th>Fecha Aprobación</th><th>Fecha Pago</th><th>Ver</th></tr></thead><tbody>
+        <tr><td class="font-mono text-orange-500 font-semibold">LIQ-2025-001</td><td class="font-mono text-sm">C-2025-001</td><td>María García</td><td>S/ 8,500</td><td class="text-red-500">S/ 2,100</td><td class="text-green-600 font-medium">S/ 6,400</td><td><span class="badge-active">Pagada</span></td><td class="text-brand-muted text-sm">10/01/2025</td><td class="text-brand-muted text-sm">12/01/2025</td><td class="text-brand-muted text-sm">15/01/2025</td><td><button (click)="openModal('modal-ver-liq')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button></td></tr>
+        <tr><td class="font-mono text-orange-500 font-semibold">LIQ-2025-002</td><td class="font-mono text-sm">C-2025-004</td><td>Corporación ABC</td><td>S/ 22,000</td><td class="text-red-500">S/ 6,800</td><td class="text-green-600 font-medium">S/ 15,200</td><td><span class="badge-warn">Aprobada</span></td><td class="text-brand-muted text-sm">05/02/2025</td><td class="text-brand-muted text-sm">08/02/2025</td><td class="text-brand-muted text-sm">—</td><td><button (click)="openModal('modal-ver-liq')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button></td></tr>
+      </tbody></table></div><div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 2 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-rep-liq') }} de {{ totalPgs(2) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-rep-liq') === 1" (click)="pageNav('t-rep-liq', -1, 2)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-rep-liq') >= totalPgs(2)" (click)="pageNav('t-rep-liq', 1, 2)">&#8250;</button></div></div></div></div>
+    </div>
+  }
+
+  @if (vistaActiva === 'rep-gerencial') {
+    <div class="view block">
+      <div class="flex items-center justify-between mb-5"><div><h2 class="text-xl font-display font-bold text-gray-800">Reporte Gerencial</h2><p class="text-sm text-brand-muted mt-0.5">Visión estratégica para toma de decisiones</p></div><button (click)="showToast('Reporte exportado a Excel')" class="btn-secondary"><svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Exportar Excel</button></div>
+      <div class="stat-card p-4 mb-5"><div class="flex flex-wrap gap-3 items-end">
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Por</label><select class="filter-input"><option>Periodo</option><option>Cliente</option><option>Abogado</option></select></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Desde</label><input type="date" class="filter-input"/></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Hasta</label><input type="date" class="filter-input"/></div>
+        <div><label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Entidad</label><select class="filter-input"><option>Todas</option><option>Persona Natural</option><option>Empresa</option><option>Banco</option></select></div>
+        <button (click)="showToast('Reporte gerencial generado')" class="btn-orange">Generar Reporte</button>
+      </div></div>
+      <div class="stat-card overflow-hidden"><div class="overflow-x-auto"><table class="data-table"><thead><tr><th>Periodo</th><th>Cliente</th><th>Entidad</th><th>Abogado</th><th>Total Casos</th><th>Casos Liq.</th><th>Ingresos</th><th>Gastos</th><th>Utilidad</th><th>Margen</th><th>% Vencidos</th><th>Estado</th></tr></thead><tbody>
+        <tr><td class="font-medium">Ene 2025</td><td>María García</td><td class="text-brand-muted">Persona Natural</td><td class="text-brand-muted">A. Vega</td><td class="text-center">3</td><td class="text-green-600 text-center">2</td><td>S/ 28,500</td><td class="text-red-500">S/ 7,200</td><td class="text-green-600 font-medium">S/ 21,300</td><td class="text-green-600 font-medium">74.7%</td><td class="text-brand-muted">5%</td><td><span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span></td></tr>
+        <tr><td class="font-medium">Feb 2025</td><td>Corporación ABC</td><td class="text-brand-muted">Empresa</td><td class="text-brand-muted">M. Quispe</td><td class="text-center">5</td><td class="text-amber-600 text-center">1</td><td>S/ 62,000</td><td class="text-red-500">S/ 18,400</td><td class="text-amber-600 font-medium">S/ 43,600</td><td class="text-amber-600 font-medium">70.3%</td><td class="text-amber-600">12%</td><td><span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span></td></tr>
+        <tr><td class="font-medium">Mar 2025</td><td>Banco Nacional</td><td class="text-brand-muted">Banco</td><td class="text-brand-muted">A. Vega</td><td class="text-center">8</td><td class="text-red-500 text-center">0</td><td>S/ 45,000</td><td class="text-red-500">S/ 22,000</td><td class="text-red-500 font-medium">S/ 23,000</td><td class="text-red-500 font-medium">51.1%</td><td class="text-red-500">28%</td><td><span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span></td></tr>
+      </tbody></table></div><div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 3 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-rep-ger') }} de {{ totalPgs(3) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-rep-ger') === 1" (click)="pageNav('t-rep-ger', -1, 3)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-rep-ger') >= totalPgs(3)" (click)="pageNav('t-rep-ger', 1, 3)">&#8250;</button></div></div></div></div>
+    </div>
+  }
+
+  @if (vistaActiva === 'tipo-gasto') {
+    <div id="view-tipo-gasto" class="view block">
+
+      <!-- Encabezado -->
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <h2 class="text-xl font-display font-bold text-gray-800">Tipo de Gasto</h2>
+          <p class="text-sm text-brand-muted mt-0.5">Definición y configuración de tipos de gasto</p>
+        </div>
+        <button (click)="openModal('modal-nuevo-tipo-gasto')" class="btn-orange">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Nuevo Tipo de Gasto
+        </button>
+      </div>
+
+      <!-- Barra de filtros -->
+      <div class="stat-card p-4 mb-4">
+        <div class="flex flex-wrap gap-3 items-end">
+          <div class="flex-1 min-w-[200px]">
+            <label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Buscar</label>
+            <div class="relative">
+              <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" class="filter-input" style="padding-left:2.25rem" placeholder="Nombre de tipo de gasto..."/>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Categoría</label>
+            <select class="filter-input"><option>Todos</option><option>Judicial</option><option>Administrativo</option><option>Valores</option></select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-brand-muted uppercase tracking-wider mb-1.5">Estado</label>
+            <select class="filter-input"><option>Todos</option><option>Activo</option><option>Inactivo</option></select>
+          </div>
+          <button class="btn-orange">Filtrar</button>
+        </div>
+      </div>
+
+      <!-- Tabla -->
+      <div class="stat-card overflow-hidden">
+        <div class="flex items-center justify-between px-4 pt-4 pb-3 border-b border-gray-100">
+          <h3 class="font-semibold text-gray-700">Lista de Tipos de Gasto</h3>
+          <span class="text-sm text-brand-muted">4 registros</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>¿Req. Aprobación?</th>
+                <th>¿Aplica a Liquidación?</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-medium">Honorarios Profesionales</td>
+                <td><span class="badge bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full">Judicial</span></td>
+                <td><span class="badge-active">Sí</span></td>
+                <td><span class="badge-active">Sí</span></td>
+                <td><span class="badge-active">Activo</span></td>
+                <td><div class="flex gap-1 items-center">
+                  <button (click)="openModal('modal-ver-tipo-gasto')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <button (click)="openModal('modal-editar-tipo-gasto')" class="btn-icon btn-edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="font-medium">Gastos Notariales</td>
+                <td><span class="badge bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded-full">Judicial</span></td>
+                <td><span class="badge-warn">No</span></td>
+                <td><span class="badge-active">Sí</span></td>
+                <td><span class="badge-active">Activo</span></td>
+                <td><div class="flex gap-1 items-center">
+                  <button (click)="openModal('modal-ver-tipo-gasto')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <button (click)="openModal('modal-editar-tipo-gasto')" class="btn-icon btn-edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="font-medium">Gastos Administrativos</td>
+                <td><span class="badge bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full">Administrativo</span></td>
+                <td><span class="badge-active">Sí</span></td>
+                <td><span class="badge-warn">No</span></td>
+                <td><span class="badge-active">Activo</span></td>
+                <td><div class="flex gap-1 items-center">
+                  <button (click)="openModal('modal-ver-tipo-gasto')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <button (click)="openModal('modal-editar-tipo-gasto')" class="btn-icon btn-edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                </div></td>
+              </tr>
+              <tr>
+                <td class="font-medium">Tasas Judiciales</td>
+                <td><span class="badge bg-amber-100 text-amber-700 text-xs px-2 py-0.5 rounded-full">Valores</span></td>
+                <td><span class="badge-warn">No</span></td>
+                <td><span class="badge-active">Sí</span></td>
+                <td><span class="badge-danger">Inactivo</span></td>
+                <td><div class="flex gap-1 items-center">
+                  <button (click)="openModal('modal-ver-tipo-gasto')" class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                  <button (click)="openModal('modal-editar-tipo-gasto')" class="btn-icon btn-edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pg-bar"><div class="flex items-center gap-2"><span class="pg-info">Por página:</span><select class="pg-select" [value]="pgSize" (change)="setPgSize($any($event.target).value)"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="100">100</option></select><span class="pg-info">de 4 registros</span></div><div class="flex items-center gap-2"><span class="pg-info">Página {{ getPage('t-tipo-gasto') }} de {{ totalPgs(4) }}</span><div class="flex gap-1"><button class="pg-btn" [disabled]="getPage('t-tipo-gasto') === 1" (click)="pageNav('t-tipo-gasto', -1, 4)">&#8249;</button><button class="pg-btn" [disabled]="getPage('t-tipo-gasto') >= totalPgs(4)" (click)="pageNav('t-tipo-gasto', 1, 4)">&#8250;</button></div></div></div>
+      </div>
+
+    </div>
+  }
+
+    </main>
+  </div>
+
+  <!-- ══ TOAST ══ -->
+  @if (toastVisible) {
+    <div class="fixed bottom-5 right-5 z-[99999] flex items-center gap-3 bg-white text-gray-800 px-4 py-3 rounded-xl shadow-2xl text-sm font-medium" style="border-left:4px solid var(--orange)">
+      <svg class="w-4 h-4 flex-shrink-0" style="color:var(--orange)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      {{ toastMessage }}
+    </div>
+  }
+
+  <!-- ══ MODALES: TIPO DE GASTO ══ -->
+
+  @if (isModalOpen('modal-nuevo-tipo-gasto')) {
+    <div class="modal-overlay" (click)="closeModal('modal-nuevo-tipo-gasto')">
+      <div class="modal" (click)="$event.stopPropagation()" style="max-width:480px">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          </div>
+          Nuevo Tipo de Gasto
+          <button (click)="closeModal('modal-nuevo-tipo-gasto')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div><label>Nombre *</label><input type="text" placeholder="Ej: Honorarios Profesionales"/></div>
+        <div><label>Categoría *</label><select><option value="">Seleccionar...</option><option>Judicial</option><option>Administrativo</option><option>Valores</option></select></div>
+        <div><label>¿Requiere Aprobación?</label><select><option>Sí</option><option>No</option></select></div>
+        <div><label>¿Aplica a Liquidación?</label><select><option>Sí</option><option>No</option></select></div>
+        <div><label>Estado</label><select><option>Activo</option><option>Inactivo</option></select></div>
+        <div class="flex gap-3 justify-end mt-2">
+          <button (click)="closeModal('modal-nuevo-tipo-gasto')" class="btn-secondary">Cancelar</button>
+          <button (click)="closeModal('modal-nuevo-tipo-gasto');showToast('Tipo de Gasto registrado exitosamente')" class="btn-orange">Guardar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-editar-tipo-gasto')) {
+    <div class="modal-overlay" (click)="closeModal('modal-editar-tipo-gasto')">
+      <div class="modal" (click)="$event.stopPropagation()" style="max-width:480px">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/></svg>
+          </div>
+          Editar Tipo de Gasto
+          <button (click)="closeModal('modal-editar-tipo-gasto')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div><label>Nombre *</label><input type="text" value="Honorarios Profesionales"/></div>
+        <div><label>Categoría *</label><select><option selected>Judicial</option><option>Administrativo</option><option>Valores</option></select></div>
+        <div><label>¿Requiere Aprobación?</label><select><option selected>Sí</option><option>No</option></select></div>
+        <div><label>¿Aplica a Liquidación?</label><select><option selected>Sí</option><option>No</option></select></div>
+        <div><label>Estado</label><select><option selected>Activo</option><option>Inactivo</option></select></div>
+        <div class="flex gap-3 justify-end mt-2">
+          <button (click)="closeModal('modal-editar-tipo-gasto')" class="btn-secondary">Cancelar</button>
+          <button (click)="closeModal('modal-editar-tipo-gasto');showToast('Tipo de Gasto actualizado')" class="btn-orange">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-ver-tipo-gasto')) {
+    <div class="modal-overlay" (click)="closeModal('modal-ver-tipo-gasto')">
+      <div class="modal" (click)="$event.stopPropagation()" style="max-width:440px">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0"/></svg>
+          </div>
+          Detalle de Tipo de Gasto
+          <button (click)="closeModal('modal-ver-tipo-gasto')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Nombre</p><p class="font-medium">Honorarios Profesionales</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Categoría</p><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">Judicial</span></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Req. Aprobación</p><span class="badge-active">Sí</span></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Aplica a Liquidación</p><span class="badge-active">Sí</span></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Estado</p><span class="badge-active">Activo</span></div>
+        </div>
+        <div class="flex justify-end mt-4"><button (click)="closeModal('modal-ver-tipo-gasto')" class="btn-secondary">Cerrar</button></div>
+      </div>
+    </div>
+  }
+
+  <!-- ══ MODALES: INGRESOS ══ -->
+
+  @if (isModalOpen('modal-nuevo-ingreso')) {
+    <div class="modal-overlay" (click)="closeModal('modal-nuevo-ingreso')">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-title"><div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center"><svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg></div>Nuevo Ingreso<button (click)="closeModal('modal-nuevo-ingreso')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+        <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-3">Datos del Ingreso</p>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div><label>Nro. Caso *</label><select><option value="">Seleccionar caso...</option><option>C-2025-002 – Juan Pérez</option><option>C-2025-003 – Rosa Linares</option></select></div>
+          <div><label>Monto Total del Caso</label><input type="text" value="—" readonly style="background:#F9FAFB"/></div>
+          <div><label>Moneda</label><input type="text" value="—" readonly style="background:#F9FAFB"/></div>
+          <div><label>Cliente</label><input type="text" value="—" readonly style="background:#F9FAFB"/></div>
+          <div><label>Responsable</label><input type="text" value="Administrador" readonly style="background:#F9FAFB"/></div>
+          <div><label>Estado</label><input type="text" value="Sin pagos" readonly style="background:#F9FAFB"/></div>
+        </div>
+        <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mt-4 mb-3">Pagos Registrados</p>
+        <div class="bg-gray-50 rounded-xl p-3 mb-3">
+          <div class="grid grid-cols-3 gap-3 mb-3">
+            <div><label>Monto Pagado</label><input type="text" value="S/ 0.00" readonly style="background:#F9FAFB"/></div>
+            <div><label>Saldo Pendiente</label><input type="text" value="—" readonly style="background:#F9FAFB"/></div>
+            <div><label>% Cobrado</label><input type="text" value="0%" readonly style="background:#F9FAFB"/></div>
+          </div>
+          <button (click)="openModal('modal-registrar-pago')" class="btn-orange text-xs"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>+ Agregar Pago</button>
+        </div>
+        <table class="data-table text-xs"><thead><tr><th>Fecha</th><th>Monto</th><th>Medio de Pago</th><th>Usuario</th><th>Documento</th><th>Acciones</th></tr></thead><tbody><tr><td colspan="6" class="text-center text-brand-muted py-4 italic">Sin pagos registrados</td></tr></tbody></table>
+        <div class="flex gap-3 justify-end mt-4"><button (click)="closeModal('modal-nuevo-ingreso')" class="btn-secondary">Cancelar</button><button (click)="closeModal('modal-nuevo-ingreso');showToast('Ingreso creado exitosamente')" class="btn-orange">Aceptar</button></div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-ver-ingreso')) {
+    <div class="modal-overlay" (click)="closeModal('modal-ver-ingreso')">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-title"><div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center"><svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></div>Detalle de Ingreso – ING-2025-001<button (click)="closeModal('modal-ver-ingreso')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+        <div class="grid grid-cols-2 gap-4 text-sm bg-gray-50 rounded-xl p-4 mb-4">
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Nro. Ingreso</p><p class="font-mono text-orange-500">ING-2025-001</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Nro. Caso</p><p class="font-mono">C-2025-001</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Cliente</p><p class="font-medium">María García López</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Moneda</p><p>PEN – Soles</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Monto del Caso</p><p class="font-semibold">S/ 8,500</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Monto Pagado</p><p class="text-green-600 font-semibold">S/ 8,500</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Saldo</p><p class="text-green-600">S/ 0</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Estado</p><span class="badge-active">Pagado</span></div>
+        </div>
+        <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2">Historial de Pagos</p>
+        <table class="data-table text-xs"><thead><tr><th>Fecha</th><th>Monto</th><th>Medio de Pago</th><th>Usuario</th><th>Documento</th></tr></thead><tbody>
+          <tr><td>05/01/2025</td><td class="text-green-600 font-medium">S/ 4,250</td><td>Transferencia</td><td class="text-brand-muted">Admin</td><td class="font-mono">BOL-001</td></tr>
+          <tr><td>12/01/2025</td><td class="text-green-600 font-medium">S/ 4,250</td><td>Depósito</td><td class="text-brand-muted">Admin</td><td class="font-mono">BOL-002</td></tr>
+        </tbody></table>
+        <div class="flex justify-end mt-4"><button (click)="closeModal('modal-ver-ingreso')" class="btn-secondary">Cerrar</button></div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-editar-ingreso')) {
+    <div class="modal-overlay" (click)="closeModal('modal-editar-ingreso')">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-title"><div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center"><svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/></svg></div>Editar Ingreso – ING-2025-002<button (click)="closeModal('modal-editar-ingreso')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div><label>Nro. Caso</label><input type="text" value="C-2025-002" readonly style="background:#F9FAFB"/></div>
+          <div><label>Monto Total del Caso</label><input type="text" value="S/ 12,000" readonly style="background:#F9FAFB"/></div>
+          <div><label>Moneda</label><input type="text" value="PEN – Soles" readonly style="background:#F9FAFB"/></div>
+          <div><label>Cliente</label><input type="text" value="Juan Pérez" readonly style="background:#F9FAFB"/></div>
+          <div><label>Responsable</label><input type="text" value="Administrador" readonly style="background:#F9FAFB"/></div>
+          <div><label>Estado</label><input type="text" value="En proceso" readonly style="background:#F9FAFB"/></div>
+        </div>
+        <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mt-4 mb-3">Pagos Registrados</p>
+        <div class="bg-gray-50 rounded-xl p-3 mb-3">
+          <div class="grid grid-cols-3 gap-3 mb-3">
+            <div><label>Monto Pagado</label><input type="text" value="S/ 6,000" readonly style="background:#F9FAFB"/></div>
+            <div><label>Saldo Pendiente</label><input type="text" value="S/ 6,000" readonly style="background:#F9FAFB"/></div>
+            <div><label>% Cobrado</label><input type="text" value="50%" readonly style="background:#F9FAFB"/></div>
+          </div>
+          <button (click)="openModal('modal-registrar-pago')" class="btn-orange text-xs"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>+ Agregar Pago</button>
+        </div>
+        <table class="data-table text-xs"><thead><tr><th>Fecha</th><th>Monto</th><th>Medio de Pago</th><th>Usuario</th><th>Documento</th><th>Acciones</th></tr></thead><tbody>
+          <tr><td>05/01/2025</td><td class="text-green-600 font-medium">S/ 6,000</td><td>Transferencia</td><td class="text-brand-muted">Admin</td><td class="font-mono text-xs">BOL-001</td><td><button (click)="openModal('modal-ver-ingreso')" class="btn-icon btn-view" style="width:24px;height:24px;"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0"/></svg></button></td></tr>
+        </tbody></table>
+        <div class="flex gap-3 justify-end mt-4"><button (click)="closeModal('modal-editar-ingreso')" class="btn-secondary">Cancelar</button><button (click)="closeModal('modal-editar-ingreso');showToast('Ingreso actualizado exitosamente')" class="btn-orange">Aceptar</button></div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-registrar-pago')) {
+    <div class="modal-overlay" (click)="closeModal('modal-registrar-pago')">
+      <div class="modal" style="max-width:480px" (click)="$event.stopPropagation()">
+        <div class="modal-title"><div class="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center"><svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>Registrar Pago<button (click)="closeModal('modal-registrar-pago')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div><label>Fecha del Pago *</label><input type="date"/></div>
+          <div><label>Monto *</label><input type="number" placeholder="0.00"/></div>
+          <div><label>Medio de Pago *</label><select><option value="">Seleccionar...</option><option>Transferencia</option><option>Depósito</option><option>Cheque</option><option>Efectivo</option></select></div>
+          <div><label>Nro. de Documento</label><input type="text" placeholder="Boleta / Factura / Recibo"/></div>
+          <div class="col-span-2"><label>Observaciones</label><textarea rows="2" placeholder="Notas adicionales (opcional)" style="resize:none"></textarea></div>
+        </div>
+        <div class="border border-dashed border-gray-200 rounded-xl p-3 text-center text-sm text-brand-muted mt-1">
+          <svg class="w-6 h-6 mx-auto mb-1 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+          <p class="text-xs">Adjuntar comprobante</p><button class="btn-secondary mt-1 text-xs" style="font-size:.7rem;padding:4px 10px;">Seleccionar archivo</button>
+        </div>
+        <div class="flex gap-3 justify-end mt-4"><button (click)="closeModal('modal-registrar-pago')" class="btn-secondary">Cancelar</button><button (click)="closeModal('modal-registrar-pago');showToast('Pago registrado exitosamente')" class="btn-orange">Guardar Pago</button></div>
+      </div>
+    </div>
+  }
+
+  <!-- ══ MODALES: GASTOS ══ -->
+
+  @if (isModalOpen('modal-nuevo-gasto')) {
+    <div class="modal-overlay" (click)="closeModal('modal-nuevo-gasto')">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-title"><div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center"><svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg></div>Registrar Nuevo Gasto<button (click)="closeModal('modal-nuevo-gasto')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
+        <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-3">Datos del Gasto</p>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div><label>Tipo de Gasto *</label><select><option value="">Seleccionar...</option><option>Honorarios Profesionales</option><option>Gastos Notariales</option><option>Gastos Administrativos</option><option>Tasas Judiciales</option></select></div>
+          <div><label>Categoría</label><select><option value="">Automático</option><option>Judicial</option><option>Administrativo</option><option>Valores</option></select></div>
+          <div><label>Moneda *</label><select><option>PEN – Soles</option><option>USD – Dólares</option></select></div>
+          <div><label>Tipo de Cambio</label><input type="number" placeholder="Solo si moneda difiere" style="background:#F9FAFB" readonly/></div>
+          <div><label>Monto del Gasto *</label><input type="number" placeholder="0.00"/></div>
+          <div><label>Nro. Caso *</label><select><option value="">Seleccionar caso...</option><option>C-2025-001 – María García</option><option>C-2025-002 – Juan Pérez</option><option>C-2025-003 – Rosa Linares</option></select></div>
+          <div><label>Cliente</label><input type="text" placeholder="Se llena automáticamente" readonly style="background:#F9FAFB"/></div>
+          <div><label>Fecha del Gasto *</label><input type="date"/></div>
+          <div><label>Responsable</label><input type="text" value="Administrador" readonly style="background:#F9FAFB"/></div>
+          <div class="col-span-2"><label>Descripción</label><textarea placeholder="Descripción del gasto (opcional)" rows="2" style="resize:none"></textarea></div>
+        </div>
+        <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mt-3 mb-2">Información Adicional</p>
+        <div class="border border-dashed border-gray-200 rounded-xl p-4 text-center text-sm text-brand-muted">
+          <svg class="w-8 h-8 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+          <p>Adjuntar documento del gasto</p>
+          <input type="text" placeholder="Descripción del adjunto..."/>
+          <button class="btn-secondary text-xs" style="font-size:.7rem;padding:4px 10px;">Seleccionar archivo</button>
+        </div>
+        <div class="flex gap-3 justify-end mt-4"><button (click)="closeModal('modal-nuevo-gasto')" class="btn-secondary">Cancelar</button><button (click)="closeModal('modal-nuevo-gasto');showToast('Gasto registrado exitosamente')" class="btn-orange">Guardar</button></div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-ver-gasto')) {
+    <div class="modal-overlay" (click)="closeModal('modal-ver-gasto')">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </div>
+          Detalle del Gasto – G-2025-001
+          <button (click)="closeModal('modal-ver-gasto')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-4 text-sm bg-gray-50 rounded-xl p-4 mb-4">
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Nro. Gasto</p><p class="font-mono text-orange-500 font-semibold">G-2025-001</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Nro. Caso</p><p class="font-mono">C-2025-001</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Cliente</p><p class="font-medium">María García López</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Tipo de Gasto</p><p>Notarial</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Categoría</p><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">Judicial</span></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Moneda</p><p>PEN – Soles</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Monto</p><p class="font-semibold text-orange-500">S/ 450.00</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Fecha</p><p>15/01/2025</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Estado</p><span class="badge-active">Aprobado</span></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Responsable</p><p>A. Vega</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Aprobado por</p><p>J. Torres</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Fecha Aprobación</p><p>16/01/2025</p></div>
+          <div class="col-span-2"><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Descripción</p><p class="text-brand-muted">Gastos notariales para protocolización de contrato</p></div>
+        </div>
+        <div class="flex justify-end"><button (click)="closeModal('modal-ver-gasto')" class="btn-secondary">Cerrar</button></div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-editar-gasto')) {
+    <div class="modal-overlay" (click)="closeModal('modal-editar-gasto')">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5"/></svg>
+          </div>
+          Editar Gasto – G-2025-002
+          <button (click)="closeModal('modal-editar-gasto')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div><label>Tipo de Gasto *</label><select><option selected>Peritos</option><option>Honorarios</option><option>Notarial</option></select></div>
+          <div><label>Categoría</label><select><option>Judicial</option><option selected>Administrativo</option></select></div>
+          <div><label>Moneda *</label><select><option selected>PEN – Soles</option><option>USD – Dólares</option></select></div>
+          <div><label>Monto del Gasto *</label><input type="number" value="1200"/></div>
+          <div><label>Nro. Caso *</label><select><option selected>C-2025-002 – Juan Pérez</option></select></div>
+          <div><label>Cliente</label><input type="text" value="Juan Pérez" readonly style="background:#F9FAFB"/></div>
+          <div><label>Fecha del Gasto *</label><input type="date" value="2025-01-18"/></div>
+          <div><label>Responsable</label><input type="text" value="M. Quispe" readonly style="background:#F9FAFB"/></div>
+          <div class="col-span-2"><label>Descripción</label><textarea rows="2" style="resize:none">Gastos de peritos para evaluación técnica</textarea></div>
+        </div>
+        <div class="flex gap-3 justify-end mt-4">
+          <button (click)="closeModal('modal-editar-gasto')" class="btn-secondary">Cancelar</button>
+          <button (click)="closeModal('modal-editar-gasto');showToast('Gasto actualizado exitosamente')" class="btn-orange">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-aprobar-gasto')) {
+    <div class="modal-overlay" (click)="closeModal('modal-aprobar-gasto')">
+      <div class="modal" (click)="$event.stopPropagation()" style="max-width:440px">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-green-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          Aprobar Gasto – G-2025-002
+          <button (click)="closeModal('modal-aprobar-gasto')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-4 text-sm">
+          <p class="font-semibold text-green-800 mb-2">Confirmar aprobación</p>
+          <div class="grid grid-cols-2 gap-2 text-green-700">
+            <div><p class="text-xs font-semibold text-green-600 uppercase mb-0.5">Gasto</p><p>G-2025-002 · Peritos</p></div>
+            <div><p class="text-xs font-semibold text-green-600 uppercase mb-0.5">Monto</p><p class="font-bold">S/ 1,200</p></div>
+            <div><p class="text-xs font-semibold text-green-600 uppercase mb-0.5">Caso</p><p>C-2025-002 – Juan Pérez</p></div>
+            <div><p class="text-xs font-semibold text-green-600 uppercase mb-0.5">Categoría</p><p>Administrativo</p></div>
+          </div>
+        </div>
+        <div><label>Observaciones de aprobación</label><textarea rows="2" placeholder="Comentario opcional..." style="resize:none"></textarea></div>
+        <div class="flex gap-3 justify-end mt-2">
+          <button (click)="closeModal('modal-aprobar-gasto')" class="btn-secondary">Cancelar</button>
+          <button (click)="closeModal('modal-aprobar-gasto');showToast('Gasto aprobado exitosamente')" class="btn-orange">Confirmar Aprobación</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-pagar-gasto')) {
+    <div class="modal-overlay" (click)="closeModal('modal-pagar-gasto')">
+      <div class="modal" (click)="$event.stopPropagation()" style="max-width:440px">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-green-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          </div>
+          Registrar Pago del Gasto – G-2025-001
+          <button (click)="closeModal('modal-pagar-gasto')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div><label>Fecha de Pago *</label><input type="date"/></div>
+          <div><label>Monto a Pagar</label><input type="text" value="S/ 450" readonly style="background:#F9FAFB"/></div>
+          <div><label>Medio de Pago *</label><select><option value="">Seleccionar...</option><option>Transferencia</option><option>Depósito</option><option>Cheque</option><option>Efectivo</option></select></div>
+          <div><label>Nro. de Comprobante</label><input type="text" placeholder="Boleta / Factura"/></div>
+        </div>
+        <div class="flex gap-3 justify-end mt-4">
+          <button (click)="closeModal('modal-pagar-gasto')" class="btn-secondary">Cancelar</button>
+          <button (click)="closeModal('modal-pagar-gasto');showToast('Pago del gasto registrado exitosamente')" class="btn-orange">Confirmar Pago</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-anular-gasto')) {
+    <div class="modal-overlay" (click)="closeModal('modal-anular-gasto')">
+      <div class="modal" (click)="$event.stopPropagation()" style="max-width:420px">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-red-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+          </div>
+          Anular Gasto
+          <button (click)="closeModal('modal-anular-gasto')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-4 text-sm text-red-700">
+          <p class="font-semibold mb-1">¿Está seguro de anular este gasto?</p>
+          <p class="text-xs">Esta acción cambiará el estado del gasto a <strong>Rechazado</strong>. El gasto no impactará en el resultado financiero del caso.</p>
+        </div>
+        <div><label>Motivo de anulación *</label><textarea rows="3" placeholder="Indique el motivo de anulación..." style="resize:none"></textarea></div>
+        <div class="flex gap-3 justify-end mt-2">
+          <button (click)="closeModal('modal-anular-gasto')" class="btn-secondary">Cancelar</button>
+          <button (click)="closeModal('modal-anular-gasto');showToast('Gasto anulado exitosamente')" class="btn-orange" style="background:linear-gradient(135deg,#EF4444,#B91C1C);">Confirmar Anulación</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ══ MODALES: LIQUIDACIÓN ══ -->
+
+  @if (isModalOpen('modal-nueva-liquidacion')) {
+    <div class="modal-overlay" (click)="closeModal('modal-nueva-liquidacion')">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          Generar Liquidación
+          <button (click)="closeModal('modal-nueva-liquidacion')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div><label>Nro. de Caso (Estado: Liquidable) *</label><select><option value="">Seleccionar caso liquidable...</option><option>C-2025-007 – Empresa Los Pinos S.A.C.</option><option>C-2025-008 – Rosa Flores Meza</option></select></div>
+        <div class="bg-gray-50 rounded-xl p-4 grid grid-cols-2 gap-3 text-sm mb-3">
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Cliente</p><p class="text-brand-muted italic text-xs">Se autocompleta</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Abogado Asignado</p><p class="text-brand-muted italic text-xs">Se autocompleta</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Moneda del Caso</p><p class="text-brand-muted italic text-xs">Se autocompleta</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Ingreso del Caso</p><p class="text-brand-muted italic text-xs">Se autocompleta</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Total Gastos Aprobados</p><p class="text-brand-muted italic text-xs">Se autocompleta</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Resultado Neto</p><p class="text-brand-muted italic text-xs">Se autocompleta</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Tipo de Abogado</p><p class="text-brand-muted italic text-xs">Se autocompleta</p></div>
+        </div>
+        <div class="flex gap-3 justify-end">
+          <button (click)="closeModal('modal-nueva-liquidacion')" class="btn-secondary">Cancelar</button>
+          <button (click)="closeModal('modal-nueva-liquidacion');showToast('Liquidación generada exitosamente')" class="btn-orange">Confirmar y Generar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-ver-liq')) {
+    <div class="modal-overlay" (click)="closeModal('modal-ver-liq')">
+      <div class="modal" (click)="$event.stopPropagation()" style="max-width:680px">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </div>
+          Detalle de Liquidación – LIQ-2025-001
+          <button (click)="closeModal('modal-ver-liq')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-3 gap-3 text-sm bg-gray-50 rounded-xl p-4 mb-4">
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Nro. de Caso</p><p class="font-mono text-orange-500 font-semibold">C-2025-001</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Cliente</p><p class="font-medium">María García López</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Estado</p><span class="badge-active">Pagada</span></div>
+        </div>
+        <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2">Detalle de Ingresos</p>
+        <table class="data-table text-xs mb-4">
+          <thead><tr><th>Fecha</th><th>Nro. Ingreso</th><th>Concepto</th><th>Medio de Pago</th><th class="text-right">Monto</th><th>Moneda</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>05/01/2025</td><td class="font-mono text-orange-500">ING-2025-001</td><td class="text-brand-muted">Pago parcial 1 – Honorarios</td><td>Transferencia</td><td class="text-green-600 font-medium text-right">S/ 4,250</td><td>PEN</td><td><span class="badge-active">Pagado</span></td></tr>
+            <tr><td>12/01/2025</td><td class="font-mono text-orange-500">ING-2025-001</td><td class="text-brand-muted">Pago parcial 2 – Honorarios</td><td>Depósito</td><td class="text-green-600 font-medium text-right">S/ 4,250</td><td>PEN</td><td><span class="badge-active">Pagado</span></td></tr>
+          </tbody>
+          <tfoot><tr class="bg-green-50"><td colspan="4" class="text-right font-semibold text-green-700 py-2 pr-3">Total Ingresos</td><td class="text-right font-bold text-green-700 py-2">S/ 8,500</td><td colspan="2"></td></tr></tfoot>
+        </table>
+        <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2">Detalle de Gastos</p>
+        <table class="data-table text-xs mb-4">
+          <thead><tr><th>Fecha</th><th>Nro. Gasto</th><th>Tipo</th><th>Descripción</th><th class="text-right">Monto</th><th>Moneda</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>15/01/2025</td><td class="font-mono text-orange-500">G-2025-001</td><td>Notarial</td><td class="text-brand-muted">Protocolización contrato</td><td class="text-right">S/ 450</td><td>PEN</td><td><span class="badge-active">Aprobado</span></td></tr>
+            <tr><td>18/01/2025</td><td class="font-mono text-orange-500">G-2025-005</td><td>Tasas</td><td class="text-brand-muted">Tasa juzgado civil</td><td class="text-right">S/ 1,650</td><td>PEN</td><td><span class="badge-active">Aprobado</span></td></tr>
+          </tbody>
+          <tfoot><tr class="bg-red-50"><td colspan="4" class="text-right font-semibold text-red-600 py-2 pr-3">Total Gastos</td><td class="text-right font-bold text-red-600 py-2">S/ 2,100</td><td colspan="2"></td></tr></tfoot>
+        </table>
+        <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2">Cálculo de Liquidación</p>
+        <div class="bg-gray-50 rounded-xl p-4 mb-4">
+          <div class="flex flex-col gap-2.5 text-sm max-w-xs">
+            <div class="flex items-center justify-between"><span class="text-brand-muted">Total Ingresos</span><span class="font-semibold text-green-600">S/ 8,500.00</span></div>
+            <div class="flex items-center justify-between"><span class="text-brand-muted">(-) Total Gastos</span><span class="font-semibold text-red-500">S/ 2,100.00</span></div>
+            <div class="border-t border-dashed border-gray-300 pt-2.5 flex items-center justify-between"><span class="font-bold text-gray-800">Utilidad Neta</span><span class="font-bold text-green-600 text-base">S/ 6,400.00</span></div>
+          </div>
+        </div>
+        <p class="text-xs font-bold text-brand-muted uppercase tracking-wider mb-2">Distribución</p>
+        <div class="grid grid-cols-4 gap-3 text-sm bg-gray-50 rounded-xl p-4 mb-4">
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">% Estudio</p><p class="font-semibold">70%</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Monto Estudio</p><p class="font-semibold text-orange-500">S/ 4,480</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">% Abogado</p><p class="font-semibold">30%</p></div>
+          <div><p class="text-xs text-brand-muted uppercase font-semibold mb-1">Monto Abogado</p><p class="font-semibold">S/ 1,920</p></div>
+        </div>
+        <div class="flex justify-end"><button (click)="closeModal('modal-ver-liq')" class="btn-secondary">Cerrar</button></div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-aprobar-liq')) {
+    <div class="modal-overlay" (click)="closeModal('modal-aprobar-liq')">
+      <div class="modal" (click)="$event.stopPropagation()" style="max-width:440px">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-green-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          Aprobar Liquidación – C-2025-006
+          <button (click)="closeModal('modal-aprobar-liq')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-4 text-sm">
+          <p class="font-semibold text-green-800 mb-2">Resumen de la liquidación</p>
+          <div class="grid grid-cols-2 gap-2 text-green-700">
+            <div><p class="text-xs font-semibold text-green-600 uppercase mb-0.5">Caso</p><p>C-2025-006</p></div>
+            <div><p class="text-xs font-semibold text-green-600 uppercase mb-0.5">Cliente</p><p>Emp. Los Andes</p></div>
+            <div><p class="text-xs font-semibold text-green-600 uppercase mb-0.5">Total Ingresos</p><p class="font-bold">S/ 15,000</p></div>
+            <div><p class="text-xs font-semibold text-green-600 uppercase mb-0.5">Utilidad Real</p><p class="font-bold">S/ 10,900</p></div>
+          </div>
+        </div>
+        <div><label>Observaciones de aprobación</label><textarea rows="2" placeholder="Comentario opcional..." style="resize:none"></textarea></div>
+        <div class="flex gap-3 justify-end mt-2">
+          <button (click)="closeModal('modal-aprobar-liq')" class="btn-secondary">Cancelar</button>
+          <button (click)="closeModal('modal-aprobar-liq');showToast('Liquidación aprobada exitosamente')" class="btn-orange">Confirmar Aprobación</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-pagar-liq')) {
+    <div class="modal-overlay" (click)="closeModal('modal-pagar-liq')">
+      <div class="modal" (click)="$event.stopPropagation()" style="max-width:440px">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          </div>
+          Pagar Liquidación – C-2025-004
+          <button (click)="closeModal('modal-pagar-liq')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4 text-sm">
+          <p class="font-semibold text-blue-800 mb-2">Confirmar pago y cierre financiero</p>
+          <div class="grid grid-cols-2 gap-2 text-blue-700">
+            <div><p class="text-xs font-semibold text-blue-600 uppercase mb-0.5">Caso</p><p>C-2025-004</p></div>
+            <div><p class="text-xs font-semibold text-blue-600 uppercase mb-0.5">Cliente</p><p>Corporación ABC</p></div>
+            <div><p class="text-xs font-semibold text-blue-600 uppercase mb-0.5">Utilidad Real</p><p class="font-bold">S/ 15,200</p></div>
+            <div><p class="text-xs font-semibold text-blue-600 uppercase mb-0.5">Estado actual</p><p>Aprobada</p></div>
+          </div>
+          <p class="text-xs text-blue-600 mt-2">⚠ Al confirmar, el caso pasará a estado financiero <strong>Cerrado</strong>.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4">
+          <div><label>Fecha de Pago *</label><input type="date"/></div>
+          <div><label>Nro. de Comprobante</label><input type="text" placeholder="Referencia"/></div>
+        </div>
+        <div class="flex gap-3 justify-end mt-4">
+          <button (click)="closeModal('modal-pagar-liq')" class="btn-secondary">Cancelar</button>
+          <button (click)="closeModal('modal-pagar-liq');showToast('Liquidación pagada y caso cerrado financieramente')" class="btn-orange">Confirmar Pago</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (isModalOpen('modal-anular-liq')) {
+    <div class="modal-overlay" (click)="closeModal('modal-anular-liq')">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-red-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+          </div>
+          Anular Liquidación
+          <button (click)="closeModal('modal-anular-liq')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="bg-red-50 border border-red-200 rounded-xl p-3 mb-4 flex items-start gap-3">
+          <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <p class="text-sm text-red-700">Esta acción <strong>no se puede deshacer</strong>. La liquidación quedará anulada.</p>
+        </div>
+        <div><label>Motivo de Anulación *</label><textarea rows="3" placeholder="Ingrese el motivo de anulación..."></textarea></div>
+        <div class="flex justify-end gap-3 mt-2">
+          <button (click)="closeModal('modal-anular-liq')" class="btn-secondary">Cancelar</button>
+          <button (click)="closeModal('modal-anular-liq');showToast('Liquidación anulada')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-red-500 text-white border-none cursor-pointer hover:bg-red-600 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>Anular</button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ══ MODAL: PROCESO ══ -->
+
+  @if (isModalOpen('modal-ver-proceso')) {
+    <div class="modal-overlay" (click)="closeModal('modal-ver-proceso')">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-title">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          </div>
+          Detalle Financiero — C-2025-001
+          <button (click)="closeModal('modal-ver-proceso')" class="ml-auto text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+          <div class="bg-gray-50 rounded-xl p-3"><p class="text-xs text-brand-muted mb-0.5">Cliente</p><p class="font-semibold">María García López</p></div>
+          <div class="bg-gray-50 rounded-xl p-3"><p class="text-xs text-brand-muted mb-0.5">Abogado</p><p class="font-semibold">A. Vega</p></div>
+          <div class="bg-gray-50 rounded-xl p-3"><p class="text-xs text-brand-muted mb-0.5">Ing. Proyectado</p><p class="font-semibold text-blue-500">S/ 8,500.00</p></div>
+          <div class="bg-gray-50 rounded-xl p-3"><p class="text-xs text-brand-muted mb-0.5">Ing. Real</p><p class="font-semibold text-green-600">S/ 8,500.00</p></div>
+          <div class="bg-gray-50 rounded-xl p-3"><p class="text-xs text-brand-muted mb-0.5">Total Gastos</p><p class="font-semibold text-red-500">S/ 2,100.00</p></div>
+          <div class="bg-gray-50 rounded-xl p-3"><p class="text-xs text-brand-muted mb-0.5">Utilidad</p><p class="font-semibold text-green-600">S/ 6,400.00</p></div>
+        </div>
+        <div class="bg-orange-50 border border-orange-100 rounded-xl p-3 flex items-center justify-between mb-1"><span class="text-sm font-semibold text-gray-700">Estado Financiero</span><span class="badge-liquidado">Liquidado</span></div>
+        <div class="flex justify-end mt-2">
+          <button (click)="closeModal('modal-ver-proceso')" class="btn-secondary">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

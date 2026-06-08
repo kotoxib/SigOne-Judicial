@@ -125,10 +125,22 @@ export class AuthService {
           id: 'U005', username: 'sechavarria', nombres: 'Sandra', apellidos: 'Echavarria',
           email: 'sechavarria@notarialima.pe', celular: '991234567', pwd: btoa('sandra123'),
           notaria: 'Notaría Lima Centro',
-          roles: [{ notaria: 'Notaría Lima Centro', rol: 'Administrador', app: 'TODOS' }],
+          roles: [
+            { id: 'R-U005-1', notaria: 'Notaría Lima Centro', rol: 'Administrador', app: 'TODOS' },
+            { id: 'R-U005-2', notaria: 'Notaría Lima Centro', rol: 'Digitador',     app: 'SPJ,GAP' }
+          ],
           estado: 'Activo', avatar: '', condicion: '', comision: '',
           tipoUsuario: 'Administrador', abogadoAsociado: ''
         });
+      } else {
+        // Garantiza que Sandra siempre tenga los 2 roles (por si ya existía con 1)
+        const sandra = usuarios.find((u: any) => u.email === 'sechavarria@notarialima.pe');
+        if (sandra && (!sandra.roles || sandra.roles.length < 2)) {
+          sandra.roles = [
+            { id: 'R-U005-1', notaria: 'Notaría Lima Centro', rol: 'Administrador', app: 'TODOS' },
+            { id: 'R-U005-2', notaria: 'Notaría Lima Centro', rol: 'Digitador',     app: 'SPJ,GAP' }
+          ];
+        }
       }
 
       if (!usuarios.find((u: any) => u.email === 'bjimenez@notarialima.pe')) {

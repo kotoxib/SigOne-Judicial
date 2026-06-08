@@ -78,10 +78,17 @@ body {
 .text-brand-muted { color: var(--muted); }
 
 /* Inputs de filtro */
-.filter-input {
+.filter-input,
+.filter-inp {
   @apply w-full border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-700 bg-white outline-none transition-all duration-200;
 }
-.filter-input:focus { border-color: var(--orange) !important; }
+.filter-input:focus,
+.filter-inp:focus { border-color: var(--orange) !important; }
+
+/* Labels y inputs de formulario interno */
+.f-label { font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);display:block;margin-bottom:4px; }
+.f-input { width:100%;border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--text);background:#fff;outline:none;transition:border-color .2s;font-family:var(--font-body); }
+.f-input:focus { border-color:var(--orange); }
 
 /* Tabla de datos */
 .data-table { @apply w-full text-left border-collapse text-xs; }
@@ -151,7 +158,18 @@ body {
 }
 .btn-secondary:hover { background: #E5E7EB; }
 
-/* Badges */
+/* Botón secundario compacto */
+.btn-sec { display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;background:#F3F4F6;color:var(--text);border:1px solid var(--border);cursor:pointer;transition:background .2s;white-space:nowrap; }
+.btn-sec:hover { background:#E5E7EB; }
+
+/* Badges — base + modificadores */
+.badge         { display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600; }
+.b-gray        { background:#F3F4F6;color:#6B7280; }
+.b-green       { background:#DCFCE7;color:#16A34A; }
+.b-blue        { background:#DBEAFE;color:#1D4ED8; }
+.b-orange      { background:rgba(244,121,32,.12);color:var(--orange); }
+.b-red         { background:#FEE2E2;color:#DC2626; }
+.b-yellow      { background:#FEF3C7;color:#D97706; }
 .badge-active  { display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:#DCFCE7;color:#16A34A; }
 .badge-warn    { display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:#FEF3C7;color:#D97706; }
 .badge-danger  { display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:#FEE2E2;color:#DC2626; }
