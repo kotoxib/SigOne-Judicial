@@ -1,4 +1,4 @@
-﻿<!--app-product-tour ruta="configuracion"></app-product-tour-->
+﻿<app-product-tour ruta="configuracion"></app-product-tour>
 <div class="flex h-screen w-screen overflow-hidden">
   
   <app-sidebar
@@ -1342,6 +1342,7 @@
                 <option value="moneda">moneda</option>
                 <option value="gasto">gasto</option>
                 <option value="arancel">arancel</option>
+                <option value="dato-adicional">Dato Adicional</option>
               </select>
             </div>
             <div>
@@ -2290,53 +2291,80 @@
   <!-- MODAL AGREGAR ETAPA -->
   @if (modalActivo() === 'agregarEtapa') {
     <div class="cfg-modal-bg" (click)="closeModal()">
-      <div class="cfg-modal" style="max-width:540px" (click)="$event.stopPropagation()">
+      <div class="cfg-modal" style="max-width:540px;overflow:visible" (click)="$event.stopPropagation()">
         <div class="cfg-modal-title">Agregar etapa<button class="ml-auto" style="color:#9CA3AF" (click)="closeModal()"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button></div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-2 gap-3 mb-3">
           <!-- Nombre -->
           <div>
             <label>Nombre <span style="color:#EF4444">**</span></label>
-            <input type="text" placeholder="Nombre de la etapa" [(ngModel)]="formAgregarEtapa.nombre"/>
+            <input type="text" placeholder="Ej: Etapa Postulatoria" [(ngModel)]="formAgregarEtapa.nombre" (ngModelChange)="onEtaNombreChange()"/>
             @if (etaErrNombre()) { <span style="color:#EF4444;font-size:11px">Campo Obligatorio*</span> }
-          </div>
-
-          <!-- Tipo de proceso (multi-select) -->
-          <div style="position:relative">
-            <label>Tipo de proceso <span style="color:#EF4444">**</span></label>
-            <button type="button"
-              style="width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border:1px solid #D1D5DB;border-radius:8px;background:#fff;font-size:13px;color:#374151;cursor:pointer"
-              (click)="etaTipoProcOpened.update(v=>!v)">
-              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px">
-                {{ etaTiposProcesoSel().length ? etaTiposProcesoSel().join(', ') : 'Seleccione' }}
-              </span>
-              <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-            </button>
-            @if (etaTipoProcOpened()) {
-              <div style="position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #E5E7EB;border-radius:8px;z-index:100;box-shadow:0 4px 12px rgba(0,0,0,.1);overflow:hidden">
-                @for (tp of TIPOS_PROCESO; track tp) {
-                  <label style="display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;font-size:13px;color:#374151;user-select:none"
-                    [style.background]="etaTiposProcesoSel().includes(tp) ? 'rgba(244,121,32,.08)' : 'transparent'"
-                    (click)="toggleTipoProceso(tp); $event.stopPropagation()">
-                    <input type="checkbox" [checked]="etaTiposProcesoSel().includes(tp)" style="width:14px;height:14px;flex-shrink:0;pointer-events:none"/>
-                    <span>{{ tp }}</span>
-                  </label>
-                }
-              </div>
-            }
-            @if (etaErrTipoProceso()) { <span style="color:#EF4444;font-size:11px">Campo Obligatorio*</span> }
           </div>
 
           <!-- Tipo de etapa -->
           <div>
             <label>Tipo de etapa <span style="color:#EF4444">**</span></label>
-            <select [(ngModel)]="formAgregarEtapa.tipoEtapa">
-              <option value="">Seleccione</option>
-              <option>Obligatoria</option>
-              <option>No Obligatoria</option>
+            <select [(ngModel)]="formAgregarEtapa.tipoEtapa" (ngModelChange)="onEtaTipoEtapaChange()">
+              <option value="">Seleccione...</option>
+              <option value="Obligatoria">Obligatoria</option>
+              <option value="No Obligatoria">No Obligatoria</option>
             </select>
             @if (etaErrTipoEtapa()) { <span style="color:#EF4444;font-size:11px">Campo Obligatorio*</span> }
           </div>
+        </div>
+
+        <!-- Tipo de proceso (dropdown sin <label>, evita doble-disparo) -->
+        <div style="position:relative">
+          <label>Tipo de proceso <span style="color:#EF4444">**</span></label>
+          <button type="button"
+            style="width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border:1.5px solid;border-radius:8px;background:#fff;font-size:13px;cursor:pointer;transition:border-color .2s"
+            [style.border-color]="etaErrTipoProceso() ? '#EF4444' : (etaTipoProcOpened() ? '#f47920' : '#D1D5DB')"
+            [style.color]="etaTiposProcesoSel().length ? '#374151' : '#9CA3AF'"
+            (click)="etaTipoProcOpened.update(v=>!v)">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+              {{ etaTiposProcesoSel().includes('Todos') ? 'Todos los tipos de proceso'
+                 : etaTiposProcesoSel().length ? etaTiposProcesoSel().join(', ')
+                 : 'Seleccionar tipos...' }}
+            </span>
+            <svg style="width:16px;height:16px;flex-shrink:0;transition:transform .2s"
+              [style.transform]="etaTipoProcOpened() ? 'rotate(180deg)' : 'rotate(0)'"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+
+          @if (etaTipoProcOpened()) {
+            <div style="position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #E5E7EB;border-radius:10px;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.15);overflow:hidden">
+              @for (tp of TIPOS_PROCESO; track tp) {
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;font-size:13px;color:#374151;user-select:none;transition:background .1s"
+                  [style.background]="(etaTiposProcesoSel().includes('Todos') || etaTiposProcesoSel().includes(tp)) ? 'rgba(244,121,32,.07)' : '#fff'"
+                  (click)="toggleTipoProceso(tp); $event.stopPropagation()">
+                  <!-- checkbox visual personalizado (sin <input> para evitar doble disparo) -->
+                  <span style="width:17px;height:17px;border-radius:4px;border:1.5px solid;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s"
+                    [style.background]="(etaTiposProcesoSel().includes('Todos') || etaTiposProcesoSel().includes(tp)) ? '#f47920' : '#fff'"
+                    [style.border-color]="(etaTiposProcesoSel().includes('Todos') || etaTiposProcesoSel().includes(tp)) ? '#f47920' : '#D1D5DB'">
+                    @if (etaTiposProcesoSel().includes('Todos') || etaTiposProcesoSel().includes(tp)) {
+                      <svg style="width:10px;height:10px;color:#fff" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                      </svg>
+                    }
+                  </span>
+                  <span [style.font-weight]="tp === 'Todos' ? '700' : '400'"
+                        [style.color]="tp === 'Todos' ? '#374151' : '#6B7280'">
+                    {{ tp === 'Todos' ? 'Todos' : tp }}
+                  </span>
+                  @if (tp === 'Todos') {
+                    <span style="font-size:11px;color:#9CA3AF;margin-left:auto">(selecciona todos)</span>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          @if (etaErrTipoProceso()) {
+            <span style="color:#EF4444;font-size:11px;display:block;margin-top:3px">Selecciona al menos un tipo de proceso *</span>
+          }
         </div>
 
         <div class="flex gap-3 justify-end mt-4">
@@ -2373,7 +2401,7 @@
         <div class="grid grid-cols-2 gap-x-3">
           <div><label>Código</label><input type="text" placeholder="TG00X" [(ngModel)]="formTabla.codigo"/></div>
           <div><label>Tipo <span style="color:#EF4444">*</span></label>
-            <select [(ngModel)]="formTabla.tipo"><option value="">Seleccionar...</option><option value="entidad">Entidad</option><option value="etapa">Etapa</option><option value="subetapa">Sub-etapa</option></select>
+            <select [(ngModel)]="formTabla.tipo"><option value="">Seleccionar...</option><option value="entidad">Entidad</option><option value="etapa">Etapa</option><option value="subetapa">Sub-etapa</option><option value="dato-adicional">Dato Adicional</option></select>
           </div>
         </div>
         <div><label>Nombre <span style="color:#EF4444">*</span></label><input type="text" [(ngModel)]="formTabla.nombre"/></div>

@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { ProductTourService } from '../../services/product-tour.service';
-//import { ProductTourComponent } from '../product-tour/product-tour.component';
+import { ProductTourComponent } from '../product-tour/product-tour.component';
 import { UsuarioModalComponent } from './modals/usuario/usuario-modal.component';
 import { RestablecerPwdModalComponent } from './modals/restablecer-pwd/restablecer-pwd-modal.component';
 import { CoberturaTempModalComponent } from './modals/cobertura-temp/cobertura-temp-modal.component';
@@ -86,13 +86,23 @@ const DEF_APLICATIVOS: Aplicativo[] = [
 ];
 
 const DEF_TABLAS: TablaGen[] = [
-  { id:'TG001', codigo:'TG001', nombre:'Entidades',          tipo:'entidad',   descripcion:'Tipos de entidad del sistema',           estado:'Activo' },
-  { id:'TG002', codigo:'TG002', nombre:'Etapas Procesales',  tipo:'etapa',     descripcion:'Etapas del proceso judicial',             estado:'Activo' },
-  { id:'TG003', codigo:'TG003', nombre:'Tipos de Documento', tipo:'documento', descripcion:'Documentos de identificación aceptados',  estado:'Activo' },
-  { id:'TG004', codigo:'TG004', nombre:'Tipos de Caso',      tipo:'caso',      descripcion:'Categorías de casos legales',             estado:'Activo' },
-  { id:'TG005', codigo:'TG005', nombre:'Monedas',            tipo:'moneda',    descripcion:'Monedas aceptadas en el sistema',         estado:'Activo' },
-  { id:'TG006', codigo:'TG006', nombre:'Tipos de Gasto',     tipo:'gasto',     descripcion:'Categorías de gastos procesales',         estado:'Activo' },
-  { id:'TG007', codigo:'TG007', nombre:'Tipos de Arancel',   tipo:'arancel',   descripcion:'Clasificación de aranceles judiciales',   estado:'Activo' },
+  { id:'TG001', codigo:'TG001', nombre:'Entidades',               tipo:'entidad',        descripcion:'Tipos de entidad del sistema',                estado:'Activo' },
+  { id:'TG002', codigo:'TG002', nombre:'Etapas Procesales',       tipo:'etapa',          descripcion:'Etapas del proceso judicial',                  estado:'Activo' },
+  { id:'TG003', codigo:'TG003', nombre:'Tipos de Documento',      tipo:'documento',      descripcion:'Documentos de identificación aceptados',       estado:'Activo' },
+  { id:'TG004', codigo:'TG004', nombre:'Tipos de Caso',           tipo:'caso',           descripcion:'Categorías de casos legales',                  estado:'Activo' },
+  { id:'TG005', codigo:'TG005', nombre:'Monedas',                 tipo:'moneda',         descripcion:'Monedas aceptadas en el sistema',              estado:'Activo' },
+  { id:'TG006', codigo:'TG006', nombre:'Tipos de Gasto',          tipo:'gasto',          descripcion:'Categorías de gastos procesales',              estado:'Activo' },
+  { id:'TG007', codigo:'TG007', nombre:'Tipos de Arancel',        tipo:'arancel',        descripcion:'Clasificación de aranceles judiciales',        estado:'Activo' },
+  { id:'TG008', codigo:'TG008', nombre:'No Impulso',              tipo:'dato-adicional', descripcion:'Proceso sin impulso por parte del banco',      estado:'Activo' },
+  { id:'TG009', codigo:'TG009', nombre:'Posterior a PA',          tipo:'dato-adicional', descripcion:'Dato registrado posterior a Actos Preparatorios', estado:'Activo' },
+  { id:'TG010', codigo:'TG010', nombre:'Estado Alerta Registral', tipo:'dato-adicional', descripcion:'Alerta registrada en el sistema registral',    estado:'Activo' },
+  { id:'TG011', codigo:'TG011', nombre:'N de Alerta',             tipo:'dato-adicional', descripcion:'Número de alerta registral asociada al caso',  estado:'Activo' },
+  { id:'TG012', codigo:'TG012', nombre:'Garantía - Embargo',      tipo:'dato-adicional', descripcion:'Bien dado en garantía o con medida de embargo',estado:'Activo' },
+  { id:'TG013', codigo:'TG013', nombre:'Inmueble',                tipo:'dato-adicional', descripcion:'Descripción del bien inmueble vinculado',      estado:'Activo' },
+  { id:'TG014', codigo:'TG014', nombre:'Vehículo',                tipo:'dato-adicional', descripcion:'Descripción del vehículo vinculado al caso',   estado:'Activo' },
+  { id:'TG015', codigo:'TG015', nombre:'Cuenta Corriente',        tipo:'dato-adicional', descripcion:'Cuenta corriente embargada o afectada',        estado:'Activo' },
+  { id:'TG016', codigo:'TG016', nombre:'Departamento',            tipo:'dato-adicional', descripcion:'Descripción del departamento o unidad inmobiliaria', estado:'Activo' },
+  { id:'TG017', codigo:'TG017', nombre:'Local Comercial',         tipo:'dato-adicional', descripcion:'Descripción del local comercial vinculado',    estado:'Activo' },
 ];
 
 const DEF_TIPOS_CASO: TipoCaso[] = [
@@ -189,7 +199,7 @@ function saveLS(key: string, val: unknown) { try { localStorage.setItem(key, JSO
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, //ProductTourComponent,
+  imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, ProductTourComponent,
             UsuarioModalComponent, RestablecerPwdModalComponent, CoberturaTempModalComponent,
             RolModalComponent],
   templateUrl: './configuracion.component.html',
@@ -1141,7 +1151,9 @@ export class Configuracion implements OnInit {
   nuevaConfigEtapa() {
     this.resetEtaForm();
     this.formConfigEtapa = { descripcion: '', estado: 'Activo' };
-    this.etapasFormList.set([]);
+    this.etapasFormList.set([
+      { id: 'E001', nombre: 'Actos Preparatorios', tiposProceso: ['ODSD', 'EGH'], tipoEtapa: 'Obligatoria' }
+    ]);
     this.etaProcEditId.set('');
     this.etaProcActiveTab.set('etapa');
     this.etaFormPage.set(1);
@@ -1227,14 +1239,27 @@ export class Configuracion implements OnInit {
     this.openModal('agregarEtapa');
   }
 
+  onEtaNombreChange() { if (this.formAgregarEtapa.nombre.trim()) this.etaErrNombre.set(false); }
+  onEtaTipoEtapaChange() { if (this.formAgregarEtapa.tipoEtapa) this.etaErrTipoEtapa.set(false); }
+
   toggleTipoProceso(tipo: string) {
     this.etaTiposProcesoSel.update(list => {
-      if (tipo === 'Todos') return list.includes('Todos') ? [] : ['Todos'];
-      const next = list.filter(t => t !== 'Todos');
-      const idx = next.indexOf(tipo);
-      if (idx > -1) next.splice(idx, 1); else next.push(tipo);
-      return [...next];
+      if (tipo === 'Todos') {
+        return list.includes('Todos') ? [] : ['Todos'];
+      }
+      // Si "Todos" está activo, al clickear un tipo individual se mantienen todos pero se quita "Todos"
+      // y se seleccionan los individuales excepto el clickeado
+      if (list.includes('Todos')) {
+        const sinTodos = this.TIPOS_PROCESO.filter(t => t !== 'Todos' && t !== tipo);
+        return sinTodos.length ? sinTodos : [];
+      }
+      const idx = list.indexOf(tipo);
+      if (idx > -1) {
+        const next = [...list]; next.splice(idx, 1); return next;
+      }
+      return [...list, tipo];
     });
+    this.etaErrTipoProceso.set(false);
   }
 
   guardarAgregarEtapa() {
