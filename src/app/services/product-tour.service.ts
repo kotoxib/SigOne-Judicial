@@ -148,29 +148,29 @@ export class ProductTourService {
         bubblePos: 'right',
       },
     ],
-    spj: [
+    spl: [
       {
-        title: 'SPJ – Procesos Judiciales',
+        title: 'SPL – Procesos Legales',
         description: 'Aquí gestionas todos tus expedientes judiciales. El dashboard mostrará métricas cuando registres tus primeros casos.',
         icon: 'M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3',
-        targetId: 'tour-spj-dashboard',
+        targetId: 'tour-spl-dashboard',
         bubblePos: 'bottom',
       },
       {
         title: 'Casos Judiciales',
         description: 'Crea y gestiona tus expedientes judiciales. Asigna cliente, entidad, tipo de caso, etapas procesales y documentos adjuntos.',
         icon: 'M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z',
-        targetId: 'tour-spj-casos',
+        targetId: 'tour-spl-casos',
         bubblePos: 'right',
       },
     ],
   };
 
-  readonly rutasOrden      = ['portal', 'configuracion', 'gap', 'gepdia', 'spj'];
+  readonly rutasOrden      = ['portal', 'configuracion', 'gap', 'gepdia', 'spl'];
   private rutasOrdenActual = this.rutasOrden;
   readonly rutaNavegacion: Record<string, string> = {
     portal: '/portal', configuracion: '/configuracion',
-    gap: '/gap', gepdia: '/gepdia', spj: '/spj',
+    gap: '/gap', gepdia: '/gepdia', spl: '/spl',
   };
 
   get pasosRutaActual(): TourStep[]  { return this.pasosPorRuta[this.rutaActual()] ?? []; }

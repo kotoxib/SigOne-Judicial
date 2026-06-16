@@ -1,7 +1,7 @@
 /* ══════════════════════════════════════════════
    PORTAL.COMPONENT.CSS — RESTAURACIÓN EXACTA V2
    Paleta: naranja #F47920 · oscuro #1A1F2E
-════════════════════════════════════════════════ */
+══════════════════════════════════════════════ */
 
 
 *,
@@ -331,17 +331,79 @@ main h1 {
 }
 
 @media (max-width: 600px) {
-  .card-grid {
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
-    padding: 0 20px !important;
+  header {
+    padding: 10px 14px !important;
   }
 
-  main h1 {
-    font-size: 24px !important;
+  .logo-img {
+    height: 60px !important;
+  }
+
+  .header-actions {
+    transform: translateY(0) !important;
+    gap: 8px !important;
   }
 
   .btn-config span {
     display: none !important;
+  }
+
+  main {
+    padding: 10px 12px 40px !important;
+  }
+
+  main h1 {
+    font-size: 20px !important;
+  }
+
+  .section-eyebrow {
+    font-size: 10px !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    padding: 0 8px !important;
+  }
+
+  .card-icon-area {
+    flex: 1 !important;
+    aspect-ratio: unset !important;
+    min-height: 110px !important;
+  }
+
+  .card-logo-img {
+    width: 68px !important;
+    height: 68px !important;
+  }
+
+  .card-badge {
+    font-size: 11px !important;
+    padding: 3px 7px !important;
+    top: 8px !important;
+    right: 8px !important;
+  }
+
+  .card-footer {
+    padding: 10px 10px !important;
+    min-height: auto !important;
+    flex-shrink: 0 !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+
+  .card-sys-name {
+    font-size: 11px !important;
+  }
+
+  .card-sys-sub {
+    font-size: 10px !important;
+  }
+
+  .card-arrow svg {
+    width: 14px !important;
+    height: 14px !important;
   }
 }

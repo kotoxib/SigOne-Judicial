@@ -1,6 +1,7 @@
 import {
   Component,
   OnDestroy,
+  OnInit,
   AfterViewInit,
   ChangeDetectionStrategy,
   signal,
@@ -9,7 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TopbarComponent, TopbarTab, TopbarNotificacion } from '../topbar/topbar.component';
@@ -72,6 +73,7 @@ export interface CasoJudicial {
   nroFile: string;
   abogado: string;
   cliente: string;
+  entidad: 'Banco' | 'Empresa' | 'Natural';
   tipo: string;
   tipoBadge: string;
   etapa: string;
@@ -189,6 +191,7 @@ export interface DrillCaso {
   comentario?: string;
   creadoPor?: string;
   estado?: string;
+  estadoBadge?: string;
   fechaUltAct?: string;
 }
 
@@ -240,16 +243,17 @@ export interface HistorialEficiencia {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 @Component({
-  selector: 'app-spj',
+  selector: 'app-spl',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, SidebarComponent, TopbarComponent, ProductTourComponent, EmptyStateComponent],
-  templateUrl: './spj.component.html',
-  styleUrl: './spj.component.css',
+  templateUrl: './spl.component.html',
+  styleUrl: './spl.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SPJ implements OnDestroy, AfterViewInit {
+export class SPL implements OnDestroy, OnInit, AfterViewInit {
   private auth = inject(AuthService);
   private router: Router = inject(Router);
+  private route: ActivatedRoute = inject(ActivatedRoute);
   private chartInstances: any[] = [];
 
   // ── Usuario ───────────────────────────────────────────────────────────────
@@ -263,6 +267,23 @@ export class SPJ implements OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.cargarGraficos(this.activeView());
+  }
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const caseId = params['case'] || params['caso'] || params['casoId'];
+      const tab = params['tab'];
+      if (caseId) {
+        this.activeTopbarTab.set('procesos');
+        this.activeView.set('casos-judiciales');
+        setTimeout(() => {
+          this.abrirDetalleCaso(caseId);
+          if (tab === 'financiera' || tab === 'configuracion' || tab === 'configuracion-financiera') {
+            this.activeCasoTab.set('financiera');
+          }
+        }, 80);
+      }
+    });
   }
 
   // ── Métodos de Gráficos ───────────────────────────────────────────────────
@@ -298,7 +319,7 @@ export class SPJ implements OnDestroy, AfterViewInit {
           onClick: (_: any, els: any[]) => {
             if (!els.length) return;
             const idx = els[0].index;
-            const casos = self.casosJudiciales.filter(c => c.etapa === etapaLabels[idx]).map(c => ({ fileNum: c.nroFile, nroJuicio: c.nroCaso, codigoCliente: '', cliente: c.cliente, abogado: c.abogado, etapa: c.etapa, estado: c.estado, fechaUltAct: c.plazo }));
+            const casos = self.casosJudiciales.filter(c => c.etapa === etapaLabels[idx]).map(c => ({ fileNum: c.nroFile, nroJuicio: c.nroCaso, codigoCliente: '', cliente: c.cliente, abogado: c.abogado, etapa: c.etapa, estado: c.estado, estadoBadge: c.estadoBadge, fechaUltAct: c.plazo }));
             self.openDrilldown('Detalle de Recuento de Etapa Procesal', 'Etapa: ' + etapaLabels[idx].toUpperCase(), 'other', casos);
           }
         }
@@ -321,7 +342,7 @@ export class SPJ implements OnDestroy, AfterViewInit {
             const casos = self.casosJudiciales.filter(c => {
               if (estatusLabels[idx] === 'Vig. sin Impulso') return c.estado.startsWith('No') || c.estado === 'Casación';
               return c.estado === estatusLabels[idx];
-            }).map(c => ({ fileNum: c.nroFile, nroJuicio: c.nroCaso, codigoCliente: '', cliente: c.cliente, abogado: c.abogado, etapa: c.etapa, estado: c.estado, fechaUltAct: c.plazo }));
+            }).map(c => ({ fileNum: c.nroFile, nroJuicio: c.nroCaso, codigoCliente: '', cliente: c.cliente, abogado: c.abogado, etapa: c.etapa, estado: c.estado, estadoBadge: c.estadoBadge, fechaUltAct: c.plazo }));
             self.openDrilldown('Detalle de Recuento por Estatus', 'Estado: ' + estatusLabels[idx].toUpperCase(), 'other', casos);
           }
         }
@@ -366,49 +387,13 @@ export class SPJ implements OnDestroy, AfterViewInit {
             const idx = els[0].index;
             const rangos = [{ min: 0, max: 50 }, { min: 51, max: 99 }, { min: 100, max: 999 }];
             const r = rangos[idx];
-            const casos = self.casosJudiciales.filter(c => c.pct >= r.min && c.pct <= r.max).map(c => ({ fileNum: c.nroFile, nroJuicio: c.nroCaso, codigoCliente: '', cliente: c.cliente, abogado: c.abogado, etapa: c.etapa, estado: c.estado, fechaUltAct: c.pct + '%' }));
+            const casos = self.casosJudiciales.filter(c => c.pct >= r.min && c.pct <= r.max).map(c => ({ fileNum: c.nroFile, nroJuicio: c.nroCaso, codigoCliente: '', cliente: c.cliente, abogado: c.abogado, etapa: c.etapa, estado: c.estado, estadoBadge: c.estadoBadge, fechaUltAct: c.pct + '%' }));
             self.openDrilldown('Semaforización de Procesos', 'Rango: ' + semaforoLabels[idx], 'other', casos);
           }
         }
       });
 
-      // 4. Procesos por Tipo de Entidad — line chart (Banco / Empresa / Natural)
-      const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-      const entidadSeries = ['Banco', 'Empresa', 'Natural'];
-      const entidadData   = [
-        [820,835,855,872,885,900,918,928,942,958,975,995],
-        [80,82,84,86,88,90,92,94,96,98,100,102],
-        [38,39,40,41,42,43,44,44,45,46,47,48],
-      ];
-      this._buildChart('chart-entidades', {
-        type: 'line',
-        data: {
-          labels: meses,
-          datasets: [
-            { label: 'Banco',   data: entidadData[0], borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,.1)',  fill: true, tension: .4, pointRadius: 4, pointHoverRadius: 7 },
-            { label: 'Empresa', data: entidadData[1], borderColor: '#F97316', backgroundColor: 'rgba(249,115,22,.07)', fill: true, tension: .4, pointRadius: 4, pointHoverRadius: 7 },
-            { label: 'Natural', data: entidadData[2], borderColor: '#8B5CF6', backgroundColor: 'rgba(139,92,246,.07)', fill: true, tension: .4, pointRadius: 4, pointHoverRadius: 7 },
-          ]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', padding: 16, font: { size: 11 } } } },
-          scales: { x: { grid: { display: false } }, y: { grid: { color: '#F3F4F6' } } },
-          onClick: (_: any, els: any[]) => {
-            if (!els.length) return;
-            const serieIdx = els[0].datasetIndex;
-            const mesIdx   = els[0].index;
-            const entidad  = entidadSeries[serieIdx];
-            const cantidad = entidadData[serieIdx][mesIdx];
-            const casos = self.casosJudiciales.filter(c => {
-              if (entidad === 'Banco')   return c.cliente.toLowerCase().includes('bcp') || c.cliente.toLowerCase().includes('bank') || c.cliente.toLowerCase().includes('scotia') || c.cliente.toLowerCase().includes('interbank') || c.cliente.toLowerCase().includes('bbva');
-              if (entidad === 'Empresa') return c.cliente.toLowerCase().includes('s.a') || c.cliente.toLowerCase().includes('sac') || c.cliente.toLowerCase().includes('inmob');
-              return true; // Natural: resto
-            }).map(c => ({ fileNum: c.nroFile, nroJuicio: c.nroCaso, codigoCliente: '', cliente: c.cliente, abogado: c.abogado, etapa: c.etapa, estado: c.estado, fechaUltAct: c.plazo }));
-            self.openDrilldown('Procesos por Tipo de Entidad', entidad.toUpperCase() + ' · ' + meses[mesIdx] + ' — ' + cantidad + ' procesos', 'other', casos);
-          }
-        }
-      });
+      this._rebuildChartEntidades();
     }, 50);
   }
 
@@ -542,7 +527,7 @@ export class SPJ implements OnDestroy, AfterViewInit {
   ];
 
   // ── Notificaciones campanita ──────────────────────────────────────────────
-  spjNotificaciones = signal<TopbarNotificacion[]>([
+  splNotificaciones = signal<TopbarNotificacion[]>([
     {
       id: 1,
       tipo: 'por-vencer',
@@ -710,7 +695,55 @@ export class SPJ implements OnDestroy, AfterViewInit {
   }
 
   getComentariosBitacora(nroCaso: string): BitacoraComment[] {
-    return this.bitacoraComentarios.filter(c => c.nroCaso === nroCaso);
+    return this.bitacoraComentarios().filter(c => c.nroCaso === nroCaso);
+  }
+
+  // ── Editar / Eliminar comentarios de Bitácora ────────────────────────────
+  modalEditarComentarioBit       = signal(false);
+  modalConfirmarEliminarBit      = signal(false);
+  bitComentarioEditando          = signal<BitacoraComment | null>(null);
+  bitComentarioEditTexto         = signal('');
+  bitComentarioEditFecha         = signal('');
+  bitComentarioEliminar          = signal<BitacoraComment | null>(null);
+
+  abrirEditarComentarioBit(c: BitacoraComment) {
+    this.bitComentarioEditando.set(c);
+    this.bitComentarioEditTexto.set(c.descripcion);
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    this.bitComentarioEditFecha.set(`${yyyy}-${mm}-${dd}`);
+    this.modalEditarComentarioBit.set(true);
+  }
+
+  guardarEditarComentarioBit() {
+    const c = this.bitComentarioEditando();
+    if (!c) return;
+    this.bitacoraComentarios.update(arr =>
+      arr.map(item =>
+        item.nroCaso === c.nroCaso && item.nro === c.nro
+          ? { ...item, descripcion: this.bitComentarioEditTexto(), fecha: this.bitComentarioEditFecha() }
+          : item
+      )
+    );
+    this.modalEditarComentarioBit.set(false);
+    this.showToastMsg('Comentario actualizado correctamente');
+  }
+
+  abrirConfirmarEliminarBit(c: BitacoraComment) {
+    this.bitComentarioEliminar.set(c);
+    this.modalConfirmarEliminarBit.set(true);
+  }
+
+  confirmarEliminarBit() {
+    const c = this.bitComentarioEliminar();
+    if (!c) return;
+    this.bitacoraComentarios.update(arr =>
+      arr.filter(item => !(item.nroCaso === c.nroCaso && item.nro === c.nro))
+    );
+    this.modalConfirmarEliminarBit.set(false);
+    this.showToastMsg('Comentario eliminado');
   }
 
   abrirDetalleBitacora(row: BitacoraRow) {
@@ -787,6 +820,8 @@ export class SPJ implements OnDestroy, AfterViewInit {
   modalConfirmarEliminar = signal(false);
   modalRetirarCuenta = signal(false);
   modalFechasEtapa = signal(false);
+  modalAgregarCuentaExistente = signal(false);
+  demandadoParaCuenta = signal('');
 
   openModal(id: string) {
     const map: Record<string, () => void> = {
@@ -808,6 +843,9 @@ export class SPJ implements OnDestroy, AfterViewInit {
       'modal-fechas-etapa':        () => this.modalFechasEtapa.set(true),
       'modal-liquidar':            () => this.modalLiquidar.set(true),
       'modal-liquidacion-creada':  () => this.modalLiquidacionCreada.set(true),
+      'modal-agregar-cuenta-existente':    () => this.modalAgregarCuentaExistente.set(true),
+      'modal-editar-comentario-bit':       () => this.modalEditarComentarioBit.set(true),
+      'modal-confirmar-eliminar-bit':      () => this.modalConfirmarEliminarBit.set(true),
     };
     map[id]?.();
   }
@@ -832,6 +870,9 @@ export class SPJ implements OnDestroy, AfterViewInit {
       'modal-fechas-etapa':        () => this.modalFechasEtapa.set(false),
       'modal-liquidar':            () => this.modalLiquidar.set(false),
       'modal-liquidacion-creada':  () => this.modalLiquidacionCreada.set(false),
+      'modal-agregar-cuenta-existente':    () => this.modalAgregarCuentaExistente.set(false),
+      'modal-editar-comentario-bit':       () => this.modalEditarComentarioBit.set(false),
+      'modal-confirmar-eliminar-bit':      () => this.modalConfirmarEliminarBit.set(false),
     };
     map[id]?.();
   }
@@ -935,8 +976,14 @@ export class SPJ implements OnDestroy, AfterViewInit {
   }
 
   openMotivoCierre(caso: CasoJudicial | string) {
-    const id = typeof caso === 'string' ? caso : caso.nroCaso;
-    this.mcCasoTitle.set('Proceso ' + id);
+    const id  = typeof caso === 'string' ? caso : caso.nroCaso;
+    const ent = typeof caso === 'string' ? 'Banco'    : caso.entidad;
+    const cli = typeof caso === 'string' ? ''         : caso.cliente;
+    const tip = typeof caso === 'string' ? 'Cobranza' : caso.tipo;
+    this.mcCasoTitle.set(id);
+    this.mcEntidad.set(ent);
+    this.mcCliente.set(cli);
+    this.mcTipo.set(tip);
     this.modalMotivoCierre.set(true);
   }
 
@@ -950,6 +997,7 @@ export class SPJ implements OnDestroy, AfterViewInit {
   modalLiquidacionCreada = signal(false);
 
   confirmarLiquidacion() {
+    this.estadoFinanciero.set('Liquidado');
     this.modalLiquidar.set(false);
     this.modalLiquidacionCreada.set(true);
   }
@@ -1044,8 +1092,19 @@ export class SPJ implements OnDestroy, AfterViewInit {
   }
 
   // ── Nuevo Evento ──────────────────────────────────────────────────────────
+  neEvTipo  = signal<'audiencia' | 'diligencia' | 'vencimiento' | 'reunion' | 'interno' | ''>('');
+  neNroCaso = signal<string>('');
+
+  abrirNuevoEvento(nroCaso?: string) {
+    this.neEvTipo.set('');
+    this.neNroCaso.set(nroCaso ?? '');
+    this.modalNuevoEvento.set(true);
+  }
+
   guardarNuevoEvento() {
     this.modalNuevoEvento.set(false);
+    this.neEvTipo.set('');
+    this.neNroCaso.set('');
     this.showToastMsg('Evento guardado correctamente');
   }
 
@@ -1264,7 +1323,35 @@ export class SPJ implements OnDestroy, AfterViewInit {
   closeDrilldown() { this.drilldownOpen.set(false); }
 
   // ── Config. Financiera ───────────────────────────────────────
-  estadoFinanciero = signal<'En Cobranza' | 'Liquidable' | 'Liquidado' | 'Cerrado'>('En Cobranza');
+  estadoFinanciero = signal<'En Cobranza' | 'Liquidable' | 'Liquidado' | 'Cerrado'>('Liquidable');
+
+  readonly etapasCasoDatos = [
+    { nro: '01', nombre: 'Actos Preparatorios', inicio: '15/01/2025', fin: '14/02/2025', plazoLabel: 'Completada', estadoKey: 'completada' as const },
+    { nro: '02', nombre: 'Etapa Postulatoria',  inicio: '15/02/2025', fin: '16/03/2025', plazoLabel: 'Completada', estadoKey: 'completada' as const },
+    { nro: '03', nombre: 'Etapa Probatoria',    inicio: '17/03/2025', fin: '16/05/2025', plazoLabel: 'Completada', estadoKey: 'completada' as const },
+    { nro: '04', nombre: 'Etapa Decisoria',     inicio: '17/05/2025', fin: '16/06/2025', plazoLabel: '18 días',   estadoKey: 'en-curso'   as const },
+  ];
+
+  etapasSortOrder   = signal<'reciente' | 'antigua'>('reciente');
+  etapasCasoPage    = signal(1);
+  etapasCasoPageSize = signal(5);
+
+  etapasCasoSorted = computed(() => {
+    const arr = [...this.etapasCasoDatos];
+    return this.etapasSortOrder() === 'reciente' ? arr.reverse() : arr;
+  });
+
+  etapasCasoTotalPages = computed(() =>
+    Math.max(1, Math.ceil(this.etapasCasoSorted().length / this.etapasCasoPageSize()))
+  );
+
+  etapasCasoPageData = computed(() => {
+    const start = (this.etapasCasoPage() - 1) * this.etapasCasoPageSize();
+    return this.etapasCasoSorted().slice(start, start + this.etapasCasoPageSize());
+  });
+
+  etapasSetPageSize(val: string) { this.etapasCasoPageSize.set(+val); this.etapasCasoPage.set(1); }
+  etapasPageNav(dir: number) { this.etapasCasoPage.update(p => Math.min(Math.max(1, p + dir), this.etapasCasoTotalPages())); }
 
   cuentasExtraArr = signal<number[]>([]);
   agregarCuentaDemandado()  { this.cuentasExtraArr.update(arr => [...arr, arr.length]); }
@@ -1272,7 +1359,8 @@ export class SPJ implements OnDestroy, AfterViewInit {
 
   // ── Auth computed ────────────────────────────────────────────
   coberturaActiva = computed(() => this.auth.coberturaActiva());
-  esIndependiente  = computed(() => this.auth.esIndependiente());
+  esIndependiente      = computed(() => this.auth.esIndependiente());
+  esAdminODigitador    = computed(() => this.auth.esAdmin() || this.auth.esDigitador());
 
   // ── Información Adicional ─────────────────────────────────────
   readonly tiposInfoAdicional = [
@@ -1293,7 +1381,60 @@ export class SPJ implements OnDestroy, AfterViewInit {
   dashFiltroFuncionario = signal('todos');
   dashFiltroEstado      = signal('todos');
 
-  onDashFiltroAnioChange(val: string) { this.dashFiltroAnio.set(val); }
+  onDashFiltroAnioChange(val: string) {
+    this.dashFiltroAnio.set(val);
+    setTimeout(() => this._rebuildChartEntidades(), 0);
+  }
+
+  private _rebuildChartEntidades(): void {
+    this.chartInstances = this.chartInstances.filter(c => {
+      if (c.canvas?.id === 'chart-entidades') { c.destroy(); return false; }
+      return true;
+    });
+
+    const anio = this.dashFiltroAnio();
+    const sinFiltro = anio === 'todos';
+    const anos  = ['2021','2022','2023','2024','2025'];
+    const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    const labels = sinFiltro ? anos : meses;
+
+    const entidadSeries = ['Banco','Empresa','Natural'];
+    const entidadData = sinFiltro
+      ? [[820,870,910,958,995],[80,85,90,98,102],[38,40,42,46,48]]
+      : [[820,835,855,872,885,900,918,928,942,958,975,995],[80,82,84,86,88,90,92,94,96,98,100,102],[38,39,40,41,42,43,44,44,45,46,47,48]];
+
+    const self = this;
+    this._buildChart('chart-entidades', {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: 'Banco',   data: entidadData[0], borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,.1)',  fill: true, tension: .4, pointRadius: 4, pointHoverRadius: 7 },
+          { label: 'Empresa', data: entidadData[1], borderColor: '#F97316', backgroundColor: 'rgba(249,115,22,.07)', fill: true, tension: .4, pointRadius: 4, pointHoverRadius: 7 },
+          { label: 'Natural', data: entidadData[2], borderColor: '#8B5CF6', backgroundColor: 'rgba(139,92,246,.07)', fill: true, tension: .4, pointRadius: 4, pointHoverRadius: 7 },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', padding: 16, font: { size: 11 } } } },
+        scales: { x: { grid: { display: false } }, y: { grid: { color: '#F3F4F6' } } },
+        onClick: (_: any, els: any[]) => {
+          if (!els.length) return;
+          const serieIdx = els[0].datasetIndex;
+          const idx = els[0].index;
+          const entidad = entidadSeries[serieIdx];
+          const cantidad = entidadData[serieIdx][idx];
+          const label = labels[idx];
+          const casos = self.casosJudiciales.filter(c => {
+            if (entidad === 'Banco')   return c.cliente.toLowerCase().includes('bcp') || c.cliente.toLowerCase().includes('bank') || c.cliente.toLowerCase().includes('scotia') || c.cliente.toLowerCase().includes('interbank') || c.cliente.toLowerCase().includes('bbva');
+            if (entidad === 'Empresa') return c.cliente.toLowerCase().includes('s.a') || c.cliente.toLowerCase().includes('sac') || c.cliente.toLowerCase().includes('inmob');
+            return true;
+          }).map(c => ({ fileNum: c.nroFile, nroJuicio: c.nroCaso, codigoCliente: '', cliente: c.cliente, abogado: c.abogado, etapa: c.etapa, estado: c.estado, estadoBadge: c.estadoBadge, fechaUltAct: c.plazo }));
+          self.openDrilldown('Procesos por Tipo de Entidad', entidad.toUpperCase() + ' · ' + label + ' — ' + cantidad + ' procesos', 'other', casos);
+        }
+      }
+    });
+  }
 
   // ── Pagination: Actualizaciones table ─────────────────────────
   actPage     = signal(0);
@@ -1375,11 +1516,14 @@ export class SPJ implements OnDestroy, AfterViewInit {
   filtroAvSearch: Record<string, string> = {};
 
   readonly filtroAvConfig: FiltroAvConfig[] = [
-    { id: 'abogado',     label: 'Abogado',           opciones: ['Dra. M. Rodríguez', 'Dr. C. Pérez', 'Dra. A. López', 'Dr. J. García', 'Dra. P. Flores'] },
-    { id: 'tipoProceso', label: 'Tipo de Proceso',    opciones: ['Cobranza', 'Civil', 'Laboral', 'Penal'] },
-    { id: 'entidad',     label: 'Entidad',            opciones: ['BCP S.A.', 'Scotiabank', 'Interbank', 'BBVA Perú'] },
-    { id: 'etapa',       label: 'Etapa Procesal',     opciones: ['Actos Preparatorios', 'Etapa Postulatoria', 'Etapa Probatoria', 'Etapa Decisoria', 'Etapa de Ejecución'] },
-    { id: 'estado',      label: 'Estado del Caso',    opciones: ['Vigente', 'Por Vencer', 'Vencido', 'No Impulso – Banco', 'Casación'] },
+    { id: 'nroFile',       label: 'Nro. de File',         opciones: ['FILE-2025-0001','FILE-2025-0002','FILE-2025-0087','FILE-2025-0061','FILE-2024-0298','FILE-2024-0201','FILE-2025-0112','FILE-2024-0178','FILE-2023-0134','FILE-2023-0089','F-2025-001','F-2025-002','F-2025-003','F-2024-088','F-2024-041','F-2025-018','F-2025-009','F-2023-067','F-2023-089','F-2023-112'] },
+    { id: 'nroJuicio',     label: 'Nro. de Juicio',       opciones: ['2025-00314-CI-01','2025-00287-CO-02','2024-01102-CI-03','2024-00956-LA-01','2025-00401-CO-04','2025-00198-CI-02','2023-00512-CI-05','2023-00318-LA-03','2023-00445-CO-06'] },
+    { id: 'nroExpediente', label: 'Nro. de Expediente',   opciones: ['EXP-2025-0314','EXP-2025-0287','EXP-2024-1102','EXP-2024-0956','EXP-2025-0401','EXP-2025-0198','EXP-2023-0512','EXP-2023-0318','EXP-2023-0445'] },
+    { id: 'abogado',       label: 'Abogado',               opciones: ['Dra. M. Rodríguez', 'Dr. C. Pérez', 'Dra. A. López', 'Dr. J. García', 'Dra. P. Flores'] },
+    { id: 'tipoProceso',   label: 'Tipo de Proceso',       opciones: ['Cobranza', 'Civil', 'Laboral', 'Penal'] },
+    { id: 'entidad',       label: 'Entidad',               opciones: ['BCP S.A.', 'Scotiabank', 'Interbank', 'BBVA Perú'] },
+    { id: 'etapa',         label: 'Etapa Procesal',        opciones: ['Actos Preparatorios', 'Etapa Postulatoria', 'Etapa Probatoria', 'Etapa Decisoria', 'Etapa de Ejecución'] },
+    { id: 'estado',        label: 'Estado del Caso',       opciones: ['Vigente', 'Por Vencer', 'Vencido', 'No Impulso – Banco', 'Casación'] },
   ];
 
   getFiltroAvLabel(id: string): string {
@@ -1508,14 +1652,17 @@ export class SPJ implements OnDestroy, AfterViewInit {
   ];
 
   casosJudiciales: CasoJudicial[] = [
-    { starred: true,  nroCaso: 'C-2025-0314', nroFile: 'FILE-2025-0087', abogado: 'Dra. M. Rodríguez', cliente: 'BCP S.A.',                     tipo: 'Cobranza', tipoBadge: 'badge-concluido',  etapa: 'Etapa Decisoria',    estado: 'Vigente',          estadoBadge: 'badge-vigente',     pct: 82, semaforoCls: 'semaforo-verde',    financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '18 días',  plazoClass: 'text-brand-muted' },
-    { starred: false, nroCaso: 'C-2025-0287', nroFile: 'FILE-2025-0061', abogado: 'Dr. C. Pérez',      cliente: 'BCP S.A.',                     tipo: 'Cobranza', tipoBadge: 'badge-concluido',  etapa: 'Etapa de Ejecución', estado: 'Vigente',          estadoBadge: 'badge-vigente',     pct: 91, semaforoCls: 'semaforo-verde',    financiero: 'Liquidable',  financieroBadge: 'badge-liquidable',  plazo: '32 días',  plazoClass: 'text-brand-muted' },
-    { starred: false, nroCaso: 'C-2024-1102', nroFile: 'FILE-2024-0298', abogado: 'Dra. A. López',     cliente: 'BCP S.A.',                     tipo: 'Civil',    tipoBadge: 'badge-por-vencer', etapa: 'Etapa Probatoria',   estado: 'Por Vencer',       estadoBadge: 'badge-por-vencer',  pct: 55, semaforoCls: 'semaforo-amarillo', financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '5 días',   plazoClass: 'text-amber-600 font-semibold' },
-    { starred: false, nroCaso: 'C-2024-0956', nroFile: 'FILE-2024-0201', abogado: 'Dr. J. García',     cliente: 'BCP S.A.',                     tipo: 'Cobranza', tipoBadge: 'badge-concluido',  etapa: 'Etapa Postulatoria', estado: 'Vencido',          estadoBadge: 'badge-vencido',     pct: 28, semaforoCls: 'semaforo-rojo',     financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '-12 días', plazoClass: 'text-red-500 font-semibold' },
-    { starred: false, nroCaso: 'C-2025-0401', nroFile: 'FILE-2025-0112', abogado: 'Dra. P. Flores',    cliente: 'BCP S.A.',                     tipo: 'Cobranza', tipoBadge: 'badge-concluido',  etapa: 'Actos Preparatorios',estado: 'No Impulso – Banco',estadoBadge: 'badge-no-impulso',   pct: 12, semaforoCls: 'semaforo-rojo',     financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '45 días',  plazoClass: 'text-brand-muted' },
-    { starred: true,  nroCaso: 'C-2024-0876', nroFile: 'FILE-2024-0178', abogado: 'Dra. M. Rodríguez', cliente: 'BCP S.A.',                     tipo: 'Cobranza', tipoBadge: 'badge-concluido',  etapa: 'Etapa de Ejecución', estado: 'Casación',          estadoBadge: 'badge-casacion',    pct: 88, semaforoCls: 'semaforo-verde',    financiero: 'Liquidado',   financieroBadge: 'badge-liquidado',   plazo: '60 días',  plazoClass: 'text-brand-muted' },
-    { starred: false, nroCaso: 'C-2023-0512', nroFile: 'FILE-2023-0134', abogado: 'Dr. C. Pérez',      cliente: 'Inmobiliaria Pacheco S.A.C.',  tipo: 'Civil',    tipoBadge: 'badge-vigente',    etapa: 'Etapa Impugnatoria', estado: 'Vigente',          estadoBadge: 'badge-vigente',     pct: 74, semaforoCls: 'semaforo-verde',    financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '27 días',  plazoClass: 'text-brand-muted' },
-    { starred: false, nroCaso: 'C-2023-0318', nroFile: 'FILE-2023-0089', abogado: 'Dra. A. López',     cliente: 'Carlos Alberto Mendoza',       tipo: 'Laboral',  tipoBadge: 'badge-vencido',    etapa: 'Etapa Decisoria',    estado: 'Por Vencer',       estadoBadge: 'badge-por-vencer',  pct: 61, semaforoCls: 'semaforo-amarillo', financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '9 días',   plazoClass: 'text-amber-600 font-semibold' },
+    { starred: false,  nroCaso: 'C-2025-001', nroFile: 'FILE-2025-0001', abogado: 'A. Vega',           cliente: 'María García López',           entidad: 'Natural',  tipo: 'Cobranza', tipoBadge: 'badge-vigente',    etapa: 'Etapa Decisoria',    estado: 'Liquidado',         estadoBadge: 'badge-liquidado',    pct: 100, semaforoCls: 'semaforo-verde',    financiero: 'Liquidado',   financieroBadge: 'badge-liquidado',   plazo: '0 días',   plazoClass: 'text-brand-muted' },
+    { starred: false,  nroCaso: 'C-2025-002', nroFile: 'FILE-2025-0002', abogado: 'M. Quispe',          cliente: 'Juan Pérez',                   entidad: 'Natural',  tipo: 'Cobranza', tipoBadge: 'badge-vigente',    etapa: 'Etapa de Ejecución', estado: 'En Cobranza',       estadoBadge: 'badge-en-cobranza',  pct: 50,  semaforoCls: 'semaforo-amarillo', financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '32 días',  plazoClass: 'text-brand-muted' },
+
+    { starred: true,  nroCaso: 'C-2025-0314', nroFile: 'FILE-2025-0087', abogado: 'Dra. M. Rodríguez', cliente: 'BCP S.A.',                     entidad: 'Banco',    tipo: 'Cobranza', tipoBadge: 'badge-concluido',  etapa: 'Etapa Decisoria',    estado: 'Vigente',           estadoBadge: 'badge-vigente',      pct: 82,  semaforoCls: 'semaforo-verde',    financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '18 días',  plazoClass: 'text-brand-muted' },
+    { starred: false, nroCaso: 'C-2025-0287', nroFile: 'FILE-2025-0061', abogado: 'Dr. C. Pérez',      cliente: 'BCP S.A.',                     entidad: 'Banco',    tipo: 'Cobranza', tipoBadge: 'badge-concluido',  etapa: 'Etapa de Ejecución', estado: 'Vigente',           estadoBadge: 'badge-vigente',      pct: 91,  semaforoCls: 'semaforo-verde',    financiero: 'Liquidable',  financieroBadge: 'badge-liquidable',  plazo: '32 días',  plazoClass: 'text-brand-muted' },
+    { starred: false, nroCaso: 'C-2024-1102', nroFile: 'FILE-2024-0298', abogado: 'Dra. A. López',     cliente: 'BCP S.A.',                     entidad: 'Banco',    tipo: 'Civil',    tipoBadge: 'badge-por-vencer', etapa: 'Etapa Probatoria',   estado: 'Por Vencer',        estadoBadge: 'badge-por-vencer',   pct: 55,  semaforoCls: 'semaforo-amarillo', financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '5 días',   plazoClass: 'text-amber-600 font-semibold' },
+    { starred: false, nroCaso: 'C-2024-0956', nroFile: 'FILE-2024-0201', abogado: 'Dr. J. García',     cliente: 'BCP S.A.',                     entidad: 'Banco',    tipo: 'Cobranza', tipoBadge: 'badge-concluido',  etapa: 'Etapa Postulatoria', estado: 'Vencido',           estadoBadge: 'badge-vencido',      pct: 28,  semaforoCls: 'semaforo-rojo',     financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '-12 días', plazoClass: 'text-red-500 font-semibold' },
+    { starred: false, nroCaso: 'C-2025-0401', nroFile: 'FILE-2025-0112', abogado: 'Dra. P. Flores',    cliente: 'BCP S.A.',                     entidad: 'Banco',    tipo: 'Cobranza', tipoBadge: 'badge-concluido',  etapa: 'Actos Preparatorios',estado: 'No Impulso – Banco',estadoBadge: 'badge-no-impulso',   pct: 12,  semaforoCls: 'semaforo-rojo',     financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '45 días',  plazoClass: 'text-brand-muted' },
+    { starred: true,  nroCaso: 'C-2024-0876', nroFile: 'FILE-2024-0178', abogado: 'Dra. M. Rodríguez', cliente: 'BCP S.A.',                     entidad: 'Banco',    tipo: 'Cobranza', tipoBadge: 'badge-concluido',  etapa: 'Etapa de Ejecución', estado: 'Casación',           estadoBadge: 'badge-casacion',     pct: 88,  semaforoCls: 'semaforo-verde',    financiero: 'Liquidado',   financieroBadge: 'badge-liquidado',   plazo: '60 días',  plazoClass: 'text-brand-muted' },
+    { starred: false, nroCaso: 'C-2023-0512', nroFile: 'FILE-2023-0134', abogado: 'Dr. C. Pérez',      cliente: 'Inmobiliaria Pacheco S.A.C.',  entidad: 'Empresa',  tipo: 'Civil',    tipoBadge: 'badge-vigente',    etapa: 'Etapa Impugnatoria', estado: 'Vigente',           estadoBadge: 'badge-vigente',      pct: 74,  semaforoCls: 'semaforo-verde',    financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '27 días',  plazoClass: 'text-brand-muted' },
+    { starred: false, nroCaso: 'C-2023-0318', nroFile: 'FILE-2023-0089', abogado: 'Dra. A. López',     cliente: 'Carlos Alberto Mendoza',       entidad: 'Natural',  tipo: 'Laboral',  tipoBadge: 'badge-vencido',    etapa: 'Etapa Decisoria',    estado: 'Por Vencer',        estadoBadge: 'badge-por-vencer',   pct: 61,  semaforoCls: 'semaforo-amarillo', financiero: 'En Cobranza', financieroBadge: 'badge-en-cobranza', plazo: '9 días',   plazoClass: 'text-amber-600 font-semibold' },
   ];
 
   readonly bitacoraRows: BitacoraRow[] = [
@@ -1531,7 +1678,7 @@ export class SPJ implements OnDestroy, AfterViewInit {
     { nroCaso:'C-2023-0445', nroFile:'F-2023-112', nroJuicio:'2023-00445-CO-06', abogado:'R. Mamani',    funcionario:'Claudia Reyes',   entidad:'Scotiabank', clienteNombre:'QUISPE MENDOZA FELIX AUGUSTO',  tipo:'banco',   cuenta:'0310000098765400',      tipoProceso:'Cobranza',  juzgado:'7mo Juzg. Comercial Lima',      expediente:'EXP-2023-0445', etapa:'Fin del Proceso',    subEstado:'Concluido',   estado:'Concluido',  estadoBadge:'badge-concluido',  creadoPor:'Mamani Rodrigo',        fechaAsignacion:'22/03/2023', fechaActoPrep:'10/01/2023', montoDemanda:'S/ 67,400.00', plazo:'—',       plazoClass:'text-brand-muted',                   ultimaAct:'01/05/2026', entradas:43, infoAdicionalTipo:'',                 infoAdicionalDesc:'', motivoCierre:'Pago Total', estadoFile:'Completo', comentarioCierre:'Cliente regularizó la totalidad de la deuda mediante pago en cuotas. Se emite constancia de pago y se solicita archivo definitivo.', fechaRetiro:'28/04/2026', fechaDevolucion:'05/05/2026' },
   ];
 
-  readonly bitacoraComentarios: BitacoraComment[] = [
+  bitacoraComentarios = signal<BitacoraComment[]>([
     { nroCaso:'C-2025-0314', nro:1, fecha:'01/06/2026', etapa:'ETAPA DECISORIA',    descripcion:'Comentario de Prueba',                                                             subEstado:'',          creadoPor:'Administrador sigcomt' },
     { nroCaso:'C-2025-0314', nro:2, fecha:'01/06/2026', etapa:'ETAPA DECISORIA',    descripcion:'xasasas a s asasa',                                                                subEstado:'',          creadoPor:'Administrador sigcomt' },
     { nroCaso:'C-2025-0314', nro:3, fecha:'01/06/2026', etapa:'ETAPA DECISORIA',    descripcion:'JOEL CASTILLO',                                                                    subEstado:'',          creadoPor:'Administrador sigcomt' },
@@ -1542,7 +1689,7 @@ export class SPJ implements OnDestroy, AfterViewInit {
     { nroCaso:'C-2024-0956', nro:1, fecha:'08/05/2026', etapa:'ETAPA POSTULATORIA', descripcion:'Comentario para validar desde bitacora',                                           subEstado:'',          creadoPor:'sigcomt Administrador'  },
     { nroCaso:'C-2023-0445', nro:1, fecha:'28/04/2026', etapa:'FIN DEL PROCESO',    descripcion:'Cliente realizó pago total de la deuda. Se procede con el archivo definitivo.',   subEstado:'Concluido', creadoPor:'Mamani Rodrigo'         },
     { nroCaso:'C-2023-0445', nro:2, fecha:'15/03/2026', etapa:'ETAPA DE EJECUCIÓN', descripcion:'Se notificó resolución de embargo a Scotiabank. Saldo embargado: S/ 67,400.00.',   subEstado:'',          creadoPor:'Mamani Rodrigo'         },
-  ];
+  ]);
 
   procesosConcluidos: ProcesoConcluido[] = [
     { nroCaso: 'C-2025-0314', entidad: 'BCP S.A.',                    tipo: 'banco',   cuentaFile: 'Cta. 001 · FILE-2025-0087', abogado: 'Dra. M. Rodríguez', tipoProceso: 'Cobranza', motivoCierre: 'Pago Total',          motivoBadge: 'badge-vigente',    fechaCierre: '10/05/2025', estadoFile: 'Completo',      fileBadge: 'badge-vigente' },

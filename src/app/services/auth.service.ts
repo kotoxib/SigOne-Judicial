@@ -61,6 +61,7 @@ export class AuthService {
   });
 
   esIndependiente = computed(() => this.authData()?.rolActivo?.rol === 'Independiente');
+  esDigitador     = computed(() => this.authData()?.rolActivo?.rol === 'Digitador');
 
   esPrimeraVez = computed(() => {
     const auth = this.authData();

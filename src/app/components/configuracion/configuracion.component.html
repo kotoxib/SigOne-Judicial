@@ -44,7 +44,7 @@
         <span class="nav-label">Tablas Generales</span>
       </button>
 
-      <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Mantenedores SPJ</span>
+      <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Mantenedores SPL</span>
 
       <button id="tour-nav-etapas" class="sdi w-full" [class.nav-active]="activeView()==='etapas'" (click)="showView('etapas')">
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m-.01 4h.01"/></svg>
@@ -68,7 +68,7 @@
         <span class="nav-label">Tipos de Gasto</span>
       </button>
 
-      <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Mantenedores SCG</span>
+      <span class="nav-group-title" style="display: block; padding: 10px 12px; font-size: 11px; color: rgba(255,255,255,0.3); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Mantenedores SGC</span>
 
       <button class="sdi w-full" [class.nav-active]="activeView()==='tiposArancel'" (click)="showView('tiposArancel')">
         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -464,9 +464,9 @@
           <table class="data-table">
             <thead><tr><th>#</th><th>Nombre</th><th>Descripción</th><th>Aplica a</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody>
-              <tr><td class="n-col">1</td><td class="font-medium">Persona Natural</td><td class="text-muted">Cliente individual, persona física</td><td><span class="badge-role">SPJ</span> <span class="badge-role">GAP</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view" (click)="abrirModalEntidad('Persona Natural','Cliente individual')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalEntidad('Persona Natural','Cliente individual')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
-              <tr><td class="n-col">2</td><td class="font-medium">Empresa</td><td class="text-muted">Persona jurídica SAC / SA</td><td><span class="badge-role">SPJ</span> <span class="badge-role">GAP</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view" (click)="abrirModalEntidad('Empresa','Persona jurídica SAC/SA')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalEntidad('Empresa','Persona jurídica SAC/SA')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
-              <tr><td class="n-col">3</td><td class="font-medium">Banco</td><td class="text-muted">Entidad bancaria / financiera</td><td><span class="badge-role">SCG</span> <span class="badge-role">SPJ</span> <span class="badge-role">GAP</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view" (click)="abrirModalEntidad('Banco','Entidad bancaria')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalEntidad('Banco','Entidad bancaria')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
+              <tr><td class="n-col">1</td><td class="font-medium">Persona Natural</td><td class="text-muted">Cliente individual, persona física</td><td><span class="badge-role">SPL</span> <span class="badge-role">GAP</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view" (click)="abrirModalEntidad('Persona Natural','Cliente individual')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalEntidad('Persona Natural','Cliente individual')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
+              <tr><td class="n-col">2</td><td class="font-medium">Empresa</td><td class="text-muted">Persona jurídica SAC / SA</td><td><span class="badge-role">SPL</span> <span class="badge-role">GAP</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view" (click)="abrirModalEntidad('Empresa','Persona jurídica SAC/SA')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalEntidad('Empresa','Persona jurídica SAC/SA')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
+              <tr><td class="n-col">3</td><td class="font-medium">Banco</td><td class="text-muted">Entidad bancaria / financiera</td><td><span class="badge-role">SGC</span> <span class="badge-role">SPL</span> <span class="badge-role">GAP</span></td><td><span class="badge-active">Activo</span></td><td><div class="flex gap-1.5"><button class="btn-icon btn-view" (click)="abrirModalEntidad('Banco','Entidad bancaria')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button><button class="btn-icon btn-edit" (click)="abrirModalEntidad('Banco','Entidad bancaria')"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></div></td></tr>
             </tbody>
           </table>
           <div class="pg-bar">
@@ -493,7 +493,7 @@
         <div class="flex items-center justify-between mb-3">
           <div>
             <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Tipos de Caso</h2>
-            <p class="text-sm mt-0.5" style="color:#6B7280">Categorías de caso con monto base por entidad (SPJ y GAP)</p>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Categorías de caso con monto base por entidad (SPL y GAP)</p>
           </div>
           <button class="btn-orange" (click)="abrirModalTipoCaso()">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -1487,12 +1487,12 @@
         </div>
       }
 
-      <!-- ══ TIPOS DE ARANCEL (SCG) ══ -->
+      <!-- ══ TIPOS DE ARANCEL (SGC) ══ -->
       @if (activeView() === 'tiposArancel') {
         <div class="flex items-center justify-between mb-3">
           <div>
             <h2 class="text-xl font-bold" style="font-family:'Sora','DM Sans',sans-serif;color:#1F2937">Tipos de Arancel</h2>
-            <p class="text-sm mt-0.5" style="color:#6B7280">Aranceles judiciales del módulo SCG · Monto referencial en S/</p>
+            <p class="text-sm mt-0.5" style="color:#6B7280">Aranceles judiciales del módulo SGC · Monto referencial en S/</p>
           </div>
           <button class="btn-orange" (click)="abrirModalArancel()">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -2203,7 +2203,7 @@
             </div>
           }
         </div>
-        <p class="text-xs mt-2" style="color:#9CA3AF">El monto base puede ajustarse al crear o editar un caso en SPJ.</p>
+        <p class="text-xs mt-2" style="color:#9CA3AF">El monto base puede ajustarse al crear o editar un caso en SPL.</p>
         <div class="flex gap-3 justify-end mt-4">
           <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
           <button class="btn-orange" (click)="guardarTipoCaso()">Guardar</button>
@@ -2414,7 +2414,7 @@
     </div>
   }
 
-  <!-- MODAL TIPO DE ARANCEL (SCG) -->
+  <!-- MODAL TIPO DE ARANCEL (SGC) -->
   @if (modalActivo() === 'tipoarancel') {
     <div class="cfg-modal-bg" (click)="closeModal()">
       <div class="cfg-modal" style="max-width:480px" (click)="$event.stopPropagation()">
@@ -2508,7 +2508,7 @@
           <div>
             <label>Aplicativo</label>
             <select [(ngModel)]="formGasto.aplicativo">
-              <option>GAP</option><option>SPJ</option><option>SCG</option>
+              <option>GAP</option><option>SPL</option><option>SGC</option>
             </select>
           </div>
           <div>

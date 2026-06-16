@@ -414,13 +414,13 @@ body {
     padding: 20px;
 }
 
-.spj-table {
+.spl-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
 }
 
-.spj-table th {
+.spl-table th {
     text-align: left;
     padding: 9px 12px;
     font-size: 11px;
@@ -432,18 +432,18 @@ body {
     border-bottom: 1px solid var(--color-border);
 }
 
-.spj-table td {
+.spl-table td {
     padding: 10px 12px;
     border-bottom: 1px solid #F3F4F6;
     color: var(--color-text);
     vertical-align: middle;
 }
 
-.spj-table tr:last-child td {
+.spl-table tr:last-child td {
     border-bottom: none;
 }
 
-.spj-table tbody tr:hover td {
+.spl-table tbody tr:hover td {
     background: rgba(244, 121, 32, .03);
 }
 
