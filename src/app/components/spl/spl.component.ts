@@ -822,6 +822,8 @@ export class SPL implements OnDestroy, OnInit, AfterViewInit {
   modalFechasEtapa = signal(false);
   modalAgregarCuentaExistente = signal(false);
   demandadoParaCuenta = signal('');
+  modalCargaMasiva = signal(false);
+  cargaMasivaTab = signal<'proceso' | 'etapa'>('proceso');
 
   openModal(id: string) {
     const map: Record<string, () => void> = {
@@ -846,6 +848,7 @@ export class SPL implements OnDestroy, OnInit, AfterViewInit {
       'modal-agregar-cuenta-existente':    () => this.modalAgregarCuentaExistente.set(true),
       'modal-editar-comentario-bit':       () => this.modalEditarComentarioBit.set(true),
       'modal-confirmar-eliminar-bit':      () => this.modalConfirmarEliminarBit.set(true),
+      'modal-carga-masiva':               () => this.modalCargaMasiva.set(true),
     };
     map[id]?.();
   }
@@ -873,8 +876,14 @@ export class SPL implements OnDestroy, OnInit, AfterViewInit {
       'modal-agregar-cuenta-existente':    () => this.modalAgregarCuentaExistente.set(false),
       'modal-editar-comentario-bit':       () => this.modalEditarComentarioBit.set(false),
       'modal-confirmar-eliminar-bit':      () => this.modalConfirmarEliminarBit.set(false),
+      'modal-carga-masiva':               () => this.modalCargaMasiva.set(false),
     };
     map[id]?.();
+  }
+
+  confirmarCargaMasiva() {
+    this.modalCargaMasiva.set(false);
+    this.showToastMsg('Carga masiva procesada correctamente');
   }
 
   // ── Modal context state ───────────────────────────────────────────────────
