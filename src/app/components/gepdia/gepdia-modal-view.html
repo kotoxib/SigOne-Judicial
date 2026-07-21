@@ -1,0 +1,188 @@
+<!-- Modal: Ver Documento (Previsualización + Botones Editar/Guardar/Enviar) -->
+@if (isModalOpen('modal-view-doc')) {
+<div class="modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100;overflow-y:auto;padding:20px">
+  <div style="width:100%;max-width:900px;background:var(--card);border-radius:10px;padding:20px;border:1px solid var(--border);max-height:90vh;overflow-y:auto">
+    <!-- Encabezado -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px">
+      <div>
+        <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">{{ currentViewFile()?.name }}</h3>
+        <p style="font-size:12px;color:var(--muted)">PDF · {{ currentViewFile()?.pages || 3 }} páginas</p>
+      </div>
+      <button (click)="closeModal()" style="background:none;border:none;font-size:18px;cursor:pointer">✕</button>
+    </div>
+
+    <!-- Previsualización del documento -->
+    <div style="background:#f5f5f5;border-radius:8px;padding:20px;margin-bottom:16px;text-align:center;min-height:300px;display:flex;align-items:center;justify-content:center">
+      <div style="text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">📄</div>
+        <p style="color:var(--muted);font-size:13px">Vista previa del documento</p>
+        <p style="color:var(--textL);font-size:12px;margin-top:4px">{{ currentViewFile()?.name }}</p>
+      </div>
+    </div>
+
+    <!-- Botones de acción: Descargar, Editar, Guardar, Enviar -->
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-sec" (click)="downloadFile(currentViewFile())">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Descargar
+      </button>
+      <button class="btn-sec" (click)="openModal('modal-edit-pages')">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        Editar
+      </button>
+      <button class="btn-sec" (click)="openModal('modal-guardar-como')">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+        Guardar
+      </button>
+      <button class="btn-orange" (click)="openModal('modal-enviar-email')">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal: Editar Páginas (Reordenar) -->
+@if (isModalOpen('modal-edit-pages')) {
+<div class="modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100">
+  <div style="width:100%;max-width:700px;background:var(--card);border-radius:10px;padding:24px;border:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">Editar páginas</h3>
+      <button (click)="closeModal()" style="background:none;border:none;font-size:18px">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Reordena las páginas del documento arrastrando</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-bottom:20px">
+      @for (page of [1,2,3]; track page) {
+        <div style="background:var(--bg);border:2px solid var(--border);border-radius:8px;padding:8px;text-align:center;cursor:move;transition:border-color .2s" (click)="selectPage(page)" [style.border-color]="selectedPage() === page ? 'var(--orange)' : 'var(--border)'">
+          <div style="background:#ddd;border-radius:4px;height:80px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--muted)">📄</div>
+          <p style="font-size:11px;font-weight:600;color:var(--text)">Página {{ page }}</p>
+        </div>
+      }
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-sec" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="saveEditedPages()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal: Guardar Como -->
+@if (isModalOpen('modal-guardar-como')) {
+<div class="modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100">
+  <div style="width:100%;max-width:520px;background:var(--card);border-radius:10px;padding:24px;border:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">Guardar documento</h3>
+      <button (click)="closeModal()" style="background:none;border:none;font-size:18px">✕</button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+      <div>
+        <label class="f-label">Nombre del archivo</label>
+        <input class="f-input" [(ngModel)]="saveName" placeholder="Contrato_2025.pdf" />
+      </div>
+      <div>
+        <label class="f-label">Guardar en carpeta</label>
+        <select class="f-input" [(ngModel)]="saveFolderName">
+          <option value="">Raíz</option>
+          @for (f of folders(); track f.name) {
+            <option [value]="f.name">{{ f.name }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label style="font-size:13px;color:var(--muted)"><input type="checkbox" [(ngModel)]="saveAsPrivate" /> Privado (por defecto)</label>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-sec" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="saveDocumentAs()">Guardar</button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal: Enviar por Email -->
+@if (isModalOpen('modal-enviar-email')) {
+<div class="modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100">
+  <div style="width:100%;max-width:520px;background:var(--card);border-radius:10px;padding:24px;border:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">Enviar documento por correo</h3>
+      <button (click)="closeModal()" style="background:none;border:none;font-size:18px">✕</button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+      <div>
+        <label class="f-label">De (Remitente)</label>
+        <input class="f-input" [(ngModel)]="emailFrom" placeholder="tu-email@notaria.com" disabled />
+      </div>
+      <div>
+        <label class="f-label">Para (Destinatario) *</label>
+        <input class="f-input" [(ngModel)]="emailTo" placeholder="destinatario@example.com" />
+      </div>
+      <div>
+        <label class="f-label">Asunto</label>
+        <input class="f-input" [(ngModel)]="emailSubject" [value]="'Documento: ' + (currentViewFile()?.name || '')" />
+      </div>
+      <div>
+        <label class="f-label">Mensaje</label>
+        <textarea class="f-input" [(ngModel)]="emailMessage" rows="4" style="resize:none;font-family:var(--font-body)">Estimado/a, adjunto encontrará el documento solicitado. Quedo a su disposición para cualquier consulta.</textarea>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-sec" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="sendEmail()">
+        <svg class="w-4 h-4" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal: Mover/Copiar -->
+@if (isModalOpen('modal-mover-copiar')) {
+<div class="modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100">
+  <div style="width:100%;max-width:520px;background:var(--card);border-radius:10px;padding:24px;border:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">Mover/Copiar archivos</h3>
+      <button (click)="closeModal()" style="background:none;border:none;font-size:18px">✕</button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+      <div>
+        <label class="f-label">Acción</label>
+        <select class="f-input" [(ngModel)]="moveAction">
+          <option value="move">Mover a carpeta</option>
+          <option value="copy">Copiar a carpeta</option>
+        </select>
+      </div>
+      <div>
+        <label class="f-label">Carpeta destino</label>
+        <select class="f-input" [(ngModel)]="moveTargetFolder">
+          @for (f of folders(); track f.name) {
+            <option [value]="f.name">{{ f.name }}</option>
+          }
+          <option value="">Nueva carpeta</option>
+        </select>
+      </div>
+      @if (moveTargetFolder() === '') {
+        <div>
+          <label class="f-label">Nombre de nueva carpeta</label>
+          <input class="f-input" [(ngModel)]="newFolderNameMove" placeholder="Nombre de carpeta" />
+        </div>
+      }
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-sec" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="performMoveOrCopy()">{{ moveAction() === 'move' ? 'Mover' : 'Copiar' }}</button>
+    </div>
+  </div>
+</div>
+}

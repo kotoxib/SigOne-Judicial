@@ -1,0 +1,46 @@
+<div class="empty-state">
+  <div class="empty-state__icon">
+    @if (icon) {
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path [attr.d]="icon"/>
+      </svg>
+    } @else {
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293L9.293 13.293A1 1 0 008.586 13H6"/>
+      </svg>
+    }
+  </div>
+
+  <h3 class="empty-state__title">{{ tituloFinal }}</h3>
+  <p  class="empty-state__desc">{{ descripcionFinal }}</p>
+
+  @if (helpTitle || helpText) {
+    <div class="empty-state__help">
+      @if (helpTitle) { <p class="empty-state__help-title">{{ helpTitle }}</p> }
+      @if (helpText)  { <p class="empty-state__help-text">{{ helpText }}</p> }
+    </div>
+  }
+
+  @if (mostrarCta) {
+    <button class="empty-state__btn" (click)="onClickCta()">
+      @if (ctaIcon) {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+             width="14" height="14">
+          <path [attr.d]="ctaIcon"/>
+        </svg>
+      } @else {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+             width="14" height="14">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8"  y1="12" x2="16" y2="12"/>
+        </svg>
+      }
+      {{ botonLabel }}
+    </button>
+  }
+</div>

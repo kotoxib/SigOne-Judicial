@@ -1,0 +1,301 @@
+/* Layout del topbar */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.topbar-tabs-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.topbar-tabs-nav::-webkit-scrollbar { display: none; }
+
+/* Toggle button */
+.topbar-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: color .2s, background .2s;
+  flex-shrink: 0;
+}
+.topbar-toggle-btn:hover { color: var(--text); background: var(--bg); }
+
+/* Notification bell */
+.topbar-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background .2s;
+  position: relative;
+}
+.topbar-icon-btn:hover { background: var(--bg); }
+
+/* Notif wrapper (positionamento relativo del dropdown) */
+.notif-wrap {
+  position: relative;
+}
+
+/* Dot / badge en la campanita */
+.notif-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  background: #EF4444;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 99px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  border: 1.5px solid #fff;
+  pointer-events: none;
+}
+
+/* Panel dropdown */
+.notif-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 360px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 8px 32px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.06);
+  z-index: 500;
+  overflow: hidden;
+}
+
+.notif-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid #F3F4F6;
+}
+.notif-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1F2937;
+  font-family: 'Sora', sans-serif;
+}
+.notif-panel-badge {
+  background: #EF4444;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 99px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+.notif-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1px solid #E5E7EB;
+  border-radius: 7px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6B7280;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.notif-clear-btn:hover {
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+  color: #DC2626;
+}
+.notif-clear-btn:hover svg { stroke: #DC2626; }
+
+/* Lista */
+.notif-list {
+  max-height: 380px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #F97316 #F3F4F6;
+}
+
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 18px;
+  border-bottom: 1px solid #F9FAFB;
+  transition: background .15s;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: #FAFAFA; }
+.notif-item--link { cursor: pointer; }
+.notif-item--link:hover { background: #F0F9FF; }
+
+/* Íconos */
+.notif-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.notif-icon--vencer  { background: #FEF3C7; color: #D97706; }
+.notif-icon--vencido { background: #FEE2E2; color: #DC2626; }
+.notif-icon--evento  { background: #DBEAFE; color: #2563EB; }
+.notif-icon--compartido { background: #D1FAE5; color: #059669; }
+.notif-icon--procesado { background: #FFEDD5; color: #F97316; }
+
+/* Contenido */
+.notif-content { flex: 1; min-width: 0; }
+.notif-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+.notif-titulo {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1F2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.notif-desc {
+  font-size: 11px;
+  color: #6B7280;
+  line-height: 1.5;
+  margin: 0 0 4px;
+}
+.notif-tiempo {
+  font-size: 10px;
+  color: #9CA3AF;
+}
+
+/* Chips de tipo */
+.notif-chip {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  border-radius: 99px;
+  padding: 2px 7px;
+  flex-shrink: 0;
+}
+.chip--vencer  { background: #FEF3C7; color: #B45309; }
+.chip--vencido { background: #FEE2E2; color: #B91C1C; }
+.chip--evento  { background: #DBEAFE; color: #1D4ED8; }
+.chip--compartido { background: #D1FAE5; color: #047857; }
+.chip--procesado { background: #FFEDD5; color: #D97706; }
+
+/* Empty state */
+.notif-empty {
+  text-align: center;
+  padding: 28px 18px;
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+/* Greeting */
+.topbar-greeting {
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.topbar-greeting strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Logout button */
+.topbar-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 5px 12px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  transition: background .2s, border-color .2s, color .2s;
+  white-space: nowrap;
+}
+.topbar-logout-btn:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+.topbar-logout-btn:hover svg { stroke: #dc2626; }
+
+/* Cobertura temporal en topbar */
+.topbar-cobertura-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+.topbar-cobertura-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(244,121,32,.12);
+  color: #D4620A;
+  border: 1px solid rgba(244,121,32,.25);
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  line-height: 1.6;
+}
+.topbar-cobertura-sub {
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── Responsive móvil (< 768px) ── */
+@media (max-width: 767px) {
+  .topbar-greeting { display: none; }
+  .topbar-logout-label { display: none; }
+  .topbar-logout-btn { padding: 6px; border-radius: 8px; }
+}

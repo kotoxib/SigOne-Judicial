@@ -1,0 +1,32 @@
+<!-- Backdrop móvil -->
+<div class="sidebar-backdrop" [class.visible]="expanded" (click)="toggle.emit()"></div>
+
+<aside id="sidebar" [class.expanded]="expanded">
+
+  <!-- Logo / Header del módulo -->
+  <div class="sidebar-logo">
+    @if (moduleIcon) {
+      <div class="sidebar-icon-wrap">
+        <img [src]="moduleIcon" [alt]="moduleName" class="w-full h-full object-contain">
+      </div>
+    } @else {
+      <button class="sidebar-icon-wrap sidebar-toggle-btn" (click)="toggle.emit()" title="Menú">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    }
+    <span class="nav-label sidebar-module-name">{{ moduleName }}</span>
+  </div>
+
+  <!-- Navegación (contenido proyectado por cada módulo) -->
+  <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-1">
+    <ng-content></ng-content>
+  </nav>
+
+  <!-- Footer fijo -->
+  <div class="sidebar-footer">
+    <ng-content select="[sidebar-footer]"></ng-content>
+  </div>
+
+</aside>

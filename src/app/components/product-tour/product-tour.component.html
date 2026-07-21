@@ -1,0 +1,63 @@
+<!-- Botón flotante ? -->
+@if (!tour.tourActivo() && tour.tienePasosParaRuta(ruta)) {
+  <button class="tour-fab" (click)="iniciarTour()" title="Iniciar guía del módulo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+         stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+      <line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+  </button>
+}
+
+<!-- Tour activo -->
+@if (tour.tourActivo()) {
+
+  <!-- Overlay oscuro -->
+  <div class="tour-overlay" (click)="tour.omitir()"></div>
+
+  <!-- Anillo iluminado sobre el elemento objetivo -->
+  @if (spotlightStyle()['width']) {
+    <div class="tour-spotlight" [ngStyle]="spotlightStyle()"></div>
+  }
+
+  <!-- Burbuja del paso -->
+  <div class="tour-bubble" [ngStyle]="bubbleStyle()" (click)="$event.stopPropagation()">
+
+    @if (tour.pasoInfo?.icon) {
+      <div class="tour-bubble__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path [attr.d]="tour.pasoInfo!.icon"/>
+        </svg>
+      </div>
+    }
+
+    <span class="tour-bubble__counter">
+      Paso {{ tour.numeroPasoGlobal }} de {{ tour.numeroTotalPasos }}
+    </span>
+
+    <h3 class="tour-bubble__title">{{ tour.pasoInfo?.title }}</h3>
+    <p  class="tour-bubble__desc">{{ tour.pasoInfo?.description }}</p>
+
+    <div class="tour-bubble__progress">
+      @for (i of [].constructor(tour.numeroTotalPasos); track $index) {
+        <span class="tour-dot" [class.tour-dot--active]="$index < tour.numeroPasoGlobal"></span>
+      }
+    </div>
+
+    <div class="tour-bubble__actions">
+      <button class="tour-btn-skip" (click)="tour.omitir()">Omitir</button>
+      <button class="tour-btn-next" (click)="tour.siguiente()">
+        {{ tour.esUltimoPaso ? 'Finalizar' : 'Siguiente' }}
+        @if (!tour.esUltimoPaso) {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        }
+      </button>
+    </div>
+
+  </div>
+}

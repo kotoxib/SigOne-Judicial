@@ -1,0 +1,2765 @@
+<div style="display:flex;height:100vh;overflow:hidden" (click)="closeDropdown()">
+
+  <!-- ══════════════════════════════
+       SIDEBAR
+  ══════════════════════════════ -->
+  <app-sidebar moduleIcon="assets/img/gepdia_icono.png" moduleName="GEPDIA"
+    [expanded]="sidebarExpanded()" (toggle)="toggleSidebar()">
+
+    <!-- Nav items -->
+    <p class="nav-group-title" style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.35);font-weight:700;padding:4px 12px 8px">
+      {{ {inicio:'Inicio',procesamiento:'Procesamiento',gendoc:'Documentos'}[currentMenu()] }}
+    </p>
+    @for (item of sidebarMap[currentMenu()]; track item.cb) {
+      <div class="sdi"
+        [class.on]="activeSidebarCb() === item.cb"
+        (click)="$event.stopPropagation(); sdiClick(item.cb)">
+        <svg style="width:18px;height:18px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"/>
+        </svg>
+        <span class="nav-label" style="font-size:13px">{{ item.label }}</span>
+      </div>
+    }
+
+    <!-- Regresar al Portal -->
+    <button sidebar-footer class="sdi" style="width:100%;justify-content:flex-start" [routerLink]="['/portal']">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+      <span class="nav-label" style="font-size:13px">Regresar al Portal</span>
+    </button>
+  </app-sidebar>
+
+  <!-- ══════════════════════════════
+       MAIN AREA
+  ══════════════════════════════ -->
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+
+    <!-- TOPBAR -->
+    <app-topbar
+      [tabs]="topbarTabs"
+      [activeTab]="currentMenu()"
+      userName="Sigcomt"
+      userInitials="SIG"
+      [notificaciones]="notificaciones()"
+      (sidebarToggle)="toggleSidebar()"
+      (tabChange)="goMenu($event)"
+      (logoutEvent)="handleLogout()"
+      (notifClick)="handleNotifClick($event)"
+      (clearNotif)="clearNotificaciones()"
+      (marcarTodasLeidas)="marcarTodasLeidasNotifs()">
+    </app-topbar>
+
+    <!-- CONTENT AREA -->
+    <main style="flex:1;overflow-y:auto;background:var(--bg);padding:24px" id="main-content">
+
+      <!-- ══════════════════════════════
+           PANEL INICIO – Dashboard
+      ══════════════════════════════ -->
+      @if (currentMenu() === 'inicio') {
+        <div class="panel on">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <div>
+              <h2 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--text)">Dashboard GEPDIA</h2>
+              <p style="font-size:13px;color:var(--muted);margin-top:3px">Resumen de documentos procesados y consultas IA</p>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="date" class="filter-inp" [ngModel]="dashDesde()" (ngModelChange)="dashDesde.set($event)" style="font-size:12px"/>
+              <span style="font-size:12px;color:var(--muted)">a</span>
+              <input type="date" class="filter-inp" [ngModel]="dashHasta()" (ngModelChange)="dashHasta.set($event)" style="font-size:12px"/>
+              <button class="btn-orange" (click)="recargarDash()" style="padding:7px 14px">Actualizar</button>
+            </div>
+          </div>
+
+          <!-- KPIs Documentos -->
+          <p style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Documentos Procesados</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
+            <div class="kpi-card" style="cursor:default;pointer-events:none">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <p style="font-size:12px;color:var(--muted);font-weight:500">Total permitido</p>
+                <div style="width:32px;height:32px;border-radius:9px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center">
+                  <svg width="16" height="16" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0121 9.414V19a2 2 0 01-2 2z"/>
+                  </svg>
+                </div>
+              </div>
+              <p style="font-size:30px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">500</p>
+              <p style="font-size:12px;color:var(--muted);margin-top:4px">documentos/año</p>
+              <div class="progress-bar" style="margin-top:12px"><div class="progress-fill" style="width:58%"></div></div>
+            </div>
+            <div class="kpi-card" (click)="openModal('modal-det-docs')">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <p style="font-size:12px;color:var(--muted);font-weight:500">Procesados</p>
+                <span class="badge b-orange">↑ 12%</span>
+              </div>
+              <p style="font-size:30px;font-weight:700;font-family:'Sora',sans-serif;color:var(--orange)">290</p>
+              <p style="font-size:12px;color:var(--muted);margin-top:4px">documentos procesados</p>
+              <div style="height:3px;background:var(--orange);border-radius:99px;margin-top:12px;width:58%"></div>
+            </div>
+            <div class="kpi-card" style="cursor:default;pointer-events:none">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <p style="font-size:12px;color:var(--muted);font-weight:500">Restantes</p>
+                <span class="badge b-green">Disponible</span>
+              </div>
+              <p style="font-size:30px;font-weight:700;color:#16a34a;font-family:'Sora',sans-serif">210</p>
+              <p style="font-size:12px;color:var(--muted);margin-top:4px">documentos disponibles</p>
+              <div class="progress-bar" style="margin-top:12px"><div class="progress-fill" style="width:42%;background:linear-gradient(to right,#22c55e,#16a34a)"></div></div>
+            </div>
+          </div>
+
+          <!-- KPIs Consultas IA -->
+          <p style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Consultas IA</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
+            <div class="kpi-card" style="cursor:default;pointer-events:none">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <p style="font-size:12px;color:var(--muted);font-weight:500">Total permitido</p>
+                <div style="width:32px;height:32px;border-radius:9px;background:#EFF6FF;display:flex;align-items:center;justify-content:center">
+                  <svg width="16" height="16" fill="none" stroke="#3B82F6" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                  </svg>
+                </div>
+              </div>
+              <p style="font-size:30px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">1,000</p>
+              <p style="font-size:12px;color:var(--muted);margin-top:4px">consultas/año</p>
+              <div class="progress-bar" style="margin-top:12px"><div class="progress-fill" style="width:43%;background:linear-gradient(to right,#3B82F6,#2563EB)"></div></div>
+            </div>
+            <div class="kpi-card" (click)="openModal('modal-det-consultas')">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <p style="font-size:12px;color:var(--muted);font-weight:500">Realizadas</p>
+                <span class="badge b-blue">↑ 8%</span>
+              </div>
+              <p style="font-size:30px;font-weight:700;color:#3B82F6;font-family:'Sora',sans-serif">434</p>
+              <p style="font-size:12px;color:var(--muted);margin-top:4px">consultas realizadas</p>
+              <div style="height:3px;background:#3B82F6;border-radius:99px;margin-top:12px;width:43%"></div>
+            </div>
+            <div class="kpi-card" style="cursor:default;pointer-events:none">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                <p style="font-size:12px;color:var(--muted);font-weight:500">Restantes</p>
+                <span class="badge b-green">Disponible</span>
+              </div>
+              <p style="font-size:30px;font-weight:700;color:#16a34a;font-family:'Sora',sans-serif">566</p>
+              <p style="font-size:12px;color:var(--muted);margin-top:4px">consultas disponibles</p>
+              <div class="progress-bar" style="margin-top:12px"><div class="progress-fill" style="width:57%;background:linear-gradient(to right,#22c55e,#16a34a)"></div></div>
+            </div>
+          </div>
+
+          <!-- FAQ -->
+          <div id="faq-section" class="stat-card" style="padding:20px">
+            <h3 style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;font-family:'Sora',sans-serif">
+              Preguntas Frecuentes · Uso de la IA
+            </h3>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              @for (faq of faqs(); track trackByIndex($index); let i = $index) {
+                <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+                  <div (click)="toggleFAQ(i)"
+                    style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;background:#fafbff">
+                    <p style="font-size:13px;font-weight:600;color:var(--text)">{{ faq.q }}</p>
+                    <svg width="14" height="14" fill="none" stroke="var(--muted)" viewBox="0 0 24 24"
+                      style="flex-shrink:0;transition:transform .2s"
+                      [style.transform]="faq.open ? 'rotate(180deg)' : ''">
+                      <polyline points="6 9 12 15 18 9" stroke-width="2"/>
+                    </svg>
+                  </div>
+                  @if (faq.open) {
+                    <div style="padding:0 16px 12px;font-size:13px;color:var(--muted);line-height:1.6">{{ faq.a }}</div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══════════════════════════════
+           PANEL PROCESAMIENTO
+      ══════════════════════════════ -->
+      @if (currentMenu() === 'procesamiento') {
+        <div class="panel on">
+
+          <!-- MIS DOCUMENTOS -->
+          @if (currentSubProc() === 'misdocs') {
+
+            <!-- ── Vista detalle de carpeta ── -->
+            @if (currentFolder()) {
+              <div style="display:flex;flex-direction:column;gap:16px">
+                <!-- Breadcrumb + acciones -->
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+                  <div>
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+                      <button (click)="closeFolder()"
+                        style="background:none;border:none;cursor:pointer;color:var(--orange);font-size:13px;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:4px;padding:0">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" stroke-width="2"/></svg>
+                        Documentos
+                      </button>
+                      <span style="color:var(--textL);font-size:13px">›</span>
+                      <span style="font-size:13px;font-weight:600;color:var(--text)">{{ currentFolder() }}</span>
+                    </div>
+                    <p style="font-size:13px;color:var(--muted)">Documentos de la carpeta</p>
+                  </div>
+                  <div style="display:flex;gap:8px">
+                    <button class="btn-sec"
+                      [style.opacity]="selectedFiles().size === 0 ? '.45' : '1'"
+                      [style.pointer-events]="selectedFiles().size === 0 ? 'none' : 'auto'"
+                      (click)="openModal('modal-mover-copiar')">
+                      <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1-4l-3 3m0 0l-3-3m3 3V4"/>
+                      </svg>
+                      Mover / Copiar
+                    </button>
+                  </div>
+                </div>
+                <!-- Filtros -->
+                <div class="stat-card" style="padding:16px">
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+                    <div style="flex:1;min-width:220px">
+                      <label class="f-label">Buscar</label>
+                      <div style="position:relative">
+                        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" width="13" height="13" fill="none" stroke="var(--textL)" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input class="f-input" placeholder="Nombre del documento..." style="padding-left:32px"/>
+                      </div>
+                    </div>
+                    <div><label class="f-label">Fecha inicio</label><input type="date" class="filter-inp"/></div>
+                    <div><label class="f-label">Fecha fin</label><input type="date" class="filter-inp"/></div>
+                    <button class="btn-orange">Buscar</button>
+                  </div>
+                </div>
+                <!-- Tabla de documentos -->
+                <div class="stat-card" style="overflow:hidden">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)">
+                    <p style="font-size:13px;font-weight:600;color:var(--text)">{{ currentFolder() }}</p>
+                    <span style="font-size:12px;color:var(--muted)">{{ getFilesForFolder(currentFolder()!).length }} documento(s)</span>
+                  </div>
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th style="width:36px"><input type="checkbox" style="accent-color:var(--orange)" (change)="toggleCheckAllFolder($event, currentFolder()!)"/></th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Fecha de carga</th>
+                        <th>Propietario</th>
+                        <th>Estado</th>
+                        <th>Privacidad</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @if (getFilesForFolder(currentFolder()!).length === 0) {
+                        <tr><td colspan="8" style="text-align:center;padding:28px;color:var(--textL)">Esta carpeta no tiene documentos aún.</td></tr>
+                      }
+                      @for (f of getFilesForFolder(currentFolder()!); track f.id) {
+                        <tr>
+                          <td><input type="checkbox" style="accent-color:var(--orange)" [checked]="selectedFiles().has(f.id)" (change)="toggleFile(f.id)"/></td>
+                          <td>
+                            <div style="display:flex;align-items:center;gap:8px">
+                              <div style="width:24px;height:30px;background:var(--orangeSoft);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                                <svg width="11" height="11" fill="none" stroke="var(--orange)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                              </div>
+                              <span style="font-size:13px;font-weight:500;color:var(--text)">{{ f.name }}</span>
+                            </div>
+                          </td>
+                          <td>
+                            <span style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px"
+                              [style]="getFileTypeBadgeStyle(f.fileType)">
+                              {{ f.fileType ?? 'Otro' }}
+                            </span>
+                          </td>
+                          <td style="font-size:12px;color:var(--muted)">{{ f.fecha }}</td>
+                          <td style="font-size:12px;color:var(--muted)">{{ f.owner ? f.owner : 'Yo' }}</td>
+                          <td>
+                            <span class="badge" [class.b-blue]="f.estado==='Procesado'" [class.b-yellow]="f.estado!=='Procesado'">
+                              {{ f.estado ?? 'Cargado' }}
+                            </span>
+                          </td>
+                          <td>
+                            @if (!isCurrentFolderShared()) {
+                              <button style="background:none;border:none;cursor:pointer;padding:0" title="Cambiar privacidad / Compartir"
+                                (click)="abrirShareModalFile(f.id)">
+                                <span class="badge" [class.b-gray]="f.private" [class.b-green]="!f.private"
+                                  style="cursor:pointer;text-decoration:underline dotted">
+                                  {{ f.private ? 'Privado' : 'Público' }}
+                                </span>
+                              </button>
+                            } @else {
+                              <span class="badge b-gray" style="opacity:.6">Solo lectura</span>
+                            }
+                          </td>
+                          <td>
+                            <div style="display:flex;gap:5px">
+                              <button class="btn-icon btn-view" (click)="openViewModal(f)" title="Ver documento">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                              </button>
+                              <button class="btn-icon btn-ia"
+                                [class.btn-ia-active]="f.estado === 'Procesado'"
+                                [disabled]="f.estado !== 'Procesado'"
+                                [title]="f.estado === 'Procesado' ? 'Consultar con IA' : 'Documento aún no procesado'"
+                                (click)="consultarIAArchivo(f.id)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/><path d="M19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z"/></svg>
+                              </button>
+                              <button class="btn-icon btn-share" title="Compartir" (click)="abrirShareModalFile(f.id)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                              </button>
+@if (!isCurrentFolderShared()) {
+                                <button class="btn-icon btn-del" (click)="pedirConfirmacionPapelera(f.id)" title="Mover a Papelera">
+                                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                              }
+                            </div>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            }
+
+            <!-- ── Vista principal Mis Documentos ── -->
+            @if (!currentFolder()) {
+              <div style="display:flex;flex-direction:column;gap:14px">
+
+                <!-- Header -->
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+                  <div>
+                    <h2 style="font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:var(--text)">Mis Documentos</h2>
+                    <p style="font-size:13px;color:var(--muted);margin-top:2px">
+                      {{ getActiveFolders().length }} carpeta(s) · {{ files().length }} documento(s)
+                    </p>
+                  </div>
+                  <div style="display:flex;gap:8px">
+                    <button class="btn-orange" (click)="openModal('modal-nueva-carpeta')">
+                      <svg width="13" height="13" fill="none" stroke="white" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-width="2"/></svg>
+                      + Nueva Carpeta
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Búsqueda -->
+                <div class="stat-card" style="padding:14px 18px">
+                  <div style="position:relative">
+                    <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%)" width="15" height="15" fill="none" stroke="var(--textL)" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input class="f-input" placeholder="Busca carpetas o documentos por nombre..." style="padding-left:38px;padding-right:100px"/>
+                    <button class="btn-orange" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:6px 18px;font-size:13px">Buscar</button>
+                  </div>
+                  <!-- Filtros -->
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px">
+                    <span style="font-size:12px;color:var(--muted);font-weight:500">Filtrar por:</span>
+                    <div class="md-filter-chip">
+                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke-width="2"/></svg>
+                      Tipo: Todos
+                      <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2"/></svg>
+                    </div>
+                    <div class="md-filter-chip">
+                      <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke-width="2"/></svg>
+                      Privacidad: Todos
+                      <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2"/></svg>
+                    </div>
+                    <input type="date" class="md-filter-chip" style="cursor:pointer" placeholder="dd/mm/aaaa"/>
+                    <span style="font-size:12px;color:var(--muted)">—</span>
+                    <input type="date" class="md-filter-chip" style="cursor:pointer" placeholder="dd/mm/aaaa"/>
+                    <button class="md-filter-clear">
+                      <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-width="2.5"/></svg>
+                      Limpiar filtros
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Contenido con tabs horizontales -->
+                <div class="stat-card" style="overflow:hidden">
+
+                  <!-- Tabs + toggle vista -->
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border)">
+                    <div style="display:flex;gap:0">
+                      <button class="md-tab" [class.active]="misdocsTab()==='recientes'" (click)="misdocsTab.set('recientes')">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><polyline points="12,6 12,12 16,14" stroke-width="2" stroke-linecap="round"/></svg>
+                        Recientes
+                        <span class="md-tab-badge">{{ docsRecientes().length }}</span>
+                      </button>
+                      <button class="md-tab" [class.active]="misdocsTab()==='docs'" (click)="misdocsTab.set('docs')">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" stroke-width="2"/></svg>
+                        Documentos
+                        <span class="md-tab-badge">{{ getActiveFolders().length }}</span>
+                      </button>
+                      <button class="md-tab" [class.active]="misdocsTab()==='compartidos'" (click)="misdocsTab.set('compartidos')">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke-width="2"/><circle cx="18" cy="19" r="3" stroke-width="2"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke-width="2"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke-width="2"/></svg>
+                        Compartidos conmigo
+                      </button>
+                      <button class="md-tab" [class.active]="misdocsTab()==='favoritos'" (click)="misdocsTab.set('favoritos')">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke-width="2"/></svg>
+                        Favoritos
+                      </button>
+                      <button class="md-tab" [class.active]="misdocsTab()==='papelera'" (click)="misdocsTab.set('papelera')">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke-width="2"/></svg>
+                        Papelera
+                      </button>
+                    </div>
+                    <!-- Toggle lista/cuadrícula -->
+                    <div style="display:flex;border:1.5px solid var(--border);border-radius:8px;overflow:hidden">
+                      <button class="md-view-btn" [class.active]="misdocsView()==='list'" (click)="misdocsView.set('list')" title="Vista lista">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01" stroke-width="2" stroke-linecap="round"/></svg>
+                      </button>
+                      <button class="md-view-btn" [class.active]="misdocsView()==='grid'" (click)="misdocsView.set('grid')" title="Vista cuadrícula">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1" stroke-width="2"/></svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- ── TAB: Documentos ── -->
+                  @if (misdocsTab() === 'docs') {
+                    <div style="padding:18px">
+
+                      <!-- VISTA CUADRÍCULA -->
+                      @if (misdocsView() === 'grid') {
+                        <p class="md-section-label">Carpetas</p>
+                        @if (getActiveFolders().length === 0) {
+                          <p style="font-size:13px;color:var(--textL);padding:20px 0">No hay carpetas. Crea una nueva.</p>
+                        }
+                        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px">
+                          @for (folder of getActiveFolders(); track folder.name) {
+                            <div class="folder-card" (click)="openFolder(folder.name)">
+                              <!-- Íconos de acción (solo visibles en hover) -->
+                              <div class="folder-actions">
+                                <!-- IA -->
+                                <button class="folder-action-btn" title="Consultar con IA"
+                                  (click)="$event.stopPropagation(); consultarIACarpeta(folder.name)">
+                                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/>
+                                    <path d="M19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z"/>
+                                  </svg>
+                                </button>
+                                <!-- Compartir -->
+                                <button class="folder-action-btn folder-share-btn" title="Compartir carpeta"
+                                  [class.share-active]="folder.sharedWith && folder.sharedWith !== 'none'"
+                                  (click)="$event.stopPropagation(); abrirShareModalFolder(folder.name)">
+                                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                                  </svg>
+                                </button>
+                                <!-- Favorito -->
+                                <button class="folder-action-btn" [class.fav-active]="folder.favorite"
+                                  [title]="folder.favorite ? 'Quitar favorito' : 'Marcar favorito'"
+                                  (click)="$event.stopPropagation(); toggleFolderFavorite(folder.name)">
+                                  <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </button>
+                                <!-- Papelera -->
+                                <button class="folder-action-btn" title="Mover a Papelera"
+                                  (click)="$event.stopPropagation(); moveFolderToTrash(folder.name)">
+                                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+                                </button>
+                              </div>
+                              <!-- Ícono carpeta con color según tipo -->
+                              <svg width="64" height="56" viewBox="0 0 72 62" fill="none">
+                                <path d="M2 14C2 10.13 5.13 7 9 7H26l7 8H61C64.87 7 68 10.13 68 14V50C68 53.87 64.87 57 61 57H9C5.13 57 2 53.87 2 50V14Z" [attr.fill]="getFolderIconColor(folder)" opacity=".2"/>
+                                <path d="M2 22C2 18.13 5.13 15 9 15H61C64.87 15 68 18.13 68 22V50C68 53.87 64.87 57 61 57H9C5.13 57 2 53.87 2 50V22Z" [attr.fill]="getFolderIconColor(folder)" opacity=".75"/>
+                              </svg>
+                              <span style="font-size:12px;color:var(--text);font-weight:600;text-align:center;line-height:1.3;word-break:break-word">{{ folder.name }}</span>
+                              <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                                <span style="font-size:10px;color:var(--muted)">{{ folder.files.length }} archivo(s)</span>
+                                @if (getFolderSharedLabel(folder)) {
+                                  <span style="font-size:10px;font-weight:500;color:#10B981;display:flex;align-items:center;gap:3px">
+                                    <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" stroke-width="2.2"/><circle cx="6" cy="12" r="3" stroke-width="2.2"/><circle cx="18" cy="19" r="3" stroke-width="2.2"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke-width="2.2"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke-width="2.2"/></svg>
+                                    {{ getFolderSharedLabel(folder) }}
+                                  </span>
+                                }
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      }
+
+                      <!-- VISTA LISTA -->
+                      @if (misdocsView() === 'list') {
+                        <!-- ── TABLA CARPETAS ── -->
+                        <p class="md-section-label" style="margin-top:4px">Carpetas</p>
+                        @if (getActiveFolders().length === 0) {
+                          <p style="font-size:13px;color:var(--textL);padding:12px 0">No hay carpetas. Crea una nueva.</p>
+                        } @else {
+                          <table class="data-table" style="margin-bottom:24px">
+                            <thead>
+                              <tr>
+                                <th>Nombre</th>
+                                <th>Tipo</th>
+                                <th>Fecha creación</th>
+                                <th>Propietario</th>
+                                <th>Estado</th>
+                                <th>Privacidad</th>
+                                <th>Acciones</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              @for (folder of getActiveFolders(); track folder.name) {
+                                <tr style="cursor:pointer" (click)="openFolder(folder.name)">
+                                  <td>
+                                    <div style="display:flex;align-items:center;gap:8px">
+                                      <svg width="20" height="18" viewBox="0 0 58 50" fill="none">
+                                        <path d="M2 12C2 8.69 4.69 6 8 6H22l6 7H50C53.31 7 56 9.69 56 13V41C56 44.31 53.31 47 50 47H8C4.69 47 2 44.31 2 41V12Z" [attr.fill]="getFolderIconColor(folder)" opacity=".25"/>
+                                        <path d="M2 18C2 14.69 4.69 12 8 12H50C53.31 12 56 14.69 56 18V41C56 44.31 53.31 47 50 47H8C4.69 47 2 44.31 2 41V18Z" [attr.fill]="getFolderIconColor(folder)" opacity=".8"/>
+                                      </svg>
+                                      <span style="font-size:13px;font-weight:500;color:var(--text)">{{ folder.name }}</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;background:rgba(244,121,32,.12);color:var(--orange);border:1px solid rgba(244,121,32,.3)">
+                                      Carpeta
+                                    </span>
+                                  </td>
+                                  <td style="font-size:12px;color:var(--muted)">{{ folder.fechaCreacion ?? '—' }}</td>
+                                  <td style="font-size:12px;color:var(--muted)">Yo</td>
+                                  <td>
+                                    <span class="badge b-green">Activa</span>
+                                    @if (getFolderSharedLabel(folder)) {
+                                      <span style="font-size:10px;color:#10B981;margin-left:5px;font-weight:500">
+                                        · {{ getFolderSharedLabel(folder) }}
+                                      </span>
+                                    }
+                                  </td>
+                                  <td (click)="$event.stopPropagation()">
+                                    <button style="background:none;border:none;cursor:pointer;padding:0" title="Cambiar privacidad / Compartir"
+                                      (click)="abrirShareModalFolder(folder.name)">
+                                      <span class="badge" [class.b-gray]="folder.private" [class.b-green]="!folder.private"
+                                        style="cursor:pointer;text-decoration:underline dotted">
+                                        {{ folder.private ? 'Privada' : 'Pública' }}
+                                      </span>
+                                    </button>
+                                  </td>
+                                  <td (click)="$event.stopPropagation()">
+                                    <div style="display:flex;gap:5px">
+                                      <button class="btn-icon" title="Consultar con IA" (click)="consultarIACarpeta(folder.name)" style="color:#9CA3AF">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/><path d="M19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z"/></svg>
+                                      </button>
+                                      <button class="btn-icon btn-share" title="Compartir" (click)="abrirShareModalFolder(folder.name)">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                                      </button>
+                                      <button class="btn-icon" [style.color]="folder.favorite ? '#f59e0b' : 'var(--textL)'" (click)="toggleFolderFavorite(folder.name)" title="Favorito">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                      </button>
+                                      <button class="btn-icon btn-del" (click)="moveFolderToTrash(folder.name)" title="Papelera">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              }
+                            </tbody>
+                          </table>
+                        }
+
+                      }
+
+                    </div>
+                  }
+
+                  <!-- ── TAB: Recientes ── -->
+                  @if (misdocsTab() === 'recientes') {
+                    <div style="padding:18px">
+                      <p class="md-section-label" style="margin-top:0">Documentos cargados en los últimos 7 días</p>
+                      @if (docsRecientes().length === 0) {
+                        <div style="display:flex;flex-direction:column;align-items:center;padding:40px 0;gap:14px;color:var(--textL)">
+                          <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+                          <p style="font-size:14px">No hay documentos cargados en los últimos 7 días.</p>
+                        </div>
+                      } @else {
+                        <table class="data-table">
+                          <thead>
+                            <tr>
+                              <th>Nombre</th>
+                              <th>Tipo</th>
+                              <th>Fecha de carga</th>
+                              <th>Propietario</th>
+                              <th>Estado</th>
+                              <th>Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @for (f of docsRecientes(); track f.id) {
+                              <tr>
+                                <td>
+                                  <div style="display:flex;align-items:center;gap:8px">
+                                    <div style="width:24px;height:30px;background:var(--orangeSoft);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                                      <svg width="11" height="11" fill="none" stroke="var(--orange)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                                    </div>
+                                    <span style="font-size:13px;font-weight:500;color:var(--text)">{{ f.name }}</span>
+                                  </div>
+                                </td>
+                                <td>
+                                  <span style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px" [style]="getFileTypeBadgeStyle(f.fileType)">
+                                    {{ f.fileType ?? 'Otro' }}
+                                  </span>
+                                </td>
+                                <td style="font-size:12px;color:var(--muted)">{{ f.fecha }}</td>
+                                <td style="font-size:12px;color:var(--muted)">{{ f.owner ? f.owner : 'Yo' }}</td>
+                                <td>
+                                  <span class="badge" [class.b-blue]="f.estado==='Procesado'" [class.b-yellow]="f.estado!=='Procesado'">
+                                    {{ f.estado ?? 'Cargado' }}
+                                  </span>
+                                </td>
+                                <td>
+                                  <div style="display:flex;gap:5px">
+                                    <button class="btn-icon btn-view" (click)="openViewModal(f)" title="Ver documento">
+                                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    </button>
+                                    <button class="btn-icon" title="Consultar con IA" (click)="consultarIAArchivo(f.id)" style="color:var(--textL)">
+                                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/><path d="M19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z"/></svg>
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      }
+                    </div>
+                  }
+
+                  <!-- ── TAB: Favoritos ── -->
+                  @if (misdocsTab() === 'favoritos') {
+                    <div style="padding:18px">
+                      @if (getFavoriteFolders().length === 0) {
+                        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:48px 0;color:var(--textL)">
+                          <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                          <p style="font-size:13px">No tienes carpetas favoritas aún. Marca una carpeta con ⭐.</p>
+                        </div>
+                      }
+                      @if (misdocsView() === 'grid') {
+                        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px">
+                          @for (folder of getFavoriteFolders(); track folder.name) {
+                            <div class="folder-card" (click)="openFolder(folder.name)">
+                              <div class="folder-actions">
+                                <button class="folder-action-btn" title="Consultar con IA"
+                                  (click)="$event.stopPropagation(); consultarIACarpeta(folder.name)">
+                                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"/><path d="M19 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z"/></svg>
+                                </button>
+                                <button class="folder-action-btn folder-share-btn" title="Compartir"
+                                  [class.share-active]="folder.sharedWith && folder.sharedWith !== 'none'"
+                                  (click)="$event.stopPropagation(); abrirShareModalFolder(folder.name)">
+                                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                                </button>
+                                <button class="folder-action-btn fav-active" title="Quitar favorito"
+                                  (click)="$event.stopPropagation(); toggleFolderFavorite(folder.name)">
+                                  <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </button>
+                              </div>
+                              <svg width="64" height="56" viewBox="0 0 72 62" fill="none">
+                                <path d="M2 14C2 10.13 5.13 7 9 7H26l7 8H61C64.87 7 68 10.13 68 14V50C68 53.87 64.87 57 61 57H9C5.13 57 2 53.87 2 50V14Z" [attr.fill]="getFolderIconColor(folder)" opacity=".2"/>
+                                <path d="M2 22C2 18.13 5.13 15 9 15H61C64.87 15 68 18.13 68 22V50C68 53.87 64.87 57 61 57H9C5.13 57 2 53.87 2 50V22Z" [attr.fill]="getFolderIconColor(folder)" opacity=".75"/>
+                              </svg>
+                              <span style="font-size:12px;color:var(--text);font-weight:600;text-align:center;line-height:1.3">{{ folder.name }}</span>
+                              <span class="badge" [class.b-gray]="folder.private" [class.b-green]="!folder.private" style="font-size:10px;padding:2px 7px">{{ folder.private ? 'Privada' : 'Pública' }}</span>
+                              <span style="font-size:10px;color:var(--muted)">{{ folder.files.length }} archivo(s)</span>
+                            </div>
+                          }
+                        </div>
+                      } @else {
+                        <table class="data-table">
+                          <thead><tr><th>Nombre</th><th>Archivos</th><th>Privacidad</th><th>Acciones</th></tr></thead>
+                          <tbody>
+                            @for (folder of getFavoriteFolders(); track folder.name) {
+                              <tr style="cursor:pointer" (click)="openFolder(folder.name)">
+                                <td>
+                                  <div style="display:flex;align-items:center;gap:8px">
+                                    <svg width="22" height="20" viewBox="0 0 58 50" fill="none">
+                                      <path d="M2 12C2 8.69 4.69 6 8 6H22l6 7H50C53.31 7 56 9.69 56 13V41C56 44.31 53.31 47 50 47H8C4.69 47 2 44.31 2 41V12Z" [attr.fill]="getFolderIconColor(folder)" opacity=".25"/>
+                                      <path d="M2 18C2 14.69 4.69 12 8 12H50C53.31 12 56 14.69 56 18V41C56 44.31 53.31 47 50 47H8C4.69 47 2 44.31 2 41V18Z" [attr.fill]="getFolderIconColor(folder)" opacity=".8"/>
+                                    </svg>
+                                    <span style="font-size:13px;font-weight:500;color:var(--text)">{{ folder.name }}</span>
+                                  </div>
+                                </td>
+                                <td style="font-size:12px;color:var(--muted)">{{ folder.files.length }} archivo(s)</td>
+                                <td><span class="badge" [class.b-gray]="folder.private" [class.b-green]="!folder.private">{{ folder.private ? 'Privada' : 'Pública' }}</span></td>
+                                <td (click)="$event.stopPropagation()">
+                                  <button class="btn-icon" style="color:#f59e0b" (click)="toggleFolderFavorite(folder.name)" title="Quitar favorito">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                  </button>
+                                </td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      }
+                    </div>
+                  }
+
+                  <!-- ── TAB: Papelera ── -->
+                  @if (misdocsTab() === 'papelera') {
+                    <div style="padding:18px">
+                      @if (getPapeleraFolders().length === 0 && getPapeleraFiles().length === 0) {
+                        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:48px 0;color:var(--textL)">
+                          <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+                          <p style="font-size:13px">La papelera está vacía.</p>
+                        </div>
+                      }
+                      @if (getPapeleraFolders().length > 0) {
+                        <p class="md-section-label">Carpetas</p>
+                        <table class="data-table" style="margin-bottom:18px">
+                          <thead><tr><th>Nombre</th><th>Eliminado hace</th><th>Días restantes</th><th>Acciones</th></tr></thead>
+                          <tbody>
+                            @for (f of getPapeleraFolders(); track f.name) {
+                              <tr>
+                                <td class="font-medium">
+                                  <div style="display:flex;align-items:center;gap:7px">
+                                    <svg width="14" height="14" fill="none" stroke="var(--muted)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+                                    {{ f.name }}
+                                  </div>
+                                </td>
+                                <td style="color:var(--muted);font-size:12px">{{ f.papeleraDate ? (daysInTrash(f.papeleraDate) + ' día(s)') : '—' }}</td>
+                                <td>
+                                  @if (f.papeleraDate) {
+                                    <span class="badge" [class.b-red]="daysRemaining(f.papeleraDate) <= 3" [class.b-yellow]="daysRemaining(f.papeleraDate) > 3">
+                                      {{ daysRemaining(f.papeleraDate) }} días
+                                    </span>
+                                  }
+                                </td>
+                                <td><div style="display:flex;gap:5px">
+                                  <button class="btn-icon btn-view" (click)="restoreFolderFromTrash(f.name)" title="Restaurar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>
+                                  <button class="btn-icon btn-del" (click)="permanentDeleteFolder(f.name)" title="Eliminar permanentemente"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                                </div></td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      }
+                      @if (getPapeleraFiles().length > 0) {
+                        <p class="md-section-label">Documentos</p>
+                        <table class="data-table">
+                          <thead><tr><th>Nombre</th><th>Tipo</th><th>Eliminado hace</th><th>Días restantes</th><th>Acciones</th></tr></thead>
+                          <tbody>
+                            @for (f of getPapeleraFiles(); track f.id) {
+                              <tr>
+                                <td class="font-medium">{{ f.name }}</td>
+                                <td><span [class]="'badge ' + f.typeBadge">{{ f.type }}</span></td>
+                                <td style="color:var(--muted);font-size:12px">{{ f.papeleraDate ? (daysInTrash(f.papeleraDate) + ' día(s)') : '—' }}</td>
+                                <td>
+                                  @if (f.papeleraDate) {
+                                    <span class="badge" [class.b-red]="daysRemaining(f.papeleraDate) <= 3" [class.b-yellow]="daysRemaining(f.papeleraDate) > 3">
+                                      {{ daysRemaining(f.papeleraDate) }} días
+                                    </span>
+                                  }
+                                </td>
+                                <td><div style="display:flex;gap:5px">
+                                  <button class="btn-icon btn-view" (click)="restoreFileFromTrash(f.id)" title="Restaurar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></button>
+                                  <button class="btn-icon btn-del" (click)="permanentDeleteFile(f.id)" title="Eliminar permanentemente"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                                </div></td>
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      }
+                    </div>
+                  }
+
+                  <!-- ── TAB: Compartidos conmigo ── -->
+                  @if (misdocsTab() === 'compartidos') {
+                    <div style="padding:18px">
+
+                      @if (sharedFoldersWithMe().length === 0) {
+                        <div style="display:flex;flex-direction:column;align-items:center;padding:48px 0;gap:14px;color:var(--textL)">
+                          <svg width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                          <p style="font-size:14px">Nadie ha compartido documentos contigo aún.</p>
+                        </div>
+                      } @else {
+                        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px">
+                          @for (folder of sharedFoldersWithMe(); track folder.name) {
+                            <div class="folder-card" (click)="openFolder(folder.name)">
+                              <svg width="64" height="56" viewBox="0 0 72 62" fill="none">
+                                <path d="M2 14C2 10.13 5.13 7 9 7H26l7 8H61C64.87 7 68 10.13 68 14V50C68 53.87 64.87 57 61 57H9C5.13 57 2 53.87 2 50V14Z" fill="#10B981" opacity=".2"/>
+                                <path d="M2 22C2 18.13 5.13 15 9 15H61C64.87 15 68 18.13 68 22V50C68 53.87 64.87 57 61 57H9C5.13 57 2 53.87 2 50V22Z" fill="#10B981" opacity=".75"/>
+                              </svg>
+                              <span style="font-size:12px;color:var(--text);font-weight:600;text-align:center;line-height:1.3;word-break:break-word">{{ folder.name }}</span>
+                              <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                                <span style="font-size:10px;color:var(--muted)">{{ folder.files.length }} archivo(s)</span>
+                                <span style="font-size:10px;font-weight:500;color:#10B981;display:flex;align-items:center;gap:3px">
+                                  <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" stroke-width="2.2"/><circle cx="6" cy="12" r="3" stroke-width="2.2"/><circle cx="18" cy="19" r="3" stroke-width="2.2"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke-width="2.2"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke-width="2.2"/></svg>
+                                  Por: {{ folder.sharedBy }}
+                                </span>
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      }
+
+                    </div>
+                  }
+
+                </div>
+              </div>
+            }
+
+          }
+
+          @if (false) {
+            <div>
+              <div class="stat-card" style="padding:18px">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+                  <div style="flex:1;min-width:260px">
+                    <label class="f-label">Buscar</label>
+                    <div style="position:relative">
+                      <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" width="14" height="14" fill="none" stroke="var(--textL)" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                      </svg>
+                      <input class="f-input" placeholder="Nombre, descripción..." style="padding-left:34px"/>
+                    </div>
+                  </div>
+                  <div><label class="f-label">Fecha inicio</label><input type="date" class="filter-inp"/></div>
+                  <div><label class="f-label">Fecha fin</label><input type="date" class="filter-inp"/></div>
+                  <button class="btn-orange">
+                    <svg width="14" height="14" fill="none" stroke="white" viewBox="0 0 24 24">
+                      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    Buscar
+                  </button>
+                </div>
+              </div>
+              <div class="stat-card" style="overflow:hidden">
+                <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+                  <p style="font-size:13px;font-weight:600;color:var(--text)">Contrato</p>
+                  <span style="font-size:12px;color:var(--muted)">3 encontrados</span>
+                </div>
+                <table class="data-table">
+                  <thead><tr><th>Nombre</th><th>Tipo</th><th>Fecha carga</th><th>Estado</th><th>Acciones</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td class="font-medium">Contrato_BCP_2024.pdf</td>
+                      <td><span class="badge b-blue">Contrato</span></td>
+                      <td style="color:var(--muted)">12/01/2025</td>
+                      <td><span class="badge b-green">Procesado</span></td>
+                      <td><div style="display:flex;gap:5px">
+                        <button class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                        <button class="btn-icon btn-dl"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+                      </div></td>
+                    </tr>
+                    <tr>
+                      <td class="font-medium">Poder_Notarial_López.pdf</td>
+                      <td><span class="badge b-orange">Poder</span></td>
+                      <td style="color:var(--muted)">08/03/2025</td>
+                      <td><span class="badge b-green">Procesado</span></td>
+                      <td><div style="display:flex;gap:5px">
+                        <button class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                        <button class="btn-icon btn-dl"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+                      </div></td>
+                    </tr>
+                    <tr>
+                      <td class="font-medium">Acta_Reunion_Directorio.pdf</td>
+                      <td><span class="badge b-gray">Acta</span></td>
+                      <td style="color:var(--muted)">22/03/2025</td>
+                      <td><span class="badge b-yellow">Programado</span></td>
+                      <td><div style="display:flex;gap:5px">
+                        <button class="btn-icon btn-view"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                        <button class="btn-icon btn-dl"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+                      </div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          }
+
+          <!-- CONSULTA IA -->
+          @if (currentSubProc() === 'ia') {
+            <div class="ia-shell">
+
+              <!-- ── Header ── -->
+              <div class="ia-topbar">
+                <div style="display:flex;align-items:center;gap:12px">
+                  <div class="ia-avatar">
+                    <svg width="20" height="20" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M19.07 4.93l-2.12 2.12M7.05 16.95l-2.12 2.12"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p style="font-size:14px;font-weight:700;color:var(--text)">Asistente IA</p>
+                    <p style="font-size:12px;color:var(--muted)">Asistente de documentos legales</p>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  @if (iaConversation().length > 0) {
+                    <button class="ia-saved-btn" style="color:#ef4444;border-color:#fca5a5" (click)="limpiarIA()" title="Limpiar conversación">
+                      <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      Limpiar
+                    </button>
+                  }
+                  <button class="ia-saved-btn" (click)="sdiClick('guardadas')">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" stroke-width="2"/></svg>
+                    Consultas guardadas
+                  </button>
+                </div>
+              </div>
+
+              <!-- ── Contexto o Scope selector ── -->
+              @if (iaContextFolder() || iaContextFile()) {
+                <!-- Banner: consultando contexto específico -->
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 18px;background:var(--orangeSoft);border-bottom:1px solid rgba(244,121,32,.2)">
+                  <svg width="15" height="15" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24">
+                    @if (iaContextFolder()) {
+                      <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+                    } @else {
+                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/>
+                    }
+                  </svg>
+                  <span style="font-size:12px;color:var(--orange);font-weight:600">
+                    Consultando {{ iaContextFolder() ? 'carpeta' : 'documento' }}:
+                  </span>
+                  <span style="font-size:12px;color:var(--text);font-weight:500">
+                    {{ iaContextFolder() ?? iaContextFile() }}
+                  </span>
+                  <button (click)="limpiarContextoIA()" title="Quitar contexto"
+                    style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--textL);display:flex;align-items:center;padding:2px">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </button>
+                </div>
+              } @else {
+                <!-- Selector de alcance cuando no hay contexto específico -->
+                <div style="display:flex;align-items:center;gap:18px;padding:10px 18px;border-bottom:1px solid var(--border);background:var(--card)">
+                  <span style="font-size:12px;color:var(--muted);font-weight:500">Consultar en:</span>
+                  <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--text)">
+                    <div style="width:18px;height:18px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .15s"
+                      [style.border-color]="iaScopeFilter()==='all' ? 'var(--orange)' : 'var(--border)'"
+                      (click)="iaScopeFilter.set('all')">
+                      @if (iaScopeFilter()==='all') {
+                        <div style="width:9px;height:9px;border-radius:50%;background:var(--orange)"></div>
+                      }
+                    </div>
+                    Todos los docs
+                  </label>
+                  <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;color:var(--text)">
+                    <div style="width:18px;height:18px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .15s"
+                      [style.border-color]="iaScopeFilter()==='recientes' ? '#22c55e' : 'var(--border)'"
+                      (click)="iaScopeFilter.set('recientes')">
+                      @if (iaScopeFilter()==='recientes') {
+                        <div style="width:9px;height:9px;border-radius:50%;background:#22c55e"></div>
+                      }
+                    </div>
+                    Solo recientes
+                  </label>
+                </div>
+              }
+
+              <!-- ── Área de mensajes ── -->
+              <div class="ia-msgs-area" id="ia-msgs">
+
+                <!-- Estado vacío -->
+                @if (iaEmpty()) {
+                  <div class="ia-empty-state">
+                    <div class="ia-big-icon">
+                      <svg width="36" height="36" fill="none" stroke="white" stroke-width="1.8" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M19.07 4.93l-2.12 2.12M7.05 16.95l-2.12 2.12"/>
+                      </svg>
+                    </div>
+                    <h3 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--text);margin:0">Hola, {{ userName() }} 👋</h3>
+                    <p style="font-size:13.5px;color:var(--muted);text-align:center;max-width:480px;line-height:1.6;margin:0">
+                      Analizo tus documentos cargados con IA. Puedes preguntarme sobre contratos, fechas, poderes, o cualquier contenido legal.
+                    </p>
+                  </div>
+                }
+
+                <!-- Conversación -->
+                @for (msg of iaConversation(); track $index; let i = $index) {
+                  @if (msg.type === 'user') {
+                    <div class="ia-row-user fi">
+                      <div class="ia-bubble-user">{{ msg.text }}</div>
+                    </div>
+                  }
+                  @if (msg.type === 'bot') {
+                    <div class="ia-row-bot fi">
+                      <div class="ia-bot-avatar">
+                        <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+                          <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                        </svg>
+                      </div>
+                      <div class="ia-bot-card">
+                        <div class="ia-bot-card-header">
+                          <span style="font-size:13px;font-weight:700;color:var(--text)">Asistente IA</span>
+                          <span class="ia-badge-green">● Respuesta generada</span>
+                          <span class="ia-badge-type">
+                            <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-width="2"/></svg>
+                            Respuesta {{ msg.queryType }}
+                          </span>
+                        </div>
+                        <div style="font-size:13.5px;color:var(--text);line-height:1.65" [innerHTML]="msg.html"></div>
+                        @if (msg.sources && msg.sources.length > 0) {
+                          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px">
+                            <span style="font-size:11px;color:var(--muted);font-weight:600">Fuentes:</span>
+                            @for (src of msg.sources; track src) {
+                              <span class="ia-source-link">{{ src }}</span>
+                            }
+                          </div>
+                        }
+                        <div style="display:flex;gap:8px;margin-top:12px">
+                          <button class="btn-orange" style="font-size:12px;padding:7px 14px" (click)="guardarConsulta(i)">
+                            <svg width="12" height="12" fill="none" stroke="white" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" stroke-width="2"/></svg>
+                            Guardar respuesta
+                          </button>
+                          <button class="btn-sec" style="font-size:12px;padding:7px 12px" (click)="limpiarIA()">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7-7 7 7" stroke-width="2"/></svg>
+                            Nueva consulta
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                }
+
+                <!-- Generando... -->
+                @if (iaBtnText() === 'Generando…') {
+                  <div class="ia-row-bot fi">
+                    <div class="ia-bot-avatar">
+                      <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+                    </div>
+                    <div class="ia-typing">
+                      <span></span><span></span><span></span>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <!-- ── Input ── -->
+              <div class="ia-input-area">
+                <textarea class="ia-textarea" rows="2"
+                  placeholder="Escribe tu consulta o pregunta sobre tus documentos..."
+                  [ngModel]="iaQuery()"
+                  (ngModelChange)="onIaQueryInput($event)"
+                  (keydown)="onIaKeydown($event)"></textarea>
+                <div class="ia-toolbar">
+                  <!-- Mic -->
+                  <button class="ia-tool-btn" title="Voz (próximamente)" disabled>
+                    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/>
+                    </svg>
+                  </button>
+                  <!-- Tipos -->
+                  <button class="ia-type-btn"
+                    [class.active]="iaQueryType() === 'analisis'"
+                    (click)="iaQueryType.set('analisis')"
+                    title="Desarrollo amplio y fundamentado">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+                    </svg>
+                    Análisis
+                  </button>
+                  <button class="ia-type-btn"
+                    [class.active]="iaQueryType() === 'puntual'"
+                    (click)="iaQueryType.set('puntual')"
+                    title="Respuestas cortas y claras sin extenderse">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/>
+                    </svg>
+                    Puntual
+                  </button>
+                  <button class="ia-type-btn" disabled title="Próximamente: realizar gráficos, tablas y más">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                    Gráficos
+                  </button>
+                  <span style="flex:1"></span>
+                  <span class="ia-counter">{{ iaWordCount() }} / 500</span>
+                  <button class="btn-orange" (click)="generarIA()" [disabled]="!iaQuery().trim() || iaBtnText() === 'Generando…'">
+                    <svg width="13" height="13" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24">
+                      <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/>
+                    </svg>
+                    {{ iaBtnText() }}
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          }
+
+          <!-- CONSULTAS GUARDADAS -->
+          @if (currentSubProc() === 'guardadas') {
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div>
+                <h2 style="font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:var(--text)">Consultas Guardadas</h2>
+                <p style="font-size:13px;color:var(--muted);margin-top:2px">Historial de consultas IA guardadas</p>
+              </div>
+
+              <!-- Tabs Mis consultas / Consultas compartidas -->
+              <div class="stat-card" style="overflow:hidden">
+                <div style="display:flex;border-bottom:1px solid var(--border)">
+                  <button class="md-tab" [class.active]="consultasTab()==='mis'" (click)="consultasTab.set('mis')" style="font-size:13px">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" stroke-width="2"/></svg>
+                    Mis consultas
+                    <span class="md-tab-badge">{{ consultasGuardadas().length }}</span>
+                  </button>
+                  <button class="md-tab" [class.active]="consultasTab()==='compartidas'" (click)="consultasTab.set('compartidas')" style="font-size:13px">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke-width="2"/><circle cx="18" cy="19" r="3" stroke-width="2"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke-width="2"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke-width="2"/></svg>
+                    Consultas compartidas
+                    <span class="md-tab-badge">{{ consultasCompartidas().length }}</span>
+                  </button>
+                </div>
+
+                <!-- Filtros -->
+                <div style="padding:14px 18px;border-bottom:1px solid var(--border)">
+                  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+                    <div style="flex:1;min-width:200px">
+                      <label class="f-label">Buscar</label>
+                      <input class="filter-inp" style="width:100%" placeholder="Texto de la consulta..."/>
+                    </div>
+                    <div><label class="f-label">Desde</label><input type="date" class="filter-inp"/></div>
+                    <div><label class="f-label">Hasta</label><input type="date" class="filter-inp"/></div>
+                    <button class="btn-orange">Buscar</button>
+                    <button class="btn-sec">Limpiar</button>
+                  </div>
+                </div>
+
+                <!-- ── MIS CONSULTAS ── -->
+                @if (consultasTab() === 'mis') {
+                  <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+                    @if (consultasGuardadas().length === 0) {
+                      <div style="padding:40px;text-align:center;color:var(--textL)">
+                        <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin:0 auto 12px;color:var(--border)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                        <p style="font-size:13px">No hay consultas guardadas aún.</p>
+                        <p style="font-size:12px;margin-top:4px">Realiza una consulta IA y pulsa "Guardar respuesta".</p>
+                      </div>
+                    }
+                    @for (c of consultasGuardadas(); track trackByIndex($index); let i = $index) {
+                      <div class="cg-card fi">
+                        <div class="cg-left">
+                          <div class="cg-bookmark-icon">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                          </div>
+                          <div style="flex:1;min-width:0">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                              <span style="font-size:13px;font-weight:700;color:var(--text)">Resultado</span>
+                              @if (c.queryType) { <span class="ia-badge-type">{{ c.queryType }}</span> }
+                            </div>
+                            <p class="cg-preview" [innerHTML]="c.res"></p>
+                            @if (c.sources && c.sources.length > 0) {
+                              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px">
+                                @for (src of c.sources; track src) { <span class="ia-source-link">{{ src }}</span> }
+                              </div>
+                            } @else {
+                              <span style="font-size:11px;color:var(--textL)">No hay documentos referenciados</span>
+                            }
+                          </div>
+                        </div>
+                        <div class="cg-divider"></div>
+                        <div class="cg-right">
+                          <div class="cg-query-box">{{ c.q }}</div>
+                          <p style="font-size:11px;color:var(--muted);margin-top:10px">
+                            Fecha: <strong style="color:var(--text)">{{ c.fecha }}</strong>
+                          </p>
+                          <div style="display:flex;gap:8px;margin-top:10px">
+                            <button class="btn-orange" style="font-size:12px;padding:7px 16px" (click)="verDetalleConsulta(c)">Ver detalle</button>
+                            <button class="btn-sec" style="font-size:12px;padding:7px 14px" (click)="eliminarGuardada(i)">Eliminar</button>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+
+                <!-- ── CONSULTAS COMPARTIDAS ── -->
+                @if (consultasTab() === 'compartidas') {
+                  <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+                    @if (consultasCompartidas().length === 0) {
+                      <div style="padding:40px;text-align:center;color:var(--textL)">
+                        <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin:0 auto 12px;color:var(--border)"><circle cx="18" cy="5" r="3" stroke-width="1.5"/><circle cx="6" cy="12" r="3" stroke-width="1.5"/><circle cx="18" cy="19" r="3" stroke-width="1.5"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke-width="1.5"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke-width="1.5"/></svg>
+                        <p style="font-size:13px">Ningún usuario ha realizado consultas sobre documentos compartidos aún.</p>
+                      </div>
+                    }
+                    @for (c of consultasCompartidas(); track trackByIndex($index)) {
+                      <div class="cg-card fi">
+                        <div class="cg-left">
+                          <!-- Avatar del usuario -->
+                          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#6366F1);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-size:13px;font-weight:700">
+                            {{ c.usuario.charAt(0) }}
+                          </div>
+                          <div style="flex:1;min-width:0">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                              <span style="font-size:13px;font-weight:700;color:var(--text)">{{ c.usuario }}</span>
+                              @if (c.queryType) { <span class="ia-badge-type">{{ c.queryType }}</span> }
+                            </div>
+                            <p class="cg-preview" [innerHTML]="c.res"></p>
+                            @if (c.sources && c.sources.length > 0) {
+                              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px">
+                                @for (src of c.sources; track src) { <span class="ia-source-link">{{ src }}</span> }
+                              </div>
+                            }
+                          </div>
+                        </div>
+                        <div class="cg-divider"></div>
+                        <div class="cg-right">
+                          <div class="cg-query-box">{{ c.q }}</div>
+                          <p style="font-size:11px;color:var(--muted);margin-top:10px">
+                            Fecha: <strong style="color:var(--text)">{{ c.fecha }}</strong>
+                          </p>
+                          <div style="margin-top:10px">
+                            <button class="btn-sec" style="font-size:12px;padding:7px 16px" (click)="verDetalleConsulta(c)">Ver detalle</button>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+
+              </div>
+            </div>
+          }
+
+          <!-- GESTIÓN DE DOCUMENTOS -->
+          @if (currentSubProc() === 'gestion') {
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+                <div>
+                  <h2 style="font-family:'Sora',sans-serif;font-size:18px;font-weight:700;color:var(--text)">Gestión de Documentos</h2>
+                  <p style="font-size:13px;color:var(--muted);margin-top:2px">Documentos que eres propietario</p>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <button class="btn-sec"
+                    [style.pointer-events]="gestionSelectedFiles().size === 0 ? 'none' : 'auto'"
+                    [style.opacity]="gestionSelectedFiles().size === 0 ? '0.4' : '1'"
+                    (click)="openModal('modal-procesar-docs')"
+                    title="{{ gestionSelectedFiles().size === 0 ? 'Selecciona al menos un documento' : 'Procesar documentos seleccionados' }}">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke-width="2"/>
+                    </svg>
+                    Procesar documentos
+                  </button>
+                  <button class="btn-orange" (click)="openModal('modal-cargar-doc')">
+                    <svg width="14" height="14" fill="none" stroke="white" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke-width="2"/></svg>
+                    Subir documentos
+                  </button>
+                </div>
+              </div>
+              <div class="stat-card" style="padding:14px">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                  <div style="position:relative;flex:1;min-width:200px">
+                    <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%)" width="14" height="14" fill="none" stroke="var(--textL)" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input class="filter-inp" placeholder="Buscar documentos cargados..." style="padding-left:32px;width:100%"
+                      [ngModel]="gestionSearchFilter()" (ngModelChange)="gestionSearchFilter.set($event)"/>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px">
+                    <svg width="14" height="14" fill="none" stroke="var(--muted)" stroke-width="2" viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <input type="date" class="filter-inp" style="font-size:12px"
+                      [ngModel]="gestionDateFilter()" (ngModelChange)="gestionDateFilter.set($event)"/>
+                    @if (gestionDateFilter()) {
+                      <button (click)="gestionDateFilter.set('')" style="background:none;border:none;cursor:pointer;color:var(--muted);display:flex;padding:0" title="Limpiar fecha">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      </button>
+                    }
+                  </div>
+                  @if (gestionSelectedFiles().size > 0) {
+                    <span style="font-size:12px;color:var(--orange);font-weight:600">
+                      {{ gestionSelectedFiles().size }} seleccionado(s)
+                    </span>
+                  }
+                </div>
+              </div>
+              <div class="stat-card" style="overflow:hidden">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)">
+                  <p style="font-size:13px;font-weight:600;color:var(--text)">Documentos cargados</p>
+                  <span style="font-size:12px;color:var(--muted)">{{ gestionFilteredDocs().length }} documentos</span>
+                </div>
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="width:36px;padding-left:16px">
+                        <input type="checkbox" style="accent-color:var(--orange);cursor:pointer"
+                          [checked]="isAllGestionChecked()"
+                          (change)="toggleCheckAllGestion($event)"/>
+                      </th>
+                      <th>Nombre</th><th>Tipo</th><th>Fecha carga</th><th>Estado</th><th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @if (gestionFilteredDocs().length === 0) {
+                      <tr><td colspan="6" style="text-align:center;padding:28px;color:var(--textL)">No hay documentos cargados.</td></tr>
+                    }
+                    @for (f of gestionPaginatedDocs(); track f.id) {
+                      <tr [style.background]="isGestionSelected(f.id) ? 'var(--orangeSoft)' : ''">
+                        <td style="padding-left:16px">
+                          <input type="checkbox" style="accent-color:var(--orange);cursor:pointer"
+                            [checked]="isGestionSelected(f.id)"
+                            (change)="toggleGestionFile(f.id)"/>
+                        </td>
+                        <td class="font-medium">{{ f.name }}</td>
+                        <td><span style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px" [style]="getFileTypeBadgeStyle(f.fileType)">{{ f.fileType ?? f.type }}</span></td>
+                        <td style="color:var(--muted);font-size:12px">{{ f.fecha }}</td>
+                        <td><span class="badge" [class.b-blue]="f.estado==='Procesado'" [class.b-yellow]="f.estado!=='Procesado'">{{ f.estado ?? 'Cargado' }}</span></td>
+                        <td><div style="display:flex;gap:5px">
+                          <button class="btn-icon btn-view" (click)="openViewModalBasic(f)" title="Ver documento"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                          <button class="btn-icon btn-del" (click)="moveFileToTrash(f.id)" title="Eliminar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                        </div></td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+                <app-pagination
+                  [currentPage]="gestionCurrentPage()"
+                  [totalPages]="gestionTotalPages()"
+                  [totalRecords]="gestionFilteredDocs().length"
+                  [pageSize]="gestionItemsPerPage"
+                  (pageChanged)="gestionGoToPage($event)">
+                </app-pagination>
+              </div>
+            </div>
+          }
+
+        </div>
+      }
+
+      <!-- ══════════════════════════════
+           PANEL GENERACIÓN DE DOCUMENTOS
+      ══════════════════════════════ -->
+      @if (currentMenu() === 'gendoc') {
+        <div class="panel on">
+
+          <!-- VISTA CONSULTA IA (Chat) -->
+          @if (currentGenDocView() === 'consulta') {
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+              <div>
+                <h2 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--text)">Generación de Documentos</h2>
+                <p style="font-size:13px;color:var(--muted);margin-top:3px">Usa el asistente IA o selecciona un tipo de documento</p>
+              </div>
+            </div>
+            <div style="height:100%;display:flex;flex-direction:column">
+              <div style="display:flex">
+                <div class="stat-card" style="flex:1;display:flex;flex-direction:column">
+                  <!-- Header chat -->
+                  <div style="padding:12px 16px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;gap:10px">
+                    <div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--orange),var(--orangeD));display:flex;align-items:center;justify-content:center">
+                      <svg width="14" height="14" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p style="font-size:13px;font-weight:700;color:var(--text)">Asistente IA</p>
+                      <p style="font-size:11px;color:#4ade80;font-weight:600">● En línea</p>
+                    </div>
+                  </div>
+
+                  <!-- Mensajes -->
+                  <div class="chat-msgs" id="chat-msgs" style="flex:1;overflow-y:auto;padding:12px">
+                    @for (msg of chatMessages(); track trackByIndex($index)) {
+                      @if (msg.type === 'bot') {
+                        <div class="msg-bot fi">
+                          <div class="bot-avatar">
+                            <svg width="12" height="12" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+                              <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                            </svg>
+                          </div>
+                          <div class="bubble-bot">
+                            <span [innerHTML]="msg.html"></span>
+                            @if (msg.docBtn) {
+                              <br><br>
+                              <button (click)="selectDoc(msg.docBtn!.type)"
+                                style="background:linear-gradient(135deg,var(--orange),var(--orangeD));color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;margin-top:6px;font-family:'DM Sans',sans-serif">
+                                Generar {{ msg.docBtn!.label }} →
+                              </button>
+                            }
+                          </div>
+                        </div>
+                      }
+                      @if (msg.type === 'user') {
+                        <div class="msg-user fi">
+                          <div class="bubble-user" [innerHTML]="msg.html"></div>
+                        </div>
+                      }
+                    }
+                    @if (showInitSuggestions()) {
+                      <div style="padding:0 0 4px 36px;display:flex;flex-wrap:wrap;gap:5px">
+                        <div class="suggest-pill" (click)="sendSuggestion('Mi papá no puede asistir')">Mi papá no puede asistir</div>
+                        <div class="suggest-pill" (click)="sendSuggestion('Quiero renunciar')">Quiero renunciar</div>
+                        <div class="suggest-pill" (click)="sendSuggestion('Necesito un contrato')">Necesito un contrato</div>
+                        <div class="suggest-pill" (click)="sendSuggestion('Declarar bienes')">Declarar bienes</div>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Input chat -->
+                  <div class="chat-inp-wrap" style="padding:10px;border-top:1px solid var(--border);background:#fff">
+                    <textarea class="chat-inp" rows="1" placeholder="Describe tu situación..."
+                      [ngModel]="chatInput()"
+                      (ngModelChange)="chatInput.set($event)"
+                      (keydown)="onChatKeydown($event)"></textarea>
+                    <button (click)="sendChat()"
+                      style="width:34px;height:34px;background:linear-gradient(135deg,var(--orange),var(--orangeD));border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer">
+                      <svg width="12" height="12" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22,2 15,22 11,13 2,9"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- VISTA FORMULARIOS -->
+          @if (currentGenDocView() === 'formularios') {
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+              <div>
+                <h2 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--text)">Formularios</h2>
+                <p style="font-size:13px;color:var(--muted);margin-top:3px">Selecciona el tipo de documento que deseas generar</p>
+              </div>
+            </div>
+            <div class="stat-card" style="width:100%;padding:20px">
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+                @for (type of docTypes; track type) {
+                  <div class="doc-card" (click)="selectDoc(type)">
+                    <div class="doc-card-icon">
+                      <svg width="26" height="26" fill="none" stroke="var(--orange)" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <line x1="10" y1="9" x2="8" y2="9"/>
+                      </svg>
+                    </div>
+                    <span class="doc-card-label">{{ DOCS[type].label }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- VISTA GESTIÓN DE PLANTILLAS -->
+          @if (currentGenDocView() === 'plantillas') {
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div>
+                  <h2 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--text)">Gestión de Plantillas</h2>
+                  <p style="font-size:13px;color:var(--muted);margin-top:3px">Administra las plantillas de documentos disponibles por notaría</p>
+                </div>
+                <button class="btn-orange" (click)="abrirNuevaPlantilla()">
+                  <svg width="14" height="14" fill="none" stroke="white" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+                  Nueva Plantilla
+                </button>
+              </div>
+              <div class="stat-card" style="padding:14px">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+                  <div style="flex:1;min-width:200px">
+                    <label class="f-label">Buscar</label>
+                    <div style="position:relative">
+                      <svg style="position:absolute;left:9px;top:50%;transform:translateY(-50%)" width="13" height="13" fill="none" stroke="var(--textL)" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                      </svg>
+                      <input class="filter-inp" placeholder="Nombre de plantilla..." style="padding-left:30px;width:100%"/>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="f-label">Notaría</label>
+                    <select class="filter-inp">
+                      <option>Todas</option><option>Notaría Lima Centro</option><option>Notaría Miraflores</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="f-label">Estado</label>
+                    <select class="filter-inp"><option>Todos</option><option>Activo</option><option>Inactivo</option></select>
+                  </div>
+                  <button class="btn-orange">Filtrar</button>
+                </div>
+              </div>
+              <div class="stat-card" style="overflow:hidden">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)">
+                  <p style="font-size:13px;font-weight:600;color:var(--text)">Lista de Plantillas</p>
+                  <span style="font-size:12px;color:var(--muted)">{{ plantillas().length }} registros</span>
+                </div>
+                <table class="data-table">
+                  <thead><tr><th>#</th><th>Notaría</th><th>Nombre</th><th>Tipo</th><th>Contexto</th><th>Etiquetas</th><th>Estado</th><th>Acciones</th></tr></thead>
+                  <tbody>
+                    @for (p of plantillaPaginatedItems(); let i = $index; track p.id) {
+                      <tr>
+                        <td style="color:var(--muted)">{{ ((plantillaCurrentPage() - 1) * plantillaItemsPerPage) + i + 1 }}</td>
+                        <td>{{ p.notaria }}</td>
+                        <td class="font-medium">{{ p.nombre }}</td>
+                        <td><span class="badge" [class]="p.tipoBadge">{{ p.tipo }}</span></td>
+                        <td style="color:var(--muted);font-size:12px;max-width:180px">{{ p.contexto }}</td>
+                        <td>
+                          @for (tag of p.etiquetas; track tag) {
+                            <span class="badge b-gray">{{ tag }}</span>
+                          }
+                        </td>
+                        <td><span class="badge" [class.b-green]="p.estado === 'Activo'" [class.b-red]="p.estado === 'Inactivo'">{{ p.estado }}</span></td>
+                        <td><div style="display:flex;gap:5px">
+                          <button class="btn-icon btn-view" (click)="openModal('modal-ver-plantilla')" title="Ver plantilla"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></button>
+                          <button class="btn-icon btn-edit" (click)="abrirEditarPlantilla()" title="Editar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                          <button class="btn-icon btn-dl" title="Descargar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button>
+                        </div></td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+                <app-pagination
+                  [currentPage]="plantillaCurrentPage()"
+                  [totalPages]="plantillaTotalPages()"
+                  [totalRecords]="plantillas().length"
+                  [pageSize]="plantillaItemsPerPage"
+                  (pageChanged)="plantillaGoToPage($event)">
+                </app-pagination>
+              </div>
+            </div>
+          }
+
+        </div>
+      }
+
+    </main>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     MODAL: FORMULARIO DE DOCUMENTO
+═══════════════════════════════ -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-doc-form')" (click)="closeModal()">
+  <div class="fi" style="background:#fff;border-radius:18px;box-shadow:0 8px 48px rgba(0,0,0,.16);width:100%;max-width:560px;overflow:hidden;max-height:90vh;display:flex;flex-direction:column" (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div style="padding:20px 28px 16px;border-bottom:1.5px solid var(--border);background:linear-gradient(135deg,#fffaf6,var(--orangeSoft));flex-shrink:0">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:11px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center;flex-shrink:0"
+          [innerHTML]="formIconSvg()"></div>
+        <div>
+          <h2 style="font-size:17px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">{{ formTitle() }}</h2>
+          <p style="font-size:12.5px;color:var(--muted);margin-top:2px">{{ formSubtitle() }}</p>
+        </div>
+        <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted);display:flex;align-items:center">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" stroke-width="2"/><line x1="6" y1="6" x2="18" y2="18" stroke-width="2"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Campos del formulario -->
+    <div style="padding:22px 28px;overflow-y:auto;flex:1">
+      @for (field of formFields(); track field.id) {
+        <div style="margin-bottom:14px">
+          <label class="f-label">{{ field.label }}</label>
+          @if (field.type === 'textarea') {
+            <textarea class="f-input" rows="3" style="resize:vertical"
+              [placeholder]="field.ph || ''"
+              [ngModel]="getFormValue(field.id)"
+              (ngModelChange)="setFormValue(field.id, $event)"></textarea>
+          } @else if (field.type === 'date') {
+            <input type="date" class="f-input"
+              [ngModel]="getFormValue(field.id)"
+              (ngModelChange)="setFormValue(field.id, $event)"/>
+          } @else {
+            <input type="text" class="f-input"
+              [placeholder]="field.ph || ''"
+              [ngModel]="getFormValue(field.id)"
+              (ngModelChange)="setFormValue(field.id, $event)"/>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Footer -->
+    <div style="padding:14px 28px 20px;display:flex;align-items:center;justify-content:space-between;border-top:1.5px solid var(--border);flex-shrink:0">
+      <button (click)="closeModal()" style="background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer">← Volver</button>
+      <button class="btn-orange" (click)="generarDocumento()">Continuar →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     SCREEN OVERLAY: PREVIEW
+═══════════════════════════════ -->
+<div class="screen-ov" [class.on]="activeScreen() === 'screen-preview'" style="background:#e8eaf0">
+  <div style="height:54px;background:#fff;border-bottom:1.5px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+    <button (click)="showScreen('screen-form')" style="background:none;border:none;cursor:pointer;color:var(--muted);display:flex;align-items:center;gap:6px;font-size:13px;font-family:'DM Sans',sans-serif">
+      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" stroke-width="2"/></svg>Editar
+    </button>
+    <div style="display:flex;gap:10px">
+      <button class="btn-orange" (click)="openModal('modal-aceptado')">Aceptar</button>
+      <button (click)="closeForm()" style="background:#fff;color:var(--muted);border:1.5px solid var(--border);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer">Cancelar</button>
+    </div>
+  </div>
+  <div style="flex:1;display:flex;overflow:hidden">
+    <div style="width:140px;flex-shrink:0;background:#d8dde8;padding:14px 10px;display:flex;flex-direction:column;gap:10px;overflow-y:auto">
+      <div class="doc-thumb on">
+        <div style="font-size:9px;color:var(--muted);font-weight:600;margin-bottom:3px">1</div>
+        <div style="background:#fffaf6;border-radius:3px;padding:6px;font-size:7px;color:var(--textL);line-height:1.4">
+          <div style="font-size:9px;font-weight:700;color:var(--orange);margin-bottom:3px;text-align:center">Vista previa</div>
+          {{ thumb1Text() }}
+        </div>
+      </div>
+      <div class="doc-thumb">
+        <div style="font-size:9px;color:var(--muted);font-weight:600;margin-bottom:3px">2</div>
+        <div style="background:#fafbff;border-radius:3px;padding:6px;font-size:7px;color:var(--textL);line-height:1.4">Lorem ipsum dolor sit amet, consectetur adipiscing...</div>
+      </div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:16px">
+      <div style="width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:13px;color:var(--muted);font-weight:500">{{ docLabel() }}</span>
+        <span style="font-size:12px;color:var(--textL)">Generado por GEPDIA IA · {{ docDate() }}</span>
+      </div>
+      <div class="doc-preview fi" [innerHTML]="docContentHtml()"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     MODALES
+═══════════════════════════ -->
+
+<!-- Modal Aceptado -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-aceptado')">
+  <div class="modal" style="max-width:400px;text-align:center">
+    <div style="width:58px;height:58px;border-radius:50%;background:var(--orangeSoft);border:2px solid rgba(244,121,32,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+      <svg width="26" height="26" fill="none" viewBox="0 0 30 30">
+        <circle cx="15" cy="15" r="14" fill="var(--orange)"/>
+        <polyline points="8,15 13,20 22,10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3 style="font-size:18px;font-weight:700;color:var(--orange);font-family:'Sora',sans-serif;margin-bottom:10px">Documento aceptado</h3>
+    <p style="font-size:13.5px;color:var(--muted);margin-bottom:22px;line-height:1.6">El documento ha sido aceptado.<br>Se procederá a imprimir.</p>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button class="btn-orange" (click)="imprimir()">Imprimir</button>
+      <button (click)="closeModal()" style="background:var(--bg);border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalle Docs -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-det-docs')" (click)="closeModal()">
+  <div class="modal modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:30px;height:30px;border-radius:8px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0121 9.414V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      Detalle de Documentos Procesados
+      <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Usuario</th><th>Notaría</th><th>Documentos cargados</th><th>Última carga</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Mario Uribe</td><td>Lima Centro</td><td><span class="badge b-orange">145</span></td><td style="color:var(--muted)">22/03/2025</td></tr>
+        <tr><td>2</td><td>Ana García</td><td>Miraflores</td><td><span class="badge b-orange">98</span></td><td style="color:var(--muted)">20/03/2025</td></tr>
+        <tr><td>3</td><td>Carlos López</td><td>San Isidro</td><td><span class="badge b-orange">47</span></td><td style="color:var(--muted)">15/03/2025</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Detalle Consultas -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-det-consultas')" (click)="closeModal()">
+  <div class="modal modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:30px;height:30px;border-radius:8px;background:#EFF6FF;display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" stroke="#3B82F6" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      </div>
+      Detalle de Consultas IA
+      <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Usuario</th><th>Notaría</th><th>Consultas realizadas</th><th>Última consulta</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Mario Uribe</td><td>Lima Centro</td><td><span class="badge b-blue">212</span></td><td style="color:var(--muted)">22/03/2025</td></tr>
+        <tr><td>2</td><td>Ana García</td><td>Miraflores</td><td><span class="badge b-blue">156</span></td><td style="color:var(--muted)">21/03/2025</td></tr>
+        <tr><td>3</td><td>Carlos López</td><td>San Isidro</td><td><span class="badge b-blue">66</span></td><td style="color:var(--muted)">14/03/2025</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Subir Documento -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-cargar-doc')" (click)="closeModal()">
+  <div class="modal" style="max-width:480px" (click)="$event.stopPropagation()">
+
+    <!-- Título -->
+    <div class="modal-title">
+      <div style="width:32px;height:32px;border-radius:9px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="15" height="15" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      </div>
+      <div>
+        <p style="font-size:15px;font-weight:700;color:var(--text)">Subir Documento</p>
+        <p style="font-size:12px;color:var(--muted)">Completa los datos y selecciona el archivo</p>
+      </div>
+      <button class="modal-close" (click)="closeModal()">✕</button>
+    </div>
+
+    <!-- Campos -->
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:4px">
+
+      <!-- Nombre -->
+      <div>
+        <label class="f-label">Nombre <span style="color:#EF4444">*</span></label>
+        <input class="f-input" placeholder="Nombre del documento"
+          [ngModel]="newDocName()" (ngModelChange)="newDocName.set($event)"/>
+      </div>
+
+      <!-- Descripción -->
+      <div>
+        <label class="f-label">Descripción <span style="font-size:11px;color:var(--muted);font-weight:400">(opcional)</span></label>
+        <textarea class="f-input" rows="2" placeholder="Descripción breve del documento..."
+          style="resize:none;line-height:1.5"
+          [ngModel]="newDocDescription()" (ngModelChange)="newDocDescription.set($event)"></textarea>
+      </div>
+
+      <!-- Carpeta + Privacidad -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label class="f-label">Carpeta</label>
+          <select class="filter-inp" style="width:100%"
+            [ngModel]="newDocFolder()" (ngModelChange)="newDocFolder.set($event)">
+            <option value="">Sin carpeta</option>
+            @for (f of getActiveFolders(); track f.name) {
+              <option [value]="f.name">{{ f.name }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="f-label">Privacidad</label>
+          <div class="filter-inp" style="display:flex;align-items:center;gap:7px;cursor:default;opacity:.75;background:var(--bg)">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            Privado
+          </div>
+          <p style="font-size:10px;color:var(--muted);margin-top:4px">La privacidad se gestiona desde la carpeta</p>
+        </div>
+      </div>
+
+      <!-- Zona de carga -->
+      <div>
+        <label class="f-label">Archivo <span style="color:#EF4444">*</span></label>
+        <div class="upload-zone" [class.drag-over]="newDocDragOver()"
+          (click)="fileDocInput.click()"
+          (dragover)="$event.preventDefault(); newDocDragOver.set(true)"
+          (dragleave)="newDocDragOver.set(false)"
+          (drop)="handleFileDrop($event)">
+          <svg width="36" height="36" fill="none" stroke="var(--orange)" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 10px">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          </svg>
+          @if (docFilename()) {
+            <p style="font-size:13px;font-weight:600;color:var(--orange)">{{ docFilename() }}</p>
+            <p style="font-size:11px;color:var(--muted);margin-top:4px">Haz clic para cambiar el archivo</p>
+          } @else {
+            <p style="font-size:14px;font-weight:600;color:var(--text)">Arrastra tu archivo aquí</p>
+            <p style="font-size:12px;color:var(--muted);margin-top:4px">o haz clic para seleccionar · PDF, Word, Excel · máx. 20 MB</p>
+          }
+          <input #fileDocInput type="file" accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" (change)="handleFileSelectDoc($event)"/>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Botones -->
+    <div class="modal-footer" style="margin-top:18px">
+      <button class="btn-ghost" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="cargarDocumento()">
+        <svg width="13" height="13" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        Subir
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal Nueva Plantilla -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-nueva-plantilla')" (click)="closeModal()">
+  <div class="modal modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:30px;height:30px;border-radius:8px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      </div>
+      {{ plantillaEditMode() ? 'Editar Plantilla' : 'Nueva Plantilla' }}
+      <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 16px">
+      <div style="grid-column:1/-1"><label>Notaría <span style="color:red">*</span></label><select><option>Notaría Lima Centro</option><option>Notaría Miraflores</option><option>Notaría San Isidro</option></select></div>
+      <div><label>Nombre <span style="color:red">*</span></label><input type="text" placeholder="Nombre de la plantilla" maxlength="50"/></div>
+      <div><label>Tipo <span style="color:red">*</span></label><select><option>Autorización</option><option>Poder</option><option>Acta</option><option>Contrato</option><option>Declaración Jurada</option><option>Carta de Renuncia</option></select></div>
+      <div style="grid-column:1/-1"><label>Contexto <span style="color:red">*</span></label><textarea rows="4" placeholder="Describe el contexto de uso de esta plantilla (máx. 5000 caracteres)..." maxlength="5000"></textarea></div>
+      <div style="grid-column:1/-1"><label>Etiquetas <span style="color:red">*</span></label><input type="text" placeholder="banco, cobro, legal (separadas por comas)"/></div>
+    </div>
+    <label style="margin-top:4px">
+      Cargar plantilla (Word .docx)
+      @if (!plantillaEditMode()) { <span style="color:red">*</span> }
+      @if (plantillaEditMode()) { <span style="font-size:11px;color:var(--muted)">(opcional — solo si deseas reemplazar el archivo)</span> }
+    </label>
+    <div class="upload-zone" style="padding:20px" (click)="filePlantillaInput.click()">
+      <svg width="28" height="28" fill="none" stroke="var(--orange)" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 8px">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+      </svg>
+      <p style="font-size:13px;color:var(--muted)">Haz clic para subir tu plantilla Word (.docx)</p>
+      <input #filePlantillaInput type="file" accept=".docx" style="display:none" (change)="handleFileSelectPlantilla($event)"/>
+    </div>
+    <p style="font-size:12px;color:var(--orange);margin-top:6px;min-height:16px">{{ plantillaFilename() }}</p>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button (click)="closeModal()" class="btn-sec">Cancelar</button>
+      <button (click)="guardarPlantilla()" class="btn-orange">
+        {{ plantillaEditMode() ? 'Guardar cambios' : 'Guardar' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ver Plantilla -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-ver-plantilla')" (click)="closeModal()">
+  <div class="modal modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:30px;height:30px;border-radius:8px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+      </div>
+      Visualizar Plantilla
+      <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="background:var(--bg);border-radius:10px;padding:32px 36px;min-height:300px;border:1px solid var(--border)">
+      <div style="text-align:center;margin-bottom:20px">
+        <p style="font-size:11px;color:var(--textL);text-transform:uppercase;letter-spacing:.1em">GEPDIA · Vista previa de plantilla</p>
+        <h3 style="font-size:18px;font-weight:700;color:var(--orange);margin:8px 0 4px;font-family:'Sora',sans-serif">Autorización para cobro</h3>
+        <div style="width:50px;height:3px;background:var(--orange);margin:0 auto;border-radius:2px"></div>
+      </div>
+      <p ngNonBindable style="font-size:13px;line-height:1.8;color:var(--text)">
+        Yo, <b>{{NOMBRE}}</b>, identificado(a) con DNI N° <b>{{DNI}}</b>, autorizo a <b>{{AUTORIZADO}}</b> con DNI <b>{{DNI_AUTORIZADO}}</b> a realizar el siguiente trámite: <i>{{TRAMITE}}</i>.<br><br>
+        Válido hasta el <b>{{FECHA}}</b>.<br><br>
+        Lugar y fecha: Lima, a los {{DIA}} días del mes de {{MES}} del año {{AÑO}}.
+      </p>
+      <div style="margin-top:40px;display:flex;justify-content:space-around">
+        <div style="text-align:center"><div style="border-top:1px solid #d1d5db;padding-top:8px;min-width:160px"><p ngNonBindable style="font-size:12px;color:var(--muted)">{{NOMBRE}} · Autorizante</p></div></div>
+        <div style="text-align:center"><div style="border-top:1px solid #d1d5db;padding-top:8px;min-width:160px"><p ngNonBindable style="font-size:12px;color:var(--muted)">{{AUTORIZADO}} · Autorizado</p></div></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+      <button class="btn-orange" (click)="closeModal()">
+        <svg width="14" height="14" fill="none" stroke="white" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Descargar
+      </button>
+      <button (click)="closeModal()" class="btn-sec">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     MODAL VER DOCUMENTO
+═══════════════════════════ -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-view-doc')" (click)="closeModal()">
+  <div class="modal" style="max-width:760px;padding:0;overflow:hidden;background:#e8eaf0" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div style="background:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="15" height="15" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      </div>
+      <div style="flex:1">
+        <p style="font-size:14px;font-weight:700;color:var(--text)">{{ currentViewFile()?.name }}</p>
+        <p style="font-size:12px;color:var(--muted)">PDF · {{ currentViewFile()?.pages ?? 1 }} páginas</p>
+      </div>
+      <button (click)="closeModal()" style="background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <!-- Previsualizador -->
+    <div style="display:flex;align-items:center;padding:20px 12px;gap:8px;min-height:360px">
+      <!-- Página izquierda (decorativa) -->
+      <div style="width:72px;flex-shrink:0;height:280px;background:rgba(255,255,255,.5);border-radius:6px;border:1px solid rgba(0,0,0,.08);filter:blur(1px);transform:perspective(300px) rotateY(15deg);overflow:hidden;padding:8px 6px">
+        <div style="background:#e2e8f0;height:8px;border-radius:3px;margin-bottom:5px"></div>
+        <div style="background:#e2e8f0;height:6px;border-radius:3px;margin-bottom:4px;width:80%"></div>
+        <div style="background:#e2e8f0;height:6px;border-radius:3px;margin-bottom:4px"></div>
+        <div style="background:#e2e8f0;height:6px;border-radius:3px;margin-bottom:4px;width:70%"></div>
+      </div>
+      <!-- Documento principal -->
+      <div style="flex:1;background:#fff;border-radius:10px;box-shadow:0 4px 24px rgba(0,0,0,.15);padding:28px 30px;min-height:300px">
+        <p style="font-size:11px;color:var(--textL);text-transform:uppercase;letter-spacing:.1em;text-align:center;margin-bottom:8px">GEPDIA · Vista Previa</p>
+        <h2 style="font-size:16px;font-weight:700;color:var(--text);text-align:center;font-family:'Sora',sans-serif;margin-bottom:6px">{{ currentViewFile()?.type?.toUpperCase() }}</h2>
+        <div style="width:40px;height:3px;background:var(--orange);border-radius:2px;margin:0 auto 18px"></div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Lima, {{ currentViewFile()?.fecha }}</p>
+        <p style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:10px">Conste por el presente documento el <strong>{{ currentViewFile()?.type?.toLowerCase() }}</strong> que celebran las partes debidamente identificadas, con plena capacidad legal para contratar y obligarse.</p>
+        <p style="font-size:13px;color:var(--text);line-height:1.8">Este documento es una vista previa de muestra del contenido del PDF. En producción se renderizaría el archivo real.</p>
+        <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap">
+          <span [class]="'badge ' + (currentViewFile()?.typeBadge ?? 'b-gray')">{{ currentViewFile()?.type }}</span>
+          <span class="badge" [class.b-gray]="currentViewFile()?.private" [class.b-green]="!currentViewFile()?.private">
+            {{ currentViewFile()?.private ? 'Privado' : 'Público' }}
+          </span>
+        </div>
+      </div>
+      <!-- Página derecha (decorativa) -->
+      <div style="width:72px;flex-shrink:0;height:280px;background:rgba(255,255,255,.5);border-radius:6px;border:1px solid rgba(0,0,0,.08);filter:blur(1px);transform:perspective(300px) rotateY(-15deg);overflow:hidden;padding:8px 6px">
+        <div style="background:#e2e8f0;height:8px;border-radius:3px;margin-bottom:5px"></div>
+        <div style="background:#e2e8f0;height:6px;border-radius:3px;margin-bottom:4px;width:75%"></div>
+        <div style="background:#e2e8f0;height:6px;border-radius:3px;margin-bottom:4px"></div>
+        <div style="background:#e2e8f0;height:6px;border-radius:3px;margin-bottom:4px;width:90%"></div>
+      </div>
+    </div>
+    <!-- Footer botones -->
+    <div style="background:#fff;padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:center">
+      <button class="btn-sec" style="font-size:13px" (click)="downloadFile(currentViewFile())">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-width="2"/></svg>
+        Descargar
+      </button>
+      <button class="btn-orange" style="font-size:13px" (click)="openModal('modal-edit-pages')">
+        <svg width="14" height="14" fill="none" stroke="white" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-width="2"/></svg>
+        Editar
+      </button>
+      @if (viewDocMode() === 'full') {
+        <button style="background:#16A34A;color:#fff;border:none;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif"
+          (click)="openModal('modal-send-email')">
+          <svg width="14" height="14" fill="none" stroke="white" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13" stroke-width="2"/><polygon points="22,2 15,22 11,13 2,9" stroke-width="2"/></svg>
+          Enviar
+        </button>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     MODAL EDITAR PÁGINAS (drag & drop)
+═══════════════════════════ -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-edit-pages')" (click)="closeModal()">
+  <div class="modal" style="max-width:520px" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="modal-title">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="15" height="15" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24"><path d="M7 4v16M17 4v16M3 8h4m10 0h4M3 16h4m10 0h4"/></svg>
+      </div>
+      <div style="flex:1">
+        <p style="font-size:14px;font-weight:700;color:var(--text);margin:0">Reordenar Páginas</p>
+        <p style="font-size:11px;color:var(--muted);margin:0">{{ currentViewFile()?.name }}</p>
+      </div>
+      <button (click)="closeModal()" style="background:none;border:none;cursor:pointer;color:var(--muted);flex-shrink:0">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Info hint -->
+    <div style="display:flex;align-items:center;gap:8px;background:var(--orangeSoft);border-radius:8px;padding:9px 12px;margin-bottom:14px">
+      <svg width="14" height="14" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
+      <span style="font-size:12px;color:var(--orange);font-weight:500">Arrastra las páginas para cambiar su posición. El botón Guardar aparecerá cuando modifiques el orden.</span>
+    </div>
+
+    <!-- Pages list -->
+    <div style="display:flex;flex-direction:column;gap:5px;max-height:340px;overflow-y:auto;padding-right:4px">
+      @for (pg of editPagesList(); track pg; let i = $index) {
+        <div class="page-drag-item"
+          [class.dragging]="isDragging(i)"
+          [class.drag-over]="isDragOver(i)"
+          draggable="true"
+          (dragstart)="onPageDragStart(i)"
+          (dragover)="onPageDragOver($event, i)"
+          (drop)="onPageDrop(i)"
+          (dragend)="onPageDragEnd()">
+          <!-- Grip handle -->
+          <div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;cursor:grab;padding:2px 4px">
+            <span style="display:block;width:14px;height:1.5px;background:var(--textL);border-radius:2px"></span>
+            <span style="display:block;width:14px;height:1.5px;background:var(--textL);border-radius:2px"></span>
+            <span style="display:block;width:14px;height:1.5px;background:var(--textL);border-radius:2px"></span>
+          </div>
+          <!-- Page thumbnail -->
+          <div style="width:42px;height:56px;background:linear-gradient(160deg,#fff9f5,var(--orangeSoft));border-radius:6px;border:1px solid rgba(244,121,32,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;flex-shrink:0;box-shadow:0 2px 6px rgba(244,121,32,.08)">
+            <svg width="14" height="14" fill="none" stroke="var(--orange)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+            <span style="font-size:11px;font-weight:700;color:var(--orange)">{{ pg }}</span>
+          </div>
+          <!-- Info -->
+          <div style="flex:1;min-width:0">
+            <p style="font-size:13px;font-weight:600;color:var(--text);margin:0">Página {{ pg }}</p>
+            <p style="font-size:11px;color:var(--muted);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ currentViewFile()?.name }}</p>
+          </div>
+          <!-- Position badge -->
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+            @if (pg !== i + 1) {
+              <span style="font-size:10px;background:#FEF3C7;color:#D97706;border-radius:4px;padding:2px 7px;font-weight:600">movida</span>
+            }
+            <span style="font-size:12px;font-weight:700;color:var(--textL);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:3px 10px;min-width:30px;text-align:center">{{ i + 1 }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Footer -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+      <p style="font-size:12px;color:var(--muted);margin:0">
+        {{ editPagesList().length }} página(s)
+        @if (pagesReordered()) {
+          · <span style="color:var(--orange);font-weight:600">orden modificado</span>
+        }
+      </p>
+      <div style="display:flex;gap:8px">
+        <button (click)="closeModal()" class="btn-sec">Cerrar</button>
+        @if (pagesReordered()) {
+          <button (click)="saveEditedPages()" class="btn-orange">
+            <svg width="13" height="13" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Guardar orden
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     MODAL GUARDAR ORDEN PÁGINAS
+═══════════════════════════ -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-save-pages')" (click)="closeModal()">
+  <div class="modal" style="max-width:440px" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:30px;height:30px;border-radius:8px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      </div>
+      Guardar nuevo orden
+      <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <!-- Mode selector -->
+      <div style="display:flex;gap:10px">
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;background:var(--bg);border:1.5px solid;border-radius:8px;padding:9px 14px;flex:1;transition:border-color .15s"
+          [style.border-color]="saveAsMode()==='same' ? 'var(--orange)' : 'var(--border)'">
+          <input type="radio" name="save-pages-mode" value="same" style="accent-color:var(--orange)"
+            [ngModel]="saveAsMode()" (ngModelChange)="saveAsMode.set($event)"/>
+          <div>
+            <p style="margin:0;font-weight:600;color:var(--text)">Sobreescribir</p>
+            <p style="margin:0;font-size:11px;color:var(--muted)">Reemplaza el archivo actual</p>
+          </div>
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;background:var(--bg);border:1.5px solid;border-radius:8px;padding:9px 14px;flex:1;transition:border-color .15s"
+          [style.border-color]="saveAsMode()==='new' ? 'var(--orange)' : 'var(--border)'">
+          <input type="radio" name="save-pages-mode" value="new" style="accent-color:var(--orange)"
+            [ngModel]="saveAsMode()" (ngModelChange)="saveAsMode.set($event)"/>
+          <div>
+            <p style="margin:0;font-weight:600;color:var(--text)">Guardar como nuevo</p>
+            <p style="margin:0;font-size:11px;color:var(--muted)">Crea una copia nueva</p>
+          </div>
+        </label>
+      </div>
+      <!-- New name (only if 'new') -->
+      @if (saveAsMode() === 'new') {
+        <div>
+          <label class="f-label">Nombre del nuevo archivo</label>
+          <input type="text" class="f-input" placeholder="Nombre del documento..."
+            [ngModel]="saveName()" (ngModelChange)="saveName.set($event)"/>
+        </div>
+      }
+      <!-- Folder -->
+      <div>
+        <label class="f-label">Carpeta destino</label>
+        <select class="filter-inp" style="width:100%">
+          <option>Carpeta actual</option>
+          @for (f of getActiveFolders(); track f.name) {
+            <option [value]="f.name">{{ f.name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
+      <button (click)="closeModal()" class="btn-sec">Cancelar</button>
+      <button (click)="confirmSavePages()" class="btn-orange">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     MODAL GUARDAR COMO
+═══════════════════════════ -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-save-as')" (click)="closeModal()">
+  <div class="modal" style="max-width:460px" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:30px;height:30px;border-radius:8px;background:#F0FDF4;display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      </div>
+      Guardar Documento
+      <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;gap:10px">
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;flex:1"
+          [style.border-color]="saveAsMode()==='same' ? 'var(--orange)' : 'var(--border)'">
+          <input type="radio" name="save-mode" value="same" style="accent-color:var(--orange)"
+            [ngModel]="saveAsMode()" (ngModelChange)="saveAsMode.set($event)"/>
+          Mantener nombre actual
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;flex:1"
+          [style.border-color]="saveAsMode()==='new' ? 'var(--orange)' : 'var(--border)'">
+          <input type="radio" name="save-mode" value="new" style="accent-color:var(--orange)"
+            [ngModel]="saveAsMode()" (ngModelChange)="saveAsMode.set($event)"/>
+          Guardar como nuevo
+        </label>
+      </div>
+      @if (saveAsMode() === 'new') {
+        <div>
+          <label class="f-label">Nuevo nombre del archivo</label>
+          <input type="text" class="f-input" placeholder="Nombre del documento..."
+            [ngModel]="saveName()" (ngModelChange)="saveName.set($event)"/>
+        </div>
+      }
+      <div>
+        <label class="f-label">Carpeta destino</label>
+        <select class="filter-inp" style="width:100%">
+          <option>Carpeta actual</option>
+          @for (f of getActiveFolders(); track f.name) {
+            <option [value]="f.name">{{ f.name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
+      <button (click)="closeModal()" class="btn-sec">Cancelar</button>
+      <button (click)="saveDocumentAs()" class="btn-orange">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════
+     MODAL ENVIAR POR CORREO
+═══════════════════════════ -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-send-email')" (click)="closeModal()">
+  <div class="modal" style="max-width:500px" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:30px;height:30px;border-radius:8px;background:#F0FDF4;display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+      </div>
+      Enviar documento por correo
+      <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div>
+        <label class="f-label" style="letter-spacing:.05em">DE (REMITENTE)</label>
+        <input type="email" class="f-input" style="background:var(--bg);color:var(--muted)" readonly
+          [ngModel]="emailFrom()" (ngModelChange)="emailFrom.set($event)"/>
+      </div>
+      <div>
+        <label class="f-label" style="letter-spacing:.05em">PARA (DESTINATARIO) <span style="color:#ef4444">*</span></label>
+        <input type="email" class="f-input" placeholder="correo@destinatario.com"
+          [ngModel]="emailTo()" (ngModelChange)="emailTo.set($event)"/>
+      </div>
+      <div>
+        <label class="f-label" style="letter-spacing:.05em">ASUNTO</label>
+        <input type="text" class="f-input"
+          [ngModel]="emailSubject()" (ngModelChange)="emailSubject.set($event)"/>
+      </div>
+      <div>
+        <label class="f-label" style="letter-spacing:.05em">MENSAJE</label>
+        <textarea class="f-input" rows="4" style="resize:none"
+          [ngModel]="emailMessage()" (ngModelChange)="emailMessage.set($event)"></textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
+      <button (click)="closeModal()" class="btn-sec">Cancelar</button>
+      <button (click)="sendEmail()" style="background:#1d4ed8;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif">
+        <svg width="14" height="14" fill="none" stroke="white" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13" stroke-width="2"/><polygon points="22,2 15,22 11,13 2,9" stroke-width="2"/></svg>
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmar Papelera -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-confirm-trash')" (click)="closeModal()">
+  <div class="modal" style="max-width:380px" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:36px;height:36px;border-radius:10px;background:#FEF2F2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="18" height="18" fill="none" stroke="#EF4444" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+      </div>
+      <div>
+        <p style="font-size:15px;font-weight:700;color:var(--text)">¿Mover a Papelera?</p>
+        <p style="font-size:12px;color:var(--muted)">El documento podrá ser restaurado desde Papelera</p>
+      </div>
+      <button class="modal-close" (click)="closeModal()">✕</button>
+    </div>
+    <div style="margin-top:8px;padding:12px 14px;background:var(--bg);border-radius:10px;border:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg width="28" height="34" fill="none" stroke="var(--orange)" stroke-width="1.5" viewBox="0 0 24 24" style="flex-shrink:0">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/>
+        </svg>
+        <p style="font-size:13px;color:var(--text);word-break:break-word">
+          {{ files().find(f => f.id === trashTargetFileId())?.name ?? 'este documento' }}
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer" style="margin-top:16px">
+      <button class="btn-ghost" (click)="closeModal()">Cancelar</button>
+      <button style="padding:8px 20px;border-radius:8px;border:none;background:#EF4444;color:white;font-size:13px;font-weight:600;cursor:pointer" (click)="confirmarMoverPapelera()">
+        Mover a Papelera
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Reordenar Páginas -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-reorder-pages')" (click)="closeModal()">
+  <div class="modal" style="max-width:400px" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:30px;height:30px;border-radius:8px;background:#ede9fe;display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" stroke="#7c3aed" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+          <polyline points="3,6 4,7 6,5"/><polyline points="3,12 4,13 6,11"/><polyline points="3,18 4,19 6,17"/>
+        </svg>
+      </div>
+      <div>
+        <p style="font-size:15px;font-weight:700;color:var(--text)">Reordenar páginas</p>
+        <p style="font-size:12px;color:var(--muted)">Arrastra o usa las flechas para cambiar el orden</p>
+      </div>
+      <button class="modal-close" (click)="closeModal()">✕</button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px;max-height:300px;overflow-y:auto">
+      @for (pageNum of reorderPageOrder(); track pageNum; let i = $index) {
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;background:var(--bg)">
+          <span style="font-size:13px;font-weight:600;color:#7c3aed;min-width:24px">{{ i + 1 }}</span>
+          <svg width="14" height="14" fill="none" stroke="var(--textL)" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0">
+            <circle cx="9" cy="12" r="1" fill="currentColor"/><circle cx="9" cy="6" r="1" fill="currentColor"/><circle cx="9" cy="18" r="1" fill="currentColor"/>
+            <circle cx="15" cy="12" r="1" fill="currentColor"/><circle cx="15" cy="6" r="1" fill="currentColor"/><circle cx="15" cy="18" r="1" fill="currentColor"/>
+          </svg>
+          <span style="font-size:13px;color:var(--text);flex:1">Página {{ pageNum }}</span>
+          <div style="display:flex;gap:4px">
+            <button (click)="moverPaginaArriba(i)"
+              [disabled]="i === 0"
+              style="width:26px;height:26px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);opacity:1"
+              [style.opacity]="i === 0 ? '0.35' : '1'">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18,15 12,9 6,15"/></svg>
+            </button>
+            <button (click)="moverPaginaAbajo(i)"
+              [disabled]="i === reorderPageOrder().length - 1"
+              style="width:26px;height:26px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text)"
+              [style.opacity]="i === reorderPageOrder().length - 1 ? '0.35' : '1'">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="6,9 12,15 18,9"/></svg>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="modal-footer" style="margin-top:16px">
+      <button class="btn-ghost" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="confirmarReordenarPaginas()">Guardar orden</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nueva Carpeta -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-nueva-carpeta')" (click)="closeModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:30px;height:30px;border-radius:8px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/>
+        </svg>
+      </div>
+      Nueva Carpeta
+      <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="f-label">Nombre de la carpeta <span style="color:#ef4444">*</span></label>
+      <input type="text" class="f-input" placeholder="Ej: Contratos 2025" maxlength="50"
+        [ngModel]="folderName()" (ngModelChange)="folderName.set($event)"/>
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="f-label">Documentos <span style="color:var(--muted);font-weight:400">(opcional)</span></label>
+      <div class="upload-zone" style="padding:18px" (click)="newFolderFileInput.click()">
+        <svg width="28" height="28" fill="none" stroke="var(--orange)" stroke-width="1.5" viewBox="0 0 24 24" style="margin:0 auto 8px">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+        </svg>
+        <p style="font-size:13px;color:var(--muted)">Haz clic para cargar documentos PDF</p>
+        <input #newFolderFileInput type="file" accept=".pdf" multiple style="display:none" (change)="onFolderFilesChange($event)"/>
+      </div>
+      @if (folderUploadingFiles.length > 0) {
+        <p style="font-size:12px;color:var(--orange);margin-top:6px">{{ folderUploadingFiles.length }} archivo(s) seleccionado(s)</p>
+      }
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="f-label">Estado</label>
+      <select class="filter-inp" style="width:100%"
+        [ngModel]="newFolderPrivacy()" (ngModelChange)="newFolderPrivacy.set($event)">
+        <option value="privada">Privada</option>
+        <option value="publica">Pública</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:6px">
+      <button (click)="closeModal()" class="btn-sec">Cancelar</button>
+      <button (click)="createFolder()" class="btn-orange">Crear Carpeta</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Mover / Copiar -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-mover-copiar')" (click)="closeModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:30px;height:30px;border-radius:8px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1-4l-3 3m0 0l-3-3m3 3V4"/>
+        </svg>
+      </div>
+      Mover / Copiar Documentos
+      <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px">{{ selectedFiles().size }} documento(s) seleccionado(s)</p>
+    <div style="margin-bottom:14px">
+      <label class="f-label">Acción</label>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 14px">
+          <input type="radio" name="move-action" value="move" style="accent-color:var(--orange)"
+            [ngModel]="moveAction()" (ngModelChange)="moveAction.set($event)"/> Mover
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 14px">
+          <input type="radio" name="move-action" value="copy" style="accent-color:var(--orange)"
+            [ngModel]="moveAction()" (ngModelChange)="moveAction.set($event)"/> Copiar
+        </label>
+      </div>
+    </div>
+    <div style="margin-bottom:14px">
+      <label class="f-label">Carpeta destino</label>
+      <select class="filter-inp" style="width:100%;margin-top:4px"
+        [ngModel]="moveTargetFolder()" (ngModelChange)="moveTargetFolder.set($event)">
+        <option value="">Seleccionar carpeta existente...</option>
+        @for (f of folders(); track f.name) {
+          @if (f.name !== currentFolder()) {
+            <option [value]="f.name">{{ f.name }}</option>
+          }
+        }
+      </select>
+    </div>
+    <div style="margin-bottom:6px">
+      <label class="f-label">O crear nueva carpeta</label>
+      <input type="text" class="f-input" placeholder="Nombre de nueva carpeta..."
+        [ngModel]="newFolderNameMove()" (ngModelChange)="newFolderNameMove.set($event)"/>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+      <button (click)="closeModal()" class="btn-sec">Cancelar</button>
+      <button (click)="performMoveOrCopy()" class="btn-orange">
+        {{ moveAction() === 'move' ? 'Mover' : 'Copiar' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: PROCESAR DOCUMENTOS ══════════ -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-procesar-docs')" (click)="closeModal()">
+  <div class="stat-card" style="max-width:480px;width:100%;padding:28px 28px 24px" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <div style="width:36px;height:36px;border-radius:10px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="18" height="18" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V9l-6-6z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v6h6"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 12v4m0 0l-2-2m2 2l2-2"/>
+        </svg>
+      </div>
+      <div>
+        <p style="font-weight:700;font-size:15px;color:var(--text)">Procesar Documentos</p>
+        <p style="font-size:12px;color:var(--muted);margin-top:1px">
+          {{ docsAProcesor().length }} documento(s) en cola de procesamiento
+        </p>
+      </div>
+      <button (click)="closeModal()" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Tipo de carga -->
+    <p class="f-label" style="margin-bottom:10px">Tipo de Carga</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
+
+      <!-- Programado -->
+      <label style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:12px;border:1.5px solid;cursor:pointer;transition:border-color .2s"
+        [style.border-color]="procesarTipoCarga() === 'programado' ? 'var(--orange)' : 'var(--border)'"
+        [style.background]="procesarTipoCarga() === 'programado' ? 'var(--orangeSoft)' : 'var(--bg)'">
+        <input type="radio" name="tipo-carga" value="programado" style="accent-color:var(--orange);margin-top:2px"
+          [checked]="procesarTipoCarga() === 'programado'"
+          (change)="procesarTipoCarga.set('programado')"/>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-weight:600;font-size:13px;color:var(--text)">Programado</span>
+            <span class="badge b-green" style="font-size:10px">Recomendado</span>
+          </div>
+          <p style="font-size:12px;color:var(--muted);line-height:1.5">
+            El procesamiento se agenda según disponibilidad del sistema.<br>
+            Consume <strong style="color:var(--text)">1 carga</strong> por documento.
+          </p>
+          <p style="font-size:12px;color:#16A34A;font-weight:600;margin-top:6px">
+            Total: {{ docsAProcesor().length }} carga(s)
+          </p>
+        </div>
+      </label>
+
+      <!-- Inmediata -->
+      <label style="display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:12px;border:1.5px solid;cursor:pointer;transition:border-color .2s"
+        [style.border-color]="procesarTipoCarga() === 'inmediata' ? 'var(--orange)' : 'var(--border)'"
+        [style.background]="procesarTipoCarga() === 'inmediata' ? 'var(--orangeSoft)' : 'var(--bg)'">
+        <input type="radio" name="tipo-carga" value="inmediata" style="accent-color:var(--orange);margin-top:2px"
+          [checked]="procesarTipoCarga() === 'inmediata'"
+          (change)="procesarTipoCarga.set('inmediata')"/>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-weight:600;font-size:13px;color:var(--text)">Inmediata</span>
+            <span class="badge b-yellow" style="font-size:10px">⚠ Alto consumo</span>
+          </div>
+          <p style="font-size:12px;color:var(--muted);line-height:1.5">
+            El procesamiento inicia de forma inmediata con prioridad alta.<br>
+            Consume <strong style="color:#DC2626">5 cargas</strong> por documento.
+          </p>
+          <p style="font-size:12px;color:#DC2626;font-weight:600;margin-top:6px">
+            Total: {{ docsAProcesor().length * 5 }} carga(s)
+          </p>
+        </div>
+      </label>
+    </div>
+
+    <!-- Advertencia total -->
+    @if (procesarTipoCarga() === 'inmediata') {
+      <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:10px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start">
+        <svg width="16" height="16" fill="none" stroke="#D97706" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:1px">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        </svg>
+        <p style="font-size:12px;color:#92400E;line-height:1.5">
+          Estás a punto de consumir <strong>{{ docsAProcesor().length * 5 }} cargas</strong> del sistema.
+          Esta acción no se puede revertir. Considera usar el modo Programado para conservar tus cargas disponibles.
+        </p>
+      </div>
+    }
+
+    <!-- Acciones -->
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button (click)="closeModal()" class="btn-sec">Cancelar</button>
+      <button (click)="procesarDocumentos()" class="btn-orange">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+        Procesar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     Modal Compartir (carpeta o archivo)
+═══════════════════════════════════════ -->
+<div class="modal-bg" [class.open]="isModalOpen('modal-share')" (click)="closeModal()">
+  <div class="modal" style="max-width:480px;width:100%" (click)="$event.stopPropagation()">
+    <div class="modal-title">
+      <div style="width:32px;height:32px;border-radius:9px;background:var(--orangeSoft);display:flex;align-items:center;justify-content:center">
+        <svg width="16" height="16" fill="none" stroke="var(--orange)" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+      </div>
+      <h3 class="modal-heading">Compartir</h3>
+      <span style="font-size:12px;color:var(--muted);margin-left:4px">
+        {{ shareTargetFolder() ?? shareTargetFile() }}
+      </span>
+    </div>
+
+    <!-- Opciones de compartir -->
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+
+      <!-- Privado -->
+      <div class="share-option-card" [class.selected]="shareMode()==='none'" (click)="shareMode.set('none')">
+        <div class="share-option-icon">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+        </div>
+        <div style="flex:1">
+          <p style="font-size:13px;font-weight:600;color:var(--text)">Privado</p>
+          <p style="font-size:12px;color:var(--muted);margin-top:2px">Solo tú tienes acceso</p>
+        </div>
+        @if (shareMode()==='none') {
+          <svg width="18" height="18" fill="var(--orange)" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        }
+      </div>
+
+      <!-- Compartir con todos -->
+      <div class="share-option-card" [class.selected]="shareMode()==='all'" (click)="shareMode.set('all')">
+        <div class="share-option-icon">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <div style="flex:1">
+          <p style="font-size:13px;font-weight:600;color:var(--text)">Compartir con todos</p>
+          <p style="font-size:12px;color:var(--muted);margin-top:2px">Todos en la notaría pueden ver</p>
+        </div>
+        @if (shareMode()==='all') {
+          <svg width="18" height="18" fill="var(--orange)" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        }
+      </div>
+
+      <!-- Seleccionar usuario -->
+      <div class="share-option-card" [class.selected]="shareMode()==='users'" (click)="shareMode.set('users')">
+        <div class="share-option-icon">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            <line x1="19" y1="11" x2="19" y2="17" stroke-linecap="round"/><line x1="16" y1="14" x2="22" y2="14" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div style="flex:1">
+          <p style="font-size:13px;font-weight:600;color:var(--text)">Seleccionar usuario</p>
+          <p style="font-size:12px;color:var(--muted);margin-top:2px">Elige quién puede ver este elemento</p>
+        </div>
+        @if (shareMode()==='users') {
+          <svg width="18" height="18" fill="var(--orange)" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        }
+      </div>
+
+      <!-- Panel de selección de usuarios (solo visible en modo users) -->
+      @if (shareMode() === 'users') {
+        <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:4px">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);background:var(--bg)">
+            <div style="display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:8px;padding:0 10px;height:34px;background:var(--card)">
+              <svg width="13" height="13" fill="none" stroke="var(--textL)" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input style="border:none;outline:none;background:transparent;font-size:12px;width:100%;color:var(--text);font-family:inherit" placeholder="Buscar usuario..."
+                [value]="shareUserSearch()" (input)="shareUserSearch.set($any($event.target).value)"/>
+            </div>
+          </div>
+          <div style="max-height:160px;overflow-y:auto">
+            @for (u of shareUsersFiltered(); track u.id) {
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s;width:100%;box-sizing:border-box"
+                [style.background]="shareSelectedUsers().includes(u.id) ? 'var(--orangeSoft)' : 'var(--card)'"
+                (click)="toggleShareUser(u.id)">
+                <div style="width:32px;height:32px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0">
+                  {{ u.name.charAt(0) }}
+                </div>
+                <div style="flex:1;min-width:0">
+                  <p style="font-size:13px;font-weight:500;color:var(--text);margin:0">{{ u.name }}</p>
+                  <p style="font-size:11px;color:var(--muted);margin:0">{{ u.role }}</p>
+                </div>
+                <div style="width:18px;height:18px;border-radius:5px;border:2px solid;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s"
+                  [style.border-color]="shareSelectedUsers().includes(u.id) ? 'var(--orange)' : 'var(--border)'"
+                  [style.background]="shareSelectedUsers().includes(u.id) ? 'var(--orange)' : 'transparent'">
+                  @if (shareSelectedUsers().includes(u.id)) {
+                    <svg width="10" height="10" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+                  }
+                </div>
+              </div>
+            }
+            @if (shareUsersFiltered().length === 0) {
+              <p style="font-size:12px;color:var(--textL);padding:14px;text-align:center">Sin resultados</p>
+            }
+          </div>
+          @if (shareSelectedUsers().length > 0) {
+            <div style="padding:8px 12px;background:var(--bg);border-top:1px solid var(--border)">
+              <p style="font-size:11px;color:var(--muted)">{{ shareSelectedUsers().length }} usuario(s) seleccionado(s)</p>
+            </div>
+          }
+        </div>
+      }
+
+    </div>
+
+    <!-- Footer -->
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
+      <button class="btn-sec" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="confirmarShare()"
+        [style.opacity]="(shareMode()==='users' && shareSelectedUsers().length===0) ? '.5' : '1'"
+        [style.pointer-events]="(shareMode()==='users' && shareSelectedUsers().length===0) ? 'none' : 'auto'">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+        Confirmar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" [class.show]="toastVisible()">
+  <p style="font-weight:600;color:var(--text);margin-bottom:2px">{{ toastMsg() }}</p>
+</div>
+
+<!-- ════════════════════════════════════
+     MODALES
+════════════════════════════════════ -->
+
+<!-- Modal: Ver Documento (Previsualización + Botones Editar/Guardar/Enviar) -->
+@if (isModalOpen('modal-view-doc')) {
+<div class="modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100;overflow-y:auto;padding:20px">
+  <div style="width:100%;max-width:900px;background:var(--card);border-radius:10px;padding:20px;border:1px solid var(--border);max-height:90vh;overflow-y:auto">
+    <!-- Encabezado -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:12px">
+      <div>
+        <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">{{ currentViewFile()?.name }}</h3>
+        <p style="font-size:12px;color:var(--muted)">PDF · {{ currentViewFile()?.pages || 3 }} páginas</p>
+      </div>
+      <button (click)="closeModal()" style="background:none;border:none;font-size:18px;cursor:pointer">✕</button>
+    </div>
+
+    <!-- Previsualización del documento -->
+    <div style="background:#f5f5f5;border-radius:8px;padding:20px;margin-bottom:16px;text-align:center;min-height:300px;display:flex;align-items:center;justify-content:center">
+      <div style="text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">📄</div>
+        <p style="color:var(--muted);font-size:13px">Vista previa del documento</p>
+        <p style="color:var(--textL);font-size:12px;margin-top:4px">{{ currentViewFile()?.name }}</p>
+      </div>
+    </div>
+
+    <!-- Botones de acción: Descargar, Editar, Guardar, Enviar -->
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-sec" (click)="downloadFile(currentViewFile())">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Descargar
+      </button>
+      <button class="btn-sec" (click)="openModal('modal-edit-pages')">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        Editar
+      </button>
+      <button class="btn-sec" (click)="openModal('modal-guardar-como')">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+        Guardar
+      </button>
+      <button class="btn-orange" (click)="openModal('modal-enviar-email')">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal: Editar Páginas (Reordenar) -->
+@if (isModalOpen('modal-edit-pages')) {
+<div class="modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100">
+  <div style="width:100%;max-width:700px;background:var(--card);border-radius:10px;padding:24px;border:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">Editar páginas</h3>
+      <button (click)="closeModal()" style="background:none;border:none;font-size:18px">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Reordena las páginas del documento arrastrando</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-bottom:20px">
+      @for (page of [1,2,3]; track page) {
+        <div style="background:var(--bg);border:2px solid var(--border);border-radius:8px;padding:8px;text-align:center;cursor:move;transition:border-color .2s" (click)="selectPage(page)" [style.border-color]="selectedPage() === page ? 'var(--orange)' : 'var(--border)'">
+          <div style="background:#ddd;border-radius:4px;height:80px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--muted)">📄</div>
+          <p style="font-size:11px;font-weight:600;color:var(--text)">Página {{ page }}</p>
+        </div>
+      }
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-sec" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="saveEditedPages()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal: Guardar Como -->
+@if (isModalOpen('modal-guardar-como')) {
+<div class="modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100">
+  <div style="width:100%;max-width:520px;background:var(--card);border-radius:10px;padding:24px;border:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">Guardar documento</h3>
+      <button (click)="closeModal()" style="background:none;border:none;font-size:18px">✕</button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+      <div>
+        <label class="f-label">Nombre del archivo</label>
+        <input class="f-input" [(ngModel)]="saveName" placeholder="Contrato_2025.pdf" />
+      </div>
+      <div>
+        <label class="f-label">Guardar en carpeta</label>
+        <select class="f-input" [(ngModel)]="saveFolderName">
+          <option value="">Raíz</option>
+          @for (f of folders(); track f.name) {
+            <option [value]="f.name">{{ f.name }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label style="font-size:13px;color:var(--muted)"><input type="checkbox" [(ngModel)]="saveAsPrivate" /> Privado (por defecto)</label>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-sec" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="saveDocumentAs()">Guardar</button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal: Enviar por Email -->
+@if (isModalOpen('modal-enviar-email')) {
+<div class="modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100">
+  <div style="width:100%;max-width:520px;background:var(--card);border-radius:10px;padding:24px;border:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">Enviar documento por correo</h3>
+      <button (click)="closeModal()" style="background:none;border:none;font-size:18px">✕</button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+      <div>
+        <label class="f-label">De (Remitente)</label>
+        <input class="f-input" [(ngModel)]="emailFrom" placeholder="tu-email@notaria.com" disabled />
+      </div>
+      <div>
+        <label class="f-label">Para (Destinatario) *</label>
+        <input class="f-input" [(ngModel)]="emailTo" placeholder="destinatario@example.com" />
+      </div>
+      <div>
+        <label class="f-label">Asunto</label>
+        <input class="f-input" [(ngModel)]="emailSubject" [value]="'Documento: ' + (currentViewFile()?.name || '')" />
+      </div>
+      <div>
+        <label class="f-label">Mensaje</label>
+        <textarea class="f-input" [(ngModel)]="emailMessage" rows="4" style="resize:none;font-family:var(--font-body)">Estimado/a, adjunto encontrará el documento solicitado. Quedo a su disposición para cualquier consulta.</textarea>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-sec" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="sendEmail()">
+        <svg class="w-4 h-4" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal: Mover/Copiar -->
+@if (isModalOpen('modal-mover-copiar')) {
+<div class="modal" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:100">
+  <div style="width:100%;max-width:520px;background:var(--card);border-radius:10px;padding:24px;border:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif">Mover/Copiar archivos</h3>
+      <button (click)="closeModal()" style="background:none;border:none;font-size:18px">✕</button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+      <div>
+        <label class="f-label">Acción</label>
+        <select class="f-input" [(ngModel)]="moveAction">
+          <option value="move">Mover a carpeta</option>
+          <option value="copy">Copiar a carpeta</option>
+        </select>
+      </div>
+      <div>
+        <label class="f-label">Carpeta destino</label>
+        <select class="f-input" [(ngModel)]="moveTargetFolder">
+          @for (f of folders(); track f.name) {
+            <option [value]="f.name">{{ f.name }}</option>
+          }
+          <option value="">Nueva carpeta</option>
+        </select>
+      </div>
+      @if (moveTargetFolder() === '') {
+        <div>
+          <label class="f-label">Nombre de nueva carpeta</label>
+          <input class="f-input" [(ngModel)]="newFolderNameMove" placeholder="Nombre de carpeta" />
+        </div>
+      }
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn-sec" (click)="closeModal()">Cancelar</button>
+      <button class="btn-orange" (click)="performMoveOrCopy()">{{ moveAction() === 'move' ? 'Mover' : 'Copiar' }}</button>
+    </div>
+  </div>
+</div>
+}
